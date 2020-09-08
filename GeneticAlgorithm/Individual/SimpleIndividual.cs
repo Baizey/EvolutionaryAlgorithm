@@ -22,7 +22,6 @@ namespace GeneticAlgorithm.Individual
         {
         }
 
-
         public T this[int i]
         {
             get => Genes[i];

@@ -25,7 +25,7 @@ namespace GeneticAlgorithm.Algorithm
 
         public Task Evolve()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

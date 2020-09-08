@@ -6,6 +6,7 @@ namespace GeneticAlgorithm.Individual
     public abstract class IndividualBase<T> : IIndividual
     {
         public abstract int Count { get; }
+        public double? Fitness { get; set; }
         public T Genes;
 
         public IndividualBase(T genes) => Genes = genes;

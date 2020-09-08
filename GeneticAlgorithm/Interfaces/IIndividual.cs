@@ -4,5 +4,6 @@
     {
         IIndividual Clone();
         public int Count { get; }
+        public double? Fitness { get; set; }
     }
 }

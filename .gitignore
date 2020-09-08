@@ -1,4 +1,4 @@
 *.xml
-*/bin
-*/obj
+*/bin/
+*/obj/
 *.cache

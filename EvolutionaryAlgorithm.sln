@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionaryAlgorithm", "EvolutionaryAlgorithm\EvolutionaryAlgorithm.csproj", "{6D00950C-C5AF-4B88-95B3-073D734CE412}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticAlgorithm", "GeneticAlgorithm\GeneticAlgorithm.csproj", "{CF9F6CCD-D3BE-486E-B9C8-627A8AD87CD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{6D00950C-C5AF-4B88-95B3-073D734CE412}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D00950C-C5AF-4B88-95B3-073D734CE412}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D00950C-C5AF-4B88-95B3-073D734CE412}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF9F6CCD-D3BE-486E-B9C8-627A8AD87CD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF9F6CCD-D3BE-486E-B9C8-627A8AD87CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF9F6CCD-D3BE-486E-B9C8-627A8AD87CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF9F6CCD-D3BE-486E-B9C8-627A8AD87CD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

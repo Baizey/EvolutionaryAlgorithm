@@ -5,9 +5,4 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="GeneticSharp" Version="2.6.0" />
-      <PackageReference Include="GeneticSharp.Extensions" Version="2.6.0" />
-    </ItemGroup>
-
 </Project>

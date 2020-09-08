@@ -5,7 +5,7 @@ using GeneticAlgorithm.Interfaces;
 
 namespace GeneticAlgorithm.Individual
 {
-    public class BooleanIndividual : IndividualBase<BitArray>, IBooleanIndividual, IEnumerable
+    public class BooleanIndividual : IndividualBase<BitArray>, IEnumerable
     {
         public override int Count => Genes.Count;
 

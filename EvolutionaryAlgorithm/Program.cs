@@ -23,7 +23,7 @@ namespace EvolutionaryAlgorithm
                 new OneMaxFitness(),
                 new Mutator<BitArray>(λ, new FirstParentSelector<BitArray>())
                     .Then(new OneMaxStaticOptimalMutation(λ)),
-                new ElitismGenerationFilter<BitArray>(μ));
+                new ElitismGenerationFilter<BitArray>());
         }
     }
 }

@@ -7,7 +7,7 @@ namespace EvolutionaryAlgorithm.Core
 {
     public interface IMutator<T> where T : ICloneable
     {
-        int Λ { get; set; }
+        int NewIndividuals { get; set; }
         IParentSelector<T> InitialSelector { get; set; }
         List<MutationStep<T>> MutationSteps { get; set; }
         IMutator<T> Then(IMutation<T> mutation, IParentSelector<T> parentSelector = null);

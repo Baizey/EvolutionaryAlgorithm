@@ -9,13 +9,13 @@ namespace EvolutionaryAlgorithm.Template.Algorithm
 {
     public class Mutator<T> : IMutator<T> where T : ICloneable
     {
-        public int Λ { get; set; }
+        public int NewIndividuals { get; set; }
         public IParentSelector<T> InitialSelector { get; set; }
         public List<MutationStep<T>> MutationSteps { get; set; }
 
-        public Mutator(int λ, IParentSelector<T> initialSelector)
+        public Mutator(int newIndividuals, IParentSelector<T> initialSelector)
         {
-            Λ = λ;
+            NewIndividuals = newIndividuals;
             InitialSelector = initialSelector;
         }
 
@@ -43,7 +43,7 @@ namespace EvolutionaryAlgorithm.Template.Algorithm
 
         public List<IIndividual<T>> Create(IPopulation<T> population, IFitness<T> fitness)
         {
-            return Enumerable.Range(0, Λ).Select(_ => CreateIndividual(population, fitness)).ToList();
+            return Enumerable.Range(0, NewIndividuals).Select(_ => CreateIndividual(population, fitness)).ToList();
         }
     }
 }

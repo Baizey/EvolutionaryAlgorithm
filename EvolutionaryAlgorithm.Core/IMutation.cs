@@ -4,6 +4,6 @@ namespace EvolutionaryAlgorithm.Core
 {
     public interface IMutation<T>
     {
-        IIndividual<T> Mutate(IIndividual<T> individual);
+        IIndividual<T> Mutate(IIndividual<T> child, IIndividual<T> parent);
     }
 }

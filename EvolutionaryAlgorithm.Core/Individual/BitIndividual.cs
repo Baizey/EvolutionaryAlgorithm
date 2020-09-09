@@ -7,19 +7,19 @@ using static System.Linq.Enumerable;
 // ReSharper disable all MemberCanBePrivate.Global
 namespace EvolutionaryAlgorithm.Core.Individual
 {
-    public class BooleanIndividual : IBooleanIndividual
+    public class BitIndividual : IBitIndividual
     {
         public double? Fitness { get; set; }
         public BitArray Genes { get; set; }
         public int Count => Genes.Count;
 
-        public BooleanIndividual(BitArray genes) => Genes = genes;
+        public BitIndividual(BitArray genes) => Genes = genes;
 
-        public BooleanIndividual(bool[] genes) : this(new BitArray(genes))
+        public BitIndividual(bool[] genes) : this(new BitArray(genes))
         {
         }
 
-        public BooleanIndividual(int size, Func<bool> generator)
+        public BitIndividual(int size, Func<bool> generator)
             : this(Range(0, size).Select(_ => generator.Invoke()).ToArray())
         {
         }
@@ -28,7 +28,7 @@ namespace EvolutionaryAlgorithm.Core.Individual
 
         public IEnumerator GetEnumerator() => Genes.GetEnumerator();
 
-        public object Clone() => new BooleanIndividual((BitArray) Genes.Clone());
+        public object Clone() => new BitIndividual((BitArray) Genes.Clone());
 
         public int CompareTo(IIndividual<BitArray> other)
         {

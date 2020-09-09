@@ -1,5 +1,11 @@
-﻿using EvolutionaryAlgorithm.Core.Individual;
+﻿using System.Collections;
+using EvolutionaryAlgorithm.Core.Individual;
+using EvolutionaryAlgorithm.Template.Algorithm;
+using EvolutionaryAlgorithm.Template.Fitness;
+using EvolutionaryAlgorithm.Template.Mutation;
+using EvolutionaryAlgorithm.Template.ParentSelector;
 using EvolutionaryAlgorithm.Template.Population;
+using EvolutionaryAlgorithm.Template.Selection;
 
 namespace EvolutionaryAlgorithm
 {
@@ -7,7 +13,17 @@ namespace EvolutionaryAlgorithm
     {
         private static void Main()
         {
-            var population = new Population<BooleanIndividual>(2, () => new BooleanIndividual(100, () => true));
+            const int
+                λ = 10,
+                n = 100,
+                μ = 1;
+
+            var algo = new BitEvolutionaryAlgorithm(
+                new BitPopulation(μ, () => new BitIndividual(n, () => true)),
+                new OneMaxFitness(),
+                new BitMutator(λ, new FirstParentSelector<BitArray>())
+                    .Then(new OneMaxStaticOptimalMutation(λ)),
+                new ElitismGenerationFilter<BitArray>(μ));
         }
     }
 }

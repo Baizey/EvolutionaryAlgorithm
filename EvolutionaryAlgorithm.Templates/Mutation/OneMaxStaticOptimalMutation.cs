@@ -31,7 +31,7 @@ namespace EvolutionaryAlgorithm.Template.Mutation
             return Math.Exp(bufferN) / (Math.Exp(bufferK) * Math.Exp(bufferKn));
         }
 
-        private BooleanIndividual Mutate(BooleanIndividual individual)
+        private BitIndividual Mutate(BitIndividual individual)
         {
             var roll = _random.NextDouble();
             var mutations = 0;
@@ -50,6 +50,7 @@ namespace EvolutionaryAlgorithm.Template.Mutation
             return individual;
         }
 
-        public IIndividual<BitArray> Mutate(IIndividual<BitArray> individual) => Mutate((BooleanIndividual) individual);
+        public IIndividual<BitArray> Mutate(IIndividual<BitArray> child, IIndividual<BitArray> parent) =>
+            Mutate((BitIndividual) child);
     }
 }

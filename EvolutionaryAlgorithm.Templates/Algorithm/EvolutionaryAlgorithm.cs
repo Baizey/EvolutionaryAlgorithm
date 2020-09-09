@@ -8,22 +8,19 @@ namespace EvolutionaryAlgorithm.Template.Algorithm
     {
         public IPopulation<T> Population { get; set; }
         public IFitness<T> Fitness { get; set; }
-        public IMutation<T> Mutator { get; set; }
-        public ICrossover<T> Crossover { get; set; }
-        public IGenerationFilter<T> Selector { get; set; }
+        public IMutator<T> Mutator { get; set; }
+        public IGenerationFilter<T> GenerationFilter { get; set; }
 
         public EvolutionaryAlgorithm(
             IPopulation<T> initialPopulation,
             IFitness<T> fitnessFunction,
-            IMutation<T> mutationFunction,
-            ICrossover<T> crossoverFunction,
+            IMutator<T> mutatorFunction,
             IGenerationFilter<T> generationFilterFunction)
         {
             Population = initialPopulation;
             Fitness = fitnessFunction;
-            Mutator = mutationFunction;
-            Crossover = crossoverFunction;
-            Selector = generationFilterFunction;
+            Mutator = mutatorFunction;
+            GenerationFilter = generationFilterFunction;
         }
 
         public Task Evolve()

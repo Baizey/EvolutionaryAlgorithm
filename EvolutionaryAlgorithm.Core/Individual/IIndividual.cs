@@ -13,7 +13,7 @@ namespace EvolutionaryAlgorithm.Core.Individual
         public T Genes { get; set; }
     }
 
-    public interface IBooleanIndividual :
+    public interface IBitIndividual :
         IIndividual<BitArray>,
         IEnumerable
     {

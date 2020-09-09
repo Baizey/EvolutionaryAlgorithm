@@ -8,6 +8,7 @@ namespace EvolutionaryAlgorithm.Core
         where T : ICloneable
     {
         public List<IIndividual<T>> Individuals { get; set; }
+        public int Length { get; }
         public int Generation { get; set; }
 
         public IIndividual<T> this[int i]

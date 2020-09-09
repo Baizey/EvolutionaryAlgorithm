@@ -10,6 +10,7 @@ namespace EvolutionaryAlgorithm.Template.Population
     public class Population<T> : IPopulation<T> where T : ICloneable
     {
         public List<IIndividual<T>> Individuals { get; set; }
+        public int Length => Individuals.Count;
         public int Generation { get; set; } = 0;
 
         public Population(List<IIndividual<T>> value) => Individuals = value;

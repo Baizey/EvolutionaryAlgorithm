@@ -3,16 +3,16 @@ using EvolutionaryAlgorithm.Core;
 
 namespace EvolutionaryAlgorithm.Template.Selection
 {
-    public class ElitismSelection<T> : ISelection<T> where T : ICloneable
+    public class ElitismGenerationFilter<T> : IGenerationFilter<T> where T : ICloneable
     {
         private readonly int _keep;
 
-        public ElitismSelection(int keep)
+        public ElitismGenerationFilter(int keep)
         {
             _keep = keep;
         }
 
-        public IPopulation<T> Select(IPopulation<T> population)
+        public IPopulation<T> Filter(IPopulation<T> population)
         {
             population.Individuals.Sort();
             population.Individuals = population.Individuals.GetRange(0, _keep);

@@ -10,20 +10,20 @@ namespace EvolutionaryAlgorithm.Template.Algorithm
         public IFitness<T> Fitness { get; set; }
         public IMutation<T> Mutator { get; set; }
         public ICrossover<T> Crossover { get; set; }
-        public ISelection<T> Selector { get; set; }
+        public IGenerationFilter<T> Selector { get; set; }
 
         public EvolutionaryAlgorithm(
             IPopulation<T> initialPopulation,
             IFitness<T> fitnessFunction,
             IMutation<T> mutationFunction,
             ICrossover<T> crossoverFunction,
-            ISelection<T> selectionFunction)
+            IGenerationFilter<T> generationFilterFunction)
         {
             Population = initialPopulation;
             Fitness = fitnessFunction;
             Mutator = mutationFunction;
             Crossover = crossoverFunction;
-            Selector = selectionFunction;
+            Selector = generationFilterFunction;
         }
 
         public Task Evolve()

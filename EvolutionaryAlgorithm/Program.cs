@@ -18,10 +18,10 @@ namespace EvolutionaryAlgorithm
                 n = 100,
                 μ = 1;
 
-            var algo = new BitEvolutionaryAlgorithm(
+            var algo = new EvolutionaryAlgorithm<BitArray>(
                 new BitPopulation(μ, () => new BitIndividual(n, () => true)),
                 new OneMaxFitness(),
-                new BitMutator(λ, new FirstParentSelector<BitArray>())
+                new Mutator<BitArray>(λ, new FirstParentSelector<BitArray>())
                     .Then(new OneMaxStaticOptimalMutation(λ)),
                 new ElitismGenerationFilter<BitArray>(μ));
         }

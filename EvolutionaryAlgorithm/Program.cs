@@ -1,5 +1,5 @@
-﻿using GeneticAlgorithm.Individual;
-using GeneticAlgorithm.Population;
+﻿using EvolutionaryAlgorithm.Core.Individual;
+using EvolutionaryAlgorithm.Template.Population;
 
 namespace EvolutionaryAlgorithm
 {

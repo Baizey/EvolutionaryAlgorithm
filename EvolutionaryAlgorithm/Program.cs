@@ -22,7 +22,7 @@ namespace EvolutionaryAlgorithm
                 new BitPopulation(μ, () => new BitIndividual(n, () => true)),
                 new OneMaxFitness(),
                 new Mutator<BitArray>(λ, new FirstParentSelector<BitArray>())
-                    .Then(new OneMaxStaticOptimalMutation(λ)),
+                    .Then(new OneMaxStaticOptimalMutation(n)),
                 new ElitismGenerationFilter<BitArray>());
         }
     }

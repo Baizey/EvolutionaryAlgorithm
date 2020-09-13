@@ -14,7 +14,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingPopulation(IPopulation<TGeneStructure, TGene> initialPopulation)
         {
             Population = initialPopulation;
-            Population.Individuals.ForEach(i => Fitness.Evaluate(i));
             return this;
         }
 

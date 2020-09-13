@@ -48,9 +48,7 @@ namespace EvolutionaryAlgorithm.Template.Algorithm
         }
 
         public List<IIndividual<BitArray, bool>> Create(IPopulation<BitArray, bool> population,
-            IFitness<BitArray, bool> fitness)
-        {
-            return Enumerable.Range(0, NewIndividuals).Select(_ => CreateIndividual(population, fitness)).ToList();
-        }
+            IFitness<BitArray, bool> fitness) =>
+            Enumerable.Range(0, NewIndividuals).Select(_ => CreateIndividual(population, fitness)).ToList();
     }
 }

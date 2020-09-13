@@ -16,19 +16,22 @@ namespace EvolutionaryAlgorithm
             const int
                 geneSize = 50,
                 populationSize = 1,
-                newIndividuals = 1;
+                newIndividuals = 1,
+                jump = 5;
 
             var random = new Random();
             var algo = new BitEvolutionaryAlgorithm()
-                .UsingOneMaxFitness()
+                .UsingJumpFitness(geneSize, jump)
                 .UsingPopulation(populationSize, geneSize, () => random.NextDouble() >= 0.5)
                 .UsingMutator(newIndividuals, new RandomParentSelector(),
                     mutator => mutator.ThenOneMaxStaticOptimalMutation(geneSize))
                 .UsingElitismGenerationFilter();
 
+            algo.Population.Individuals.ForEach(i => algo.Fitness.Evaluate(i));
             do
             {
                 await algo.Evolve();
+                Console.WriteLine(algo.Population.Generation + ": " + algo.Best);
             } while (algo.Best.Fitness < geneSize);
 
             Console.WriteLine(algo.Population.Generation + ": " + algo.Best);

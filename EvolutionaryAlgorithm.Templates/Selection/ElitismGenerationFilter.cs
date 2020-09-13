@@ -1,17 +1,19 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using EvolutionaryAlgorithm.Core;
-using EvolutionaryAlgorithm.Core.Individual;
+using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Selection
 {
-    public class ElitismGenerationFilter<T> : IGenerationFilter<T> where T : ICloneable
+    public class ElitismGenerationFilter : IBitGenerationFilter
     {
-        public IPopulation<T> Filter(IPopulation<T> population, List<IIndividual<T>> newcomers)
+        public IPopulation<BitArray, bool> Filter(
+            IPopulation<BitArray, bool> population,
+            List<IIndividual<BitArray, bool>> newcomers)
         {
-            var initialSize = population.Length;
+            var initialSize = population.Count;
             population.Individuals.AddRange(newcomers);
-            population.Individuals.Sort();
+            population.Individuals.Sort((a, b) => b.CompareTo(a));
             population.Individuals = population.Individuals.GetRange(0, initialSize);
             return population;
         }

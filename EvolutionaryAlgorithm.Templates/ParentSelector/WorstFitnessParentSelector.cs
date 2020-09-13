@@ -1,13 +1,13 @@
-﻿using System;
+﻿using System.Collections;
 using System.Linq;
-using EvolutionaryAlgorithm.Core;
-using EvolutionaryAlgorithm.Core.Individual;
+using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
-    public class WorstFitnessParentSelector<T> : IParentSelector<T> where T : ICloneable
+    public class WorstFitnessParentSelector : IBitParentSelector
     {
-        public IIndividual<T> Select(IPopulation<T> population) =>
+        public IIndividual<BitArray, bool> Select(IPopulation<BitArray, bool> population) =>
             population.Individuals.Aggregate((a, b) => a.Fitness < b.Fitness ? a : b);
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.Core;
-using EvolutionaryAlgorithm.Core.Individual;
+using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Mutation
 {
-    public class OneMaxStaticOptimalMutation : IMutation<BitArray>
+    public class OneMaxStaticOptimalMutation : IBitMutation
     {
         private readonly double[] _odds;
         private readonly Random _random;
@@ -25,32 +25,27 @@ namespace EvolutionaryAlgorithm.Template.Mutation
         // Source: https://stackoverflow.com/questions/12983731/algorithm-for-calculating-binomial-coefficient/12992171
         private static double GetnCk(long n, long k)
         {
-            var bufferN = n * Math.Log(n) - n;
-            var bufferK = k * Math.Log(k) - k;
-            var bufferKn = Math.Abs(n - k) * Math.Log(Math.Abs(n - k)) - Math.Abs(n - k);
-            return Math.Exp(bufferN) / (Math.Exp(bufferK) * Math.Exp(bufferKn));
+            double sum = 0;
+            for (long i = 0; i < k; i++)
+                sum += Math.Log10(n - i) - Math.Log10(i + 1);
+            return Math.Pow(10, sum);
         }
 
-        private BitIndividual Mutate(BitIndividual individual)
+        private IBitIndividual Mutate(IBitIndividual individual)
         {
             var roll = _random.NextDouble();
-            var mutations = 0;
-            for (; mutations < _odds.Length; mutations++)
+            foreach (var k in _odds)
             {
-                roll -= _odds[mutations];
-                if (roll <= 0) break;
-            }
-
-            for (var m = 0; m < mutations; m++)
-            {
-                var index = _random.Next(individual.Count);
-                individual.Flip(index);
+                if (roll < k) break;
+                roll -= k;
+                individual.Flip(_random.Next(individual.Size));
             }
 
             return individual;
         }
 
-        public IIndividual<BitArray> Mutate(IIndividual<BitArray> child, IIndividual<BitArray> parent) =>
-            Mutate((BitIndividual) child);
+        public IIndividual<BitArray, bool>
+            Mutate(IIndividual<BitArray, bool> child, IIndividual<BitArray, bool> parent) =>
+            Mutate((IBitIndividual) child);
     }
 }

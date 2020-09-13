@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using EvolutionaryAlgorithm.Core.Individual;
+﻿using System;
+using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Template.Algorithm;
 using EvolutionaryAlgorithm.Template.Fitness;
 using EvolutionaryAlgorithm.Template.Mutation;
@@ -11,19 +11,27 @@ namespace EvolutionaryAlgorithm
 {
     internal class Program
     {
-        private static void Main()
+        private static async Task Main()
         {
             const int
-                λ = 10,
-                n = 100,
-                μ = 1;
+                geneSize = 50,
+                populationSize = 1,
+                newIndividuals = 1;
 
-            var algo = new EvolutionaryAlgorithm<BitArray>(
-                new BitPopulation(μ, () => new BitIndividual(n, () => true)),
-                new OneMaxFitness(),
-                new Mutator<BitArray>(λ, new FirstParentSelector<BitArray>())
-                    .Then(new OneMaxStaticOptimalMutation(n)),
-                new ElitismGenerationFilter<BitArray>());
+            var random = new Random();
+            var algo = new BitEvolutionaryAlgorithm()
+                .UsingOneMaxFitness()
+                .UsingPopulation(populationSize, geneSize, () => random.NextDouble() >= 0.5)
+                .UsingMutator(newIndividuals, new RandomParentSelector(),
+                    mutator => mutator.ThenOneMaxStaticOptimalMutation(geneSize))
+                .UsingElitismGenerationFilter();
+
+            do
+            {
+                await algo.Evolve();
+            } while (algo.Best.Fitness < geneSize);
+
+            Console.WriteLine(algo.Population.Generation + ": " + algo.Best);
         }
     }
 }

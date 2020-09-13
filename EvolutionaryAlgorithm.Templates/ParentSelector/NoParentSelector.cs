@@ -1,11 +1,11 @@
-﻿using System;
-using EvolutionaryAlgorithm.Core;
-using EvolutionaryAlgorithm.Core.Individual;
+﻿using System.Collections;
+using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
-    public class NoParentSelector<T> : IParentSelector<T> where T : ICloneable
+    public class NoParentSelector : IBitParentSelector
     {
-        public IIndividual<T> Select(IPopulation<T> population) => null;
+        public IIndividual<BitArray, bool> Select(IPopulation<BitArray, bool> population) => null;
     }
 }

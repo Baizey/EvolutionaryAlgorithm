@@ -1,15 +1,17 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core;
-using EvolutionaryAlgorithm.Core.Individual;
+using System.Collections;
+using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
-    public class RandomParentSelector<T> : IParentSelector<T> where T : ICloneable
+    public class RandomParentSelector : IBitParentSelector
     {
         private readonly Random _random;
 
         public RandomParentSelector() => _random = new Random();
 
-        public IIndividual<T> Select(IPopulation<T> population) => population[_random.Next(population.Length)];
+        public IIndividual<BitArray, bool> Select(IPopulation<BitArray, bool> population) =>
+            population[_random.Next(population.Count)];
     }
 }

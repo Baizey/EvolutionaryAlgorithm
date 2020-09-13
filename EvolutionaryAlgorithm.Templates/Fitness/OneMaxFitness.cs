@@ -1,15 +1,13 @@
 ﻿using System.Collections;
 using System.Linq;
-using EvolutionaryAlgorithm.Core;
-using EvolutionaryAlgorithm.Core.Individual;
+using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Fitness
 {
-    public class OneMaxFitness : IFitness<BitArray>
+    public class OneMaxFitness : IBitFitness
     {
-        private static double Evaluate(BitIndividual individual) =>
-            (double) (individual.Fitness = individual.Genes.Cast<bool>().Count(gene => gene));
-
-        public double Evaluate(IIndividual<BitArray> individual) => Evaluate((BitIndividual) individual);
+        public double Evaluate(IIndividual<BitArray, bool> individual) =>
+            (double) (individual.Fitness = individual.Count(e => e));
     }
 }

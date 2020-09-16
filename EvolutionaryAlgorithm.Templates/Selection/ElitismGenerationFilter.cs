@@ -1,15 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using EvolutionaryAlgorithm.Core.Abstract;
+﻿using System.Collections.Generic;
 using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Selection
 {
     public class ElitismGenerationFilter : IBitGenerationFilter
     {
-        public IPopulation<BitArray, bool> Filter(
-            IPopulation<BitArray, bool> population,
-            List<IIndividual<BitArray, bool>> newcomers)
+        public IBitPopulation Filter(IBitPopulation population, List<IBitIndividual> newcomers)
         {
             var initialSize = population.Count;
             population.Individuals.AddRange(newcomers);

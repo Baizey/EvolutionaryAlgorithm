@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.Core.Algorithm;
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {

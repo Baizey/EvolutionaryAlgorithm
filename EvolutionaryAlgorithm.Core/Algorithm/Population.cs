@@ -10,7 +10,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         where TGeneStructure : ICloneable
     {
         public int Count => Individuals.Count;
-        public int Generation { get; set; } = 0;
         public List<IIndividual<TGeneStructure, TGene>> Individuals { get; set; }
 
         public IIndividual<TGeneStructure, TGene> Best =>

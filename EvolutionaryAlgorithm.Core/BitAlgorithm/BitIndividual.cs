@@ -13,6 +13,8 @@ namespace EvolutionaryAlgorithm.Core.BitAlgorithm
         public double Fitness { get; set; }
         public BitArray Genes { get; set; }
         public int Size => Genes.Count;
+        public int Ones => this.Count(e => e);
+        public int Zeros => Size - Ones;
 
         public BitIndividual(int size, bool defaultValue) => Genes = new BitArray(size, defaultValue);
         public BitIndividual(BitArray genes) => Genes = genes;

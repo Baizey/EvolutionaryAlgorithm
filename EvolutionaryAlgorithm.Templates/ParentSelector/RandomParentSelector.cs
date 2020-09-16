@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using EvolutionaryAlgorithm.Core.Abstract;
 using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.ParentSelector
@@ -11,7 +9,7 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
 
         public RandomParentSelector() => _random = new Random();
 
-        public IIndividual<BitArray, bool> Select(IPopulation<BitArray, bool> population) =>
-            population[_random.Next(population.Count)];
+        public IBitIndividual Select(IBitPopulation population) =>
+            (IBitIndividual) population[_random.Next(population.Count)];
     }
 }

@@ -23,17 +23,18 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public void Start(IEvolutionaryAlgorithm<TGeneStructure, TGene> algo)
         {
             StartTime = DateTime.Now;
+            Best = algo.Best;
             Update(algo);
         }
 
         public void Update(IEvolutionaryAlgorithm<TGeneStructure, TGene> algo)
         {
-            var clone = algo.Best.Clone() as IIndividual<TGeneStructure, TGene>;
+            var clone = (IIndividual<TGeneStructure, TGene>) algo.Best.Clone();
 
-            if (Best == null || algo.Best.Fitness > Best.Fitness)
+            if (clone.Fitness > Best.Fitness)
                 Best = clone;
 
-            if (algo.Best.Fitness <= Last.Fitness)
+            if (clone.Fitness <= Last.Fitness)
                 StagnantGeneration++;
             else
                 StagnantGeneration = 0;

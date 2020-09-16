@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using EvolutionaryAlgorithm.Core.Abstract;
 using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Mutation
@@ -31,21 +29,17 @@ namespace EvolutionaryAlgorithm.Template.Mutation
             return Math.Pow(10, sum);
         }
 
-        private IBitIndividual Mutate(IBitIndividual individual)
+        public IBitIndividual Mutate(IBitIndividual child, IBitIndividual parent)
         {
             var roll = _random.NextDouble();
             foreach (var k in _odds)
             {
                 if (roll < k) break;
                 roll -= k;
-                individual.Flip(_random.Next(individual.Size));
+                child.Flip(_random.Next(child.Size));
             }
 
-            return individual;
+            return child;
         }
-
-        public IIndividual<BitArray, bool>
-            Mutate(IIndividual<BitArray, bool> child, IIndividual<BitArray, bool> parent) =>
-            Mutate((IBitIndividual) child);
     }
 }

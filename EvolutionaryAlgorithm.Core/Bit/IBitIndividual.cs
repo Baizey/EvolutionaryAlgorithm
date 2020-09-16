@@ -12,5 +12,8 @@ namespace EvolutionaryAlgorithm.Core.Bit
         }
 
         bool Flip(int i);
+
+        int Ones { get; }
+        int Zeros { get; }
     }
 }

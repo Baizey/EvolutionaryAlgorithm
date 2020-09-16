@@ -30,7 +30,7 @@ namespace EvolutionaryAlgorithm
             do
             {
                 await algo.Evolve();
-                Console.WriteLine(algo.Population.Generation + ": " + algo.Best);
+                Console.WriteLine(algo.Statistics.Generations + ": " + algo.Best);
             } while (algo.Best.Fitness < geneSize);
         }
     }

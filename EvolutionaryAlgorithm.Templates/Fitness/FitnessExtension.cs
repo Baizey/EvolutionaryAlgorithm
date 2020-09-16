@@ -5,6 +5,10 @@ namespace EvolutionaryAlgorithm.Template.Fitness
     public static class FitnessExtension
     {
         public static IBitEvolutionaryAlgorithm
+            UsingTwoMaxFitness(this IBitEvolutionaryAlgorithm algo) =>
+            (IBitEvolutionaryAlgorithm) algo.UsingFitness(new TwoMaxFitness());
+
+        public static IBitEvolutionaryAlgorithm
             UsingOneMaxFitness(this IBitEvolutionaryAlgorithm algo) =>
             (IBitEvolutionaryAlgorithm) algo.UsingFitness(new OneMaxFitness());
 

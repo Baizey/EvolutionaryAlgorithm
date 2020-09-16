@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
-using EvolutionaryAlgorithm.Core.Abstract;
+﻿using System.Linq;
 using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Fitness
@@ -15,7 +13,7 @@ namespace EvolutionaryAlgorithm.Template.Fitness
             _limit = _total - jump;
         }
 
-        public double Evaluate(IIndividual<BitArray, bool> individual)
+        public double Evaluate(IBitIndividual individual)
         {
             var flipped = individual.Count(e => e);
             if (flipped == _total) return _total;

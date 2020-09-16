@@ -26,7 +26,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             var newGeneration = Mutator.Create(Population);
             newGeneration.ForEach(i => i.Fitness = Fitness.Evaluate(i));
             GenerationFilter.Filter(Population, newGeneration);
-            Population.Generation++;
             Statistics?.Update(this);
         }
 

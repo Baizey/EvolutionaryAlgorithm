@@ -1,10 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
+using EvolutionaryAlgorithm.Core.Abstract;
 using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Fitness
 {
     public class JumpFitness : IBitFitness
     {
+        public IEvolutionaryAlgorithm<BitArray, bool> Algorithm { get; set; }
+        
         private readonly int _total, _limit;
 
         public JumpFitness(int total, int jump)

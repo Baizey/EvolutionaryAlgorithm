@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
-    public interface IGenerationFilter<TDataStructure, TGene> where TDataStructure : ICloneable
+    public interface IGenerationFilter<TGeneStructure, TGene> where TGeneStructure : ICloneable
     {
-        IPopulation<TDataStructure, TGene> Filter(IPopulation<TDataStructure, TGene> population, List<IIndividual<TDataStructure, TGene>> newcomers);
+        public IEvolutionaryAlgorithm<TGeneStructure, TGene> Algorithm { get; set; }
+        IPopulation<TGeneStructure, TGene> Filter(IPopulation<TGeneStructure, TGene> population, List<IIndividual<TGeneStructure, TGene>> newcomers);
     }
 }

@@ -36,6 +36,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingFitness(IFitness<TGeneStructure, TGene> fitness)
         {
             Fitness = fitness;
+            Fitness.Algorithm = this;
             Initiate();
             return this;
         }
@@ -43,6 +44,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingMutator(IMutator<TGeneStructure, TGene> mutator)
         {
             Mutator = mutator;
+            Mutator.Algorithm = this;
             return this;
         }
 
@@ -50,6 +52,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
             IGenerationFilter<TGeneStructure, TGene> generationFilter)
         {
             GenerationFilter = generationFilter;
+            GenerationFilter.Algorithm = this;
             return this;
         }
 

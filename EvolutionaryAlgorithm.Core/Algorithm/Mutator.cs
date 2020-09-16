@@ -7,6 +7,23 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 {
     public class Mutator<TGeneStructure, TGene> : IMutator<TGeneStructure, TGene> where TGeneStructure : ICloneable
     {
+        private IEvolutionaryAlgorithm<TGeneStructure, TGene> _algorithm;
+
+        public IEvolutionaryAlgorithm<TGeneStructure, TGene> Algorithm
+        {
+            get => _algorithm;
+            set
+            {
+                _algorithm = value;
+                MutationSteps.ForEach(step =>
+                {
+                    step.Mutation.Algorithm = _algorithm;
+                    if (step.ParentSelector != null)
+                        step.ParentSelector.Algorithm = _algorithm;
+                });
+            }
+        }
+
         public int NewIndividuals { get; set; }
         public IParentSelector<TGeneStructure, TGene> InitialSelector { get; set; }
 
@@ -24,6 +41,9 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             IParentSelector<TGeneStructure, TGene> parentSelector = null)
         {
             MutationSteps.Add(new MutationStep<TGeneStructure, TGene>(mutation, parentSelector));
+            mutation.Algorithm = _algorithm;
+            if (parentSelector != null)
+                parentSelector.Algorithm = _algorithm;
             return this;
         }
 
@@ -37,7 +57,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
                 var parent = step.ParentSelector?.Select(population);
                 individual = step.Mutation.Mutate(individual, parent);
             }
-            
+
             return individual;
         }
 

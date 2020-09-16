@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections;
+using EvolutionaryAlgorithm.Core.Abstract;
 using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Mutation
 {
     public class OneMaxStaticOptimalMutation : IBitMutation
     {
+        public IEvolutionaryAlgorithm<BitArray, bool> Algorithm { get; set; }
+
         private readonly double[] _odds;
         private readonly Random _random;
 

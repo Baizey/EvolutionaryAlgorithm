@@ -1,7 +1,10 @@
-﻿namespace EvolutionaryAlgorithm.Core.Abstract
+﻿using System;
+
+namespace EvolutionaryAlgorithm.Core.Abstract
 {
-    public interface IFitness<T, TA>
+    public interface IFitness<TGeneStructure, TGene> where TGeneStructure : ICloneable
     {
-        double Evaluate(IIndividual<T, TA> individual);
+        public IEvolutionaryAlgorithm<TGeneStructure, TGene> Algorithm { get; set; }
+        double Evaluate(IIndividual<TGeneStructure, TGene> individual);
     }
 }

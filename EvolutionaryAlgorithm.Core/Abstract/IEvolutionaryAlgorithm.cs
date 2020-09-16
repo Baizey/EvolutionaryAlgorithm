@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EvolutionaryAlgorithm.Core.Algorithm;
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
@@ -10,28 +11,46 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public IMutator<TGeneStructure, TGene> Mutator { get; set; }
         public IGenerationFilter<TGeneStructure, TGene> GenerationFilter { get; set; }
         public IIndividual<TGeneStructure, TGene> Best { get; }
+        public IEvolutionaryStatistics<TGeneStructure, TGene> Statistics { get; set; }
 
-        IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingPopulation(IPopulation<TGeneStructure, TGene> initialPopulation)
+        void Initiate()
+        {
+            if (Population != null && Fitness != null)
+                Population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
+        }
+
+        IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingPopulation(
+            IPopulation<TGeneStructure, TGene> initialPopulation)
         {
             Population = initialPopulation;
+            Initiate();
             return this;
         }
 
-        IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingFitness(IFitness<TGeneStructure, TGene> initialPopulation)
+        IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingStatistics(
+            IEvolutionaryStatistics<TGeneStructure, TGene> statistics)
         {
-            Fitness = initialPopulation;
+            Statistics = statistics;
             return this;
         }
 
-        IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingMutator(IMutator<TGeneStructure, TGene> initialPopulation)
+        IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingFitness(IFitness<TGeneStructure, TGene> fitness)
         {
-            Mutator = initialPopulation;
+            Fitness = fitness;
+            Initiate();
             return this;
         }
 
-        IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingGenerationFilter(IGenerationFilter<TGeneStructure, TGene> initialPopulation)
+        IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingMutator(IMutator<TGeneStructure, TGene> mutator)
         {
-            GenerationFilter = initialPopulation;
+            Mutator = mutator;
+            return this;
+        }
+
+        IEvolutionaryAlgorithm<TGeneStructure, TGene> UsingGenerationFilter(
+            IGenerationFilter<TGeneStructure, TGene> generationFilter)
+        {
+            GenerationFilter = generationFilter;
             return this;
         }
 

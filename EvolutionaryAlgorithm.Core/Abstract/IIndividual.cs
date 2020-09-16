@@ -9,7 +9,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         IEnumerable<TGene>
     {
         public int Size { get; }
-        public double? Fitness { get; set; }
+        public double Fitness { get; set; }
         public TGeneStructure Genes { get; set; }
     }
 

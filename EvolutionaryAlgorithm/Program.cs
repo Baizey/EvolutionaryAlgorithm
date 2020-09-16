@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.Template.Algorithm;
+using EvolutionaryAlgorithm.Core.BitAlgorithm;
 using EvolutionaryAlgorithm.Template.Fitness;
 using EvolutionaryAlgorithm.Template.Mutation;
 using EvolutionaryAlgorithm.Template.ParentSelector;
-using EvolutionaryAlgorithm.Template.Population;
 using EvolutionaryAlgorithm.Template.Selection;
 
 namespace EvolutionaryAlgorithm
@@ -17,24 +16,22 @@ namespace EvolutionaryAlgorithm
                 geneSize = 50,
                 populationSize = 1,
                 newIndividuals = 1,
-                jump = 5;
+                jump = 1;
 
             var random = new Random();
-            var algo = new BitEvolutionaryAlgorithm()
-                .UsingJumpFitness(geneSize, jump)
+            var algo = BitEvolutionaryAlgorithm.Construct
+                .UsingBasicStatistics()
                 .UsingPopulation(populationSize, geneSize, () => random.NextDouble() >= 0.5)
+                .UsingOneMaxFitness()
                 .UsingMutator(newIndividuals, new RandomParentSelector(),
                     mutator => mutator.ThenOneMaxStaticOptimalMutation(geneSize))
                 .UsingElitismGenerationFilter();
 
-            algo.Population.Individuals.ForEach(i => algo.Fitness.Evaluate(i));
             do
             {
                 await algo.Evolve();
                 Console.WriteLine(algo.Population.Generation + ": " + algo.Best);
             } while (algo.Best.Fitness < geneSize);
-
-            Console.WriteLine(algo.Population.Generation + ": " + algo.Best);
         }
     }
 }

@@ -7,7 +7,6 @@ namespace EvolutionaryAlgorithm.Template.Fitness
 {
     public class OneMaxFitness : IBitFitness
     {
-        public double Evaluate(IIndividual<BitArray, bool> individual) =>
-            (double) (individual.Fitness = individual.Count(e => e));
+        public double Evaluate(IIndividual<BitArray, bool> individual) => individual.Count(e => e);
     }
 }

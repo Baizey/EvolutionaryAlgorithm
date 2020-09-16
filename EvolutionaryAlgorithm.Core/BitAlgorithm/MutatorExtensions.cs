@@ -1,7 +1,7 @@
 ﻿using System;
 using EvolutionaryAlgorithm.Core.Bit;
 
-namespace EvolutionaryAlgorithm.Template.Algorithm
+namespace EvolutionaryAlgorithm.Core.BitAlgorithm
 {
     public static class MutatorExtensions
     {
@@ -9,10 +9,10 @@ namespace EvolutionaryAlgorithm.Template.Algorithm
             this IBitEvolutionaryAlgorithm algo,
             int newIndividuals,
             IBitParentSelector initialSelector,
-            Action<BitMutator> opt)
+            Action<IBitMutator> opt)
         {
             algo.UsingMutator(new BitMutator(newIndividuals, initialSelector));
-            opt.Invoke((BitMutator) algo.Mutator);
+            opt.Invoke((IBitMutator) algo.Mutator);
             return algo;
         }
     }

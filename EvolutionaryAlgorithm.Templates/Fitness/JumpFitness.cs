@@ -19,7 +19,7 @@ namespace EvolutionaryAlgorithm.Template.Fitness
         {
             var flipped = individual.Count(e => e);
             if (flipped == _total) return _total;
-            return (double) (individual.Fitness = flipped < _limit ? flipped : _total - flipped);
+            return flipped < _limit ? flipped : _total - flipped;
         }
     }
 }

@@ -3,8 +3,7 @@ using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Bit
 {
-    public interface IBitIndividual :
-        IIndividual<BitArray, bool>
+    public interface IBitIndividual : IIndividual<BitArray, bool>
     {
         public bool this[int i]
         {

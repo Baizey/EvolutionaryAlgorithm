@@ -9,6 +9,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         IParentSelector<TDataStructure, TGene> InitialSelector { get; set; }
         List<MutationStep<TDataStructure, TGene>> MutationSteps { get; set; }
         IMutator<TDataStructure, TGene> Then(IMutation<TDataStructure, TGene> mutation, IParentSelector<TDataStructure, TGene> parentSelector = null);
-        List<IIndividual<TDataStructure, TGene>> Create(IPopulation<TDataStructure, TGene> population, IFitness<TDataStructure, TGene> fitness);
+        List<IIndividual<TDataStructure, TGene>> Create(IPopulation<TDataStructure, TGene> population);
     }
 }

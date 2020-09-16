@@ -6,11 +6,11 @@ using EvolutionaryAlgorithm.Core.Abstract;
 using EvolutionaryAlgorithm.Core.Bit;
 using static System.Linq.Enumerable;
 
-namespace EvolutionaryAlgorithm.Template.Individual
+namespace EvolutionaryAlgorithm.Core.BitAlgorithm
 {
     public class BitIndividual : IBitIndividual
     {
-        public double? Fitness { get; set; }
+        public double Fitness { get; set; }
         public BitArray Genes { get; set; }
         public int Size => Genes.Count;
 
@@ -32,11 +32,7 @@ namespace EvolutionaryAlgorithm.Template.Individual
 
         public IEnumerator<bool> GetEnumerator() => (IEnumerator<bool>) Genes.Cast<bool>().GetEnumerator();
 
-        public int CompareTo(IIndividual<BitArray, bool> other)
-        {
-            if (Fitness == null || other.Fitness == null) return 0;
-            return Math.Sign((double) (Fitness - other.Fitness));
-        }
+        public int CompareTo(IIndividual<BitArray, bool> other) => Math.Sign(Fitness - other.Fitness);
 
         public override string ToString() =>
             Fitness + " -> " + string.Join("", Genes.Cast<bool>().Select(e => e ? "1" : "0"));

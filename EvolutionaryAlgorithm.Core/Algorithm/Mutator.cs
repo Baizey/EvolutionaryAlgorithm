@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using EvolutionaryAlgorithm.Core.Abstract;
 
@@ -18,28 +17,32 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             set
             {
                 _algorithm = value;
-                MutationSteps.ForEach(step => step.Algorithm = _algorithm);
+                if (InitialSelector != null)
+                    InitialSelector.Algorithm = _algorithm;
+                Mutations.ForEach(step => step.Algorithm = _algorithm);
             }
         }
 
         public List<TIndividual> Reserves { get; set; }
         public IParentSelector<TIndividual, TGeneStructure, TGene> InitialSelector { get; set; }
 
-        public List<IMutation<TIndividual, TGeneStructure, TGene>> MutationSteps { get; set; } =
+        public List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; set; } =
             new List<IMutation<TIndividual, TGeneStructure, TGene>>();
 
-        public Mutator(int size, IParentSelector<TIndividual, TGeneStructure, TGene> initialSelector)
+        public Mutator(int size, IParentSelector<TIndividual, TGeneStructure, TGene> initialSelector = null)
         {
             Reserves = Enumerable.Range(0, size)
                 .Select(_ => Activator.CreateInstance<TIndividual>())
                 .ToList();
             InitialSelector = initialSelector;
+            if (initialSelector != null)
+                InitialSelector.Algorithm = _algorithm;
         }
 
         public IMutator<TIndividual, TGeneStructure, TGene> Then(
             IMutation<TIndividual, TGeneStructure, TGene> mutation)
         {
-            MutationSteps.Add(mutation);
+            Mutations.Add(mutation);
             mutation.Algorithm = _algorithm;
             return this;
         }
@@ -49,9 +52,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         {
             Reserves.ForEach(reserve =>
             {
-                var origin = InitialSelector.Select(population);
-                origin.CloneGenesTo(reserve);
-                foreach (var step in MutationSteps) step.Mutate(reserve);
+                InitialSelector?.Select(population).CloneGenesTo(reserve);
+                Mutations.ForEach(step => step.Mutate(reserve));
             });
 
             return Reserves;

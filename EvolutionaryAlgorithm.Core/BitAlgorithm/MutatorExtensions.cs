@@ -18,5 +18,16 @@ namespace EvolutionaryAlgorithm.Core.BitAlgorithm
             opt.Invoke(mutator);
             return algo;
         }
+        
+        public static IBitEvolutionaryAlgorithm UsingMutator(
+            this IBitEvolutionaryAlgorithm algo,
+            int newIndividuals,
+            Action<IMutator<IBitIndividual, BitArray, bool>> opt)
+        {
+            var mutator = new BitMutator(newIndividuals, null);
+            algo.UsingMutator(mutator);
+            opt.Invoke(mutator);
+            return algo;
+        }
     }
 }

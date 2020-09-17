@@ -14,6 +14,6 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
         public RandomParentSelector() => _random = new Random();
 
         public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
-            (IBitIndividual) population[_random.Next(population.Count)];
+            population[_random.Next(population.Count)];
     }
 }

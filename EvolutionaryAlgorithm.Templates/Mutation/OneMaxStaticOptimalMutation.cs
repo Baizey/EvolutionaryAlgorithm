@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 
@@ -15,11 +16,11 @@ namespace EvolutionaryAlgorithm.Template.Mutation
         public OneMaxStaticOptimalMutation(int n)
         {
             _random = new Random();
-            _odds = new double[10];
-            for (var k = 0; k < _odds.Length; k++)
-                _odds[k] = Math.Pow(1D - 1D / n, n - k)
-                           * Math.Pow(1D / n, k)
-                           * GetnCk(n, k);
+            _odds = Enumerable.Range(0, 10).Select(k =>
+                    Math.Pow(1D - 1D / n, n - k)
+                    * Math.Pow(1D / n, k)
+                    * GetnCk(n, k))
+                .ToArray();
         }
 
         // Reasonably efficient way of calculating
@@ -36,6 +37,7 @@ namespace EvolutionaryAlgorithm.Template.Mutation
         public IBitIndividual Mutate(IBitIndividual child)
         {
             var roll = _random.NextDouble();
+
             foreach (var k in _odds)
             {
                 if (roll < k) break;

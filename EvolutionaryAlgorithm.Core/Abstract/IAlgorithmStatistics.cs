@@ -23,6 +23,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public int StepSize { get; }
         public List<TIndividual> History { get; }
     }
 }

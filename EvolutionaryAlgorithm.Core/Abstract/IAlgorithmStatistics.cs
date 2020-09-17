@@ -10,8 +10,8 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public DateTime StartTime { get; }
         public DateTime EndTime { get; }
         public List<TIndividual> Generations { get; }
-        public IIndividual<TGeneStructure, TGene> Best { get; }
-        public IIndividual<TGeneStructure, TGene> Last { get; }
+        public TIndividual Best { get; }
+        public TIndividual Last { get; }
         public int StagnantGeneration { get; }
         public int CurrentGeneration { get; }
 

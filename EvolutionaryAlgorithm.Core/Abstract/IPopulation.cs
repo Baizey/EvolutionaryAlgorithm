@@ -10,7 +10,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
     {
         public int Count { get; }
         public List<TIndividual> Individuals { get; set; }
-        public IIndividual<TGeneStructure, TGene> Best { get; }
+        public TIndividual Best { get; }
 
         public TIndividual this[int i]
         {

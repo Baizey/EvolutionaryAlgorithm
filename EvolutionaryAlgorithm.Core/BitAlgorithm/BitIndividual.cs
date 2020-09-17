@@ -12,6 +12,9 @@ namespace EvolutionaryAlgorithm.Core.BitAlgorithm
     {
         public double Fitness { get; set; }
         public BitArray Genes { get; set; }
+
+        public void CloneGenesTo(IIndividual<BitArray, bool> other) => other.Genes = new BitArray(Genes);
+
         public int Size => Genes.Count;
         public int Ones => this.Count(e => e);
         public int Zeros => Size - Ones;

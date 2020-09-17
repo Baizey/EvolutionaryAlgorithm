@@ -11,7 +11,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
         public IMutator<TIndividual, TGeneStructure, TGene> Mutator { get; set; }
         public IGenerationFilter<TIndividual, TGeneStructure, TGene> GenerationFilter { get; set; }
-        public IIndividual<TGeneStructure, TGene> Best { get; }
+        public TIndividual Best { get; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
         
         void Initiate()

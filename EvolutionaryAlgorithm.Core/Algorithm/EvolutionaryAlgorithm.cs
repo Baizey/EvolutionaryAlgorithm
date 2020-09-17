@@ -14,7 +14,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
         public IMutator<TIndividual, TGeneStructure, TGene> Mutator { get; set; }
         public IGenerationFilter<TIndividual, TGeneStructure, TGene> GenerationFilter { get; set; }
-        public IIndividual<TGeneStructure, TGene> Best => Population.Best;
+        public TIndividual Best => Population.Best;
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
 
         public static EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Construct =>
@@ -26,7 +26,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
         private void EvolveOneGeneration()
         {
-            var newGeneration = Mutator.Create(Population);
+            var newGeneration = Mutator.GenerateNextGeneration(Population);
             newGeneration.ForEach(i => i.Fitness = Fitness.Evaluate(i));
             GenerationFilter.Filter(Population, newGeneration);
             Statistics?.Update(this);

@@ -13,7 +13,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public int Count => Individuals.Count;
         public List<TIndividual> Individuals { get; set; }
 
-        public IIndividual<TGeneStructure, TGene> Best =>
+        public TIndividual Best =>
             Individuals.Aggregate((a, b) => a.Fitness > b.Fitness ? a : b);
 
         public Population(List<TIndividual> value) => Individuals = value;

@@ -33,7 +33,7 @@ namespace EvolutionaryAlgorithm.Template.Mutation
             return Math.Pow(10, sum);
         }
 
-        public IBitIndividual Mutate(IBitIndividual child, IBitIndividual parent)
+        public IBitIndividual Mutate(IBitIndividual child)
         {
             var roll = _random.NextDouble();
             foreach (var k in _odds)

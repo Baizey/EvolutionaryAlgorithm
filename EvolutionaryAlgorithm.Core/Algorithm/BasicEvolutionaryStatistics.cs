@@ -16,8 +16,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
         public List<TIndividual> Generations { get; } = new List<TIndividual>();
 
-        public IIndividual<TGeneStructure, TGene> Best { get; private set; }
-        public IIndividual<TGeneStructure, TGene> Last => Generations.Last();
+        public TIndividual Best { get; private set; }
+        public TIndividual Last => Generations.Last();
         public int StagnantGeneration { get; private set; }
 
         public int CurrentGeneration => Generations.Count;

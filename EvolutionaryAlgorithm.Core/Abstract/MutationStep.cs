@@ -2,15 +2,18 @@
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
-    public class MutationStep<TDataStructure, TGene> where TDataStructure : ICloneable
+    public class MutationStep<TIndividual, TGeneStructure, TGene> 
+        where TGeneStructure : ICloneable
+        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public MutationStep(IMutation<TDataStructure, TGene> mutation, IParentSelector<TDataStructure, TGene> parentSelector)
+        public MutationStep(IMutation<TIndividual, TGeneStructure, TGene> mutation,
+            IParentSelector<TIndividual, TGeneStructure, TGene> parentSelector)
         {
             Mutation = mutation;
             ParentSelector = parentSelector;
         }
 
-        public readonly IMutation<TDataStructure, TGene> Mutation;
-        public readonly IParentSelector<TDataStructure, TGene> ParentSelector;
+        public readonly IMutation<TIndividual, TGeneStructure, TGene> Mutation;
+        public readonly IParentSelector<TIndividual, TGeneStructure, TGene> ParentSelector;
     }
 }

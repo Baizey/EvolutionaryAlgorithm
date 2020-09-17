@@ -7,6 +7,6 @@ namespace EvolutionaryAlgorithm.Core.BitAlgorithm
     public static class StatisticsExtensions
     {
         public static IBitEvolutionaryAlgorithm UsingBasicStatistics(this IBitEvolutionaryAlgorithm algo) =>
-            (IBitEvolutionaryAlgorithm) algo.UsingStatistics(new BasicEvolutionaryStatistics<BitArray, bool>());
+            (IBitEvolutionaryAlgorithm) algo.UsingStatistics(new BasicEvolutionaryStatistics<IBitIndividual, BitArray, bool>());
     }
 }

@@ -5,14 +5,16 @@ using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
-    public class BasicEvolutionaryStatistics<TGeneStructure, TGene> : IEvolutionaryStatistics<TGeneStructure, TGene>
+    public class
+        BasicEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
+        : IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
+        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
 
-        public List<IIndividual<TGeneStructure, TGene>> Generations { get; } =
-            new List<IIndividual<TGeneStructure, TGene>>();
+        public List<TIndividual> Generations { get; } = new List<TIndividual>();
 
         public IIndividual<TGeneStructure, TGene> Best { get; private set; }
         public IIndividual<TGeneStructure, TGene> Last => Generations.Last();
@@ -20,16 +22,16 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
         public int CurrentGeneration => Generations.Count;
 
-        public void Start(IEvolutionaryAlgorithm<TGeneStructure, TGene> algo)
+        public void Start(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
         {
             StartTime = DateTime.Now;
             Best = algo.Best;
             Update(algo);
         }
 
-        public void Update(IEvolutionaryAlgorithm<TGeneStructure, TGene> algo)
+        public void Update(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
         {
-            var clone = (IIndividual<TGeneStructure, TGene>) algo.Best.Clone();
+            var clone = (TIndividual) algo.Best.Clone();
 
             if (clone.Fitness > Best.Fitness)
                 Best = clone;
@@ -42,6 +44,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             Generations.Add(clone);
         }
 
-        public void Finish(IEvolutionaryAlgorithm<TGeneStructure, TGene> algo) => EndTime = DateTime.Now;
+        public void Finish(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo) => EndTime = DateTime.Now;
     }
 }

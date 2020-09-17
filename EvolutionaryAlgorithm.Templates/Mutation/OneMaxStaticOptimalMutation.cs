@@ -7,7 +7,7 @@ namespace EvolutionaryAlgorithm.Template.Mutation
 {
     public class OneMaxStaticOptimalMutation : IBitMutation
     {
-        public IEvolutionaryAlgorithm<BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         private readonly double[] _odds;
         private readonly Random _random;

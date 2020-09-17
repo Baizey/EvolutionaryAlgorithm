@@ -7,9 +7,11 @@ namespace EvolutionaryAlgorithm.Template.Selection
 {
     public class ElitismGenerationFilter : IBitGenerationFilter
     {
-        public IEvolutionaryAlgorithm<BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
-        public IBitPopulation Filter(IBitPopulation population, List<IBitIndividual> newcomers)
+        public IPopulation<IBitIndividual, BitArray, bool> Filter(
+            IPopulation<IBitIndividual, BitArray, bool> population,
+            List<IBitIndividual> newcomers)
         {
             var initialSize = population.Count;
             population.Individuals.AddRange(newcomers);

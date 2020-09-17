@@ -2,9 +2,11 @@
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
-    public interface IParentSelector<TGeneStructure, TGene> where TGeneStructure : ICloneable
+    public interface IParentSelector<TIndividual, TGeneStructure, TGene> 
+        where TGeneStructure : ICloneable
+        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public IEvolutionaryAlgorithm<TGeneStructure, TGene> Algorithm { get; set; }
-        public IIndividual<TGeneStructure, TGene> Select(IPopulation<TGeneStructure, TGene> population);
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
+        public TIndividual Select(IPopulation<TIndividual, TGeneStructure, TGene> population);
     }
 }

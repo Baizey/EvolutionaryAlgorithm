@@ -6,22 +6,23 @@ using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
-    public class Population<TGeneStructure, TGene> : IPopulation<TGeneStructure, TGene>
+    public class Population<TIndividual, TGeneStructure, TGene> : IPopulation<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
+        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public int Count => Individuals.Count;
-        public List<IIndividual<TGeneStructure, TGene>> Individuals { get; set; }
+        public List<TIndividual> Individuals { get; set; }
 
         public IIndividual<TGeneStructure, TGene> Best =>
             Individuals.Aggregate((a, b) => a.Fitness > b.Fitness ? a : b);
 
-        public Population(List<IIndividual<TGeneStructure, TGene>> value) => Individuals = value;
+        public Population(List<TIndividual> value) => Individuals = value;
 
         public object Clone() =>
-            new Population<TGeneStructure, TGene>(Individuals
-                .Select(i => (IIndividual<TGeneStructure, TGene>) i.Clone()).ToList());
+            new Population<TIndividual, TGeneStructure, TGene>(Individuals
+                .Select(i => (TIndividual) i.Clone()).ToList());
 
-        public IEnumerator<IIndividual<TGeneStructure, TGene>> GetEnumerator() => Individuals.GetEnumerator();
+        public IEnumerator<TIndividual> GetEnumerator() => Individuals.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => Individuals.GetEnumerator();
         public override string ToString() => Individuals.ToString();
     }

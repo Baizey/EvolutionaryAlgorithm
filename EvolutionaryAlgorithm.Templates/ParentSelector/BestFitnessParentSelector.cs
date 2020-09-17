@@ -7,9 +7,9 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
     public class BestFitnessParentSelector : IBitParentSelector
     {
-        public IEvolutionaryAlgorithm<BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
-        public IBitIndividual Select(IBitPopulation population) =>
-            (IBitIndividual) population.Individuals.Aggregate((a, b) => a.Fitness > b.Fitness ? a : b);
+        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
+            population.Individuals.Aggregate((a, b) => a.Fitness > b.Fitness ? a : b);
     }
 }

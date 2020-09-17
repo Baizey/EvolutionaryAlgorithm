@@ -8,7 +8,7 @@ using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Core.BitAlgorithm
 {
-    public class BitPopulation : Population<BitArray, bool>, IBitPopulation
+    public class BitPopulation : Population<IBitIndividual, BitArray, bool>, IBitPopulation
     {
         public static BitPopulation From(int populationCount, int geneCount, bool defaultValue) =>
             From(populationCount, geneCount, () => defaultValue);
@@ -16,11 +16,11 @@ namespace EvolutionaryAlgorithm.Core.BitAlgorithm
         public static BitPopulation From(int populationCount, int geneCount, Func<bool> generator) =>
             new BitPopulation(populationCount, () => new BitIndividual(geneCount, generator));
 
-        public BitPopulation(List<IIndividual<BitArray, bool>> value) : base(value)
+        public BitPopulation(List<IBitIndividual> value) : base(value)
         {
         }
 
-        public BitPopulation(int size, Func<IIndividual<BitArray, bool>> generator)
+        public BitPopulation(int size, Func<IBitIndividual> generator)
             : base(Enumerable.Range(0, size).Select(_ => generator.Invoke()).ToList())
         {
         }

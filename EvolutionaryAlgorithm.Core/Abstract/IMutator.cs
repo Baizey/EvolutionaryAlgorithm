@@ -3,17 +3,21 @@ using System.Collections.Generic;
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
-    public interface IMutator<TGeneStructure, TGene> where TGeneStructure : ICloneable
+    public interface IMutator<TIndividual, TGeneStructure, TGene>
+        where TGeneStructure : ICloneable
+        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public IEvolutionaryAlgorithm<TGeneStructure, TGene> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
 
-        int NewIndividuals { get; set; }
-        IParentSelector<TGeneStructure, TGene> InitialSelector { get; set; }
-        List<MutationStep<TGeneStructure, TGene>> MutationSteps { get; set; }
+        public List<TIndividual> Reserves { get; set; }
 
-        IMutator<TGeneStructure, TGene> Then(IMutation<TGeneStructure, TGene> mutation,
-            IParentSelector<TGeneStructure, TGene> parentSelector = null);
-
-        List<IIndividual<TGeneStructure, TGene>> Create(IPopulation<TGeneStructure, TGene> population);
+        int Size => Reserves.Count;
+        IParentSelector<TIndividual, TGeneStructure, TGene> InitialSelector { get; set; }
+        List<MutationStep<TIndividual, TGeneStructure, TGene>> MutationSteps { get; set; }
+        
+        IMutator<TIndividual, TGeneStructure, TGene> Then(IMutation<TIndividual, TGeneStructure, TGene> mutation,
+            IParentSelector<TIndividual, TGeneStructure, TGene> parentSelector = null);
+        
+        List<TIndividual> Create(IPopulation<TIndividual, TGeneStructure, TGene> population);
     }
 }

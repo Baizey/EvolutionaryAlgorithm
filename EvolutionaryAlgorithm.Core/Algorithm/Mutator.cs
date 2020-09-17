@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
-    public class Mutator<TGeneStructure, TGene> : IMutator<TGeneStructure, TGene> where TGeneStructure : ICloneable
+    public class Mutator<TIndividual, TGeneStructure, TGene> : IMutator<TIndividual, TGeneStructure, TGene>
+        where TGeneStructure : ICloneable
+        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        private IEvolutionaryAlgorithm<TGeneStructure, TGene> _algorithm;
+        private IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> _algorithm;
 
-        public IEvolutionaryAlgorithm<TGeneStructure, TGene> Algorithm
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm
         {
             get => _algorithm;
             set
@@ -24,44 +27,49 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             }
         }
 
-        public int NewIndividuals { get; set; }
-        public IParentSelector<TGeneStructure, TGene> InitialSelector { get; set; }
+        public List<TIndividual> Reserves { get; set; }
+        public IParentSelector<TIndividual, TGeneStructure, TGene> InitialSelector { get; set; }
 
-        public List<MutationStep<TGeneStructure, TGene>> MutationSteps { get; set; } =
-            new List<MutationStep<TGeneStructure, TGene>>();
+        public List<MutationStep<TIndividual, TGeneStructure, TGene>> MutationSteps { get; set; } =
+            new List<MutationStep<TIndividual, TGeneStructure, TGene>>();
 
-        public Mutator(int newIndividuals, IParentSelector<TGeneStructure, TGene> initialSelector)
+        public Mutator(int size, IParentSelector<TIndividual, TGeneStructure, TGene> initialSelector)
         {
-            NewIndividuals = newIndividuals;
+            Reserves = Enumerable.Range(0, size)
+                .Select(_ => Activator.CreateInstance<TIndividual>())
+                .ToList();
             InitialSelector = initialSelector;
         }
 
-        public IMutator<TGeneStructure, TGene> Then(
-            IMutation<TGeneStructure, TGene> mutation,
-            IParentSelector<TGeneStructure, TGene> parentSelector = null)
+        public IMutator<TIndividual, TGeneStructure, TGene> Then(
+            IMutation<TIndividual, TGeneStructure, TGene> mutation,
+            IParentSelector<TIndividual, TGeneStructure, TGene> parentSelector = null)
         {
-            MutationSteps.Add(new MutationStep<TGeneStructure, TGene>(mutation, parentSelector));
+            MutationSteps.Add(new MutationStep<TIndividual, TGeneStructure, TGene>(mutation, parentSelector));
             mutation.Algorithm = _algorithm;
             if (parentSelector != null)
                 parentSelector.Algorithm = _algorithm;
             return this;
         }
 
-        private IIndividual<TGeneStructure, TGene> CreateIndividual(
-            IPopulation<TGeneStructure, TGene> population)
+        private TIndividual CreateIndividual(
+            IPopulation<TIndividual, TGeneStructure, TGene> population)
         {
-            var individual = (IIndividual<TGeneStructure, TGene>) InitialSelector.Select(population).Clone();
+            var individual = (TIndividual) InitialSelector.Select(population).Clone();
 
             foreach (var step in MutationSteps)
             {
-                var parent = step.ParentSelector?.Select(population);
+                var parent = step.ParentSelector.Select(population);
                 individual = step.Mutation.Mutate(individual, parent);
             }
 
             return individual;
         }
 
-        public List<IIndividual<TGeneStructure, TGene>> Create(IPopulation<TGeneStructure, TGene> population) =>
-            Enumerable.Range(0, NewIndividuals).Select(_ => CreateIndividual(population)).ToList();
+        public List<TIndividual> Create(
+            IPopulation<TIndividual, TGeneStructure, TGene> population)
+        {
+            return Enumerable.Range(0, Reserves.Count).Select(_ => CreateIndividual(population)).ToList();
+        }
     }
 }

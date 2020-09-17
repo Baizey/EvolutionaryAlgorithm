@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using EvolutionaryAlgorithm.Core.Abstract;
 using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Core.BitAlgorithm
@@ -9,10 +11,11 @@ namespace EvolutionaryAlgorithm.Core.BitAlgorithm
             this IBitEvolutionaryAlgorithm algo,
             int newIndividuals,
             IBitParentSelector initialSelector,
-            Action<IBitMutator> opt)
+            Action<IMutator<IBitIndividual, BitArray, bool>> opt)
         {
-            algo.UsingMutator(new BitMutator(newIndividuals, initialSelector));
-            opt.Invoke((IBitMutator) algo.Mutator);
+            var mutator = new BitMutator(newIndividuals, initialSelector);
+            algo.UsingMutator(mutator);
+            opt.Invoke(mutator);
             return algo;
         }
     }

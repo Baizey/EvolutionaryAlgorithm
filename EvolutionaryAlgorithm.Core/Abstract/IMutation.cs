@@ -2,10 +2,12 @@
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
-    public interface IMutation<TGeneStructure, TGene> where TGeneStructure : ICloneable
+    public interface IMutation<TIndividual, TGeneStructure, TGene> 
+        where TGeneStructure : ICloneable
+        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public IEvolutionaryAlgorithm<TGeneStructure, TGene> Algorithm { get; set; }
-        IIndividual<TGeneStructure, TGene> Mutate(IIndividual<TGeneStructure, TGene> child,
-            IIndividual<TGeneStructure, TGene> parent);
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
+
+        TIndividual Mutate(TIndividual child, TIndividual parent);
     }
 }

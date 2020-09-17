@@ -8,7 +8,7 @@ namespace EvolutionaryAlgorithm.Template.Fitness
 {
     public class TwoMaxFitness : IBitFitness
     {
-        public IEvolutionaryAlgorithm<BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public double Evaluate(IBitIndividual individual)
         {

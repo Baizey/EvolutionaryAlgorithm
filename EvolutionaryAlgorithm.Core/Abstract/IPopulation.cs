@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
-    public interface IPopulation<TGeneStructure, TGene> :
+    public interface IPopulation<TIndividual, TGeneStructure, TGene> :
         ICloneable,
-        IEnumerable<IIndividual<TGeneStructure, TGene>>
+        IEnumerable<TIndividual>
         where TGeneStructure : ICloneable
     {
         public int Count { get; }
-        public List<IIndividual<TGeneStructure, TGene>> Individuals { get; set; }
+        public List<TIndividual> Individuals { get; set; }
         public IIndividual<TGeneStructure, TGene> Best { get; }
 
-        public IIndividual<TGeneStructure, TGene> this[int i]
+        public TIndividual this[int i]
         {
             get => Individuals[i];
             set => Individuals[i] = value;

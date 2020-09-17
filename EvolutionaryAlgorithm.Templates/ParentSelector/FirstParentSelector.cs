@@ -6,9 +6,9 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
     public class FirstParentSelector : IBitParentSelector
     {
-        public IEvolutionaryAlgorithm<BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
-        public IBitIndividual Select(IBitPopulation population) =>
+        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
             (IBitIndividual) population[0];
     }
 }

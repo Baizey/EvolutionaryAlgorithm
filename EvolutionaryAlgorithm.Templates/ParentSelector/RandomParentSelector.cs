@@ -7,13 +7,13 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
     public class RandomParentSelector : IBitParentSelector
     {
-        public IEvolutionaryAlgorithm<BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         private readonly Random _random;
 
         public RandomParentSelector() => _random = new Random();
 
-        public IBitIndividual Select(IBitPopulation population) =>
+        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
             (IBitIndividual) population[_random.Next(population.Count)];
     }
 }

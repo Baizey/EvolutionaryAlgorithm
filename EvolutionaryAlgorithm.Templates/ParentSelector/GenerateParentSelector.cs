@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
+using EvolutionaryAlgorithm.BitImplementation.Abstract;
+using EvolutionaryAlgorithm.BitImplementation.Algorithm;
 using EvolutionaryAlgorithm.Core.Abstract;
-using EvolutionaryAlgorithm.Core.Bit;
-using EvolutionaryAlgorithm.Core.BitAlgorithm;
 
 namespace EvolutionaryAlgorithm.Template.ParentSelector
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
+using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
-using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Mutation
 {

@@ -1,4 +1,4 @@
-﻿using EvolutionaryAlgorithm.Core.Bit;
+﻿using EvolutionaryAlgorithm.BitImplementation.Abstract;
 
 namespace EvolutionaryAlgorithm.Template.Fitness
 {

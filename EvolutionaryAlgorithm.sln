@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionaryAlgorithm.Templ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionaryAlgorithm.Core", "EvolutionaryAlgorithm.Core\EvolutionaryAlgorithm.Core.csproj", "{AAAA1DD0-D714-423B-BA67-B35978DCB9C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionaryAlgorithm.BitImplementation", "EvolutionaryAlgorithm.BitImplementation\EvolutionaryAlgorithm.BitImplementation.csproj", "{7B9236C6-83E2-4C0E-A771-335EC7BF5B85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{AAAA1DD0-D714-423B-BA67-B35978DCB9C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAAA1DD0-D714-423B-BA67-B35978DCB9C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAAA1DD0-D714-423B-BA67-B35978DCB9C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B9236C6-83E2-4C0E-A771-335EC7BF5B85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B9236C6-83E2-4C0E-A771-335EC7BF5B85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B9236C6-83E2-4C0E-A771-335EC7BF5B85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B9236C6-83E2-4C0E-A771-335EC7BF5B85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

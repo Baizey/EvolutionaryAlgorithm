@@ -1,8 +1,8 @@
 ﻿using System.Collections;
+using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.Bit;
 
-namespace EvolutionaryAlgorithm.Core.BitAlgorithm
+namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 {
     public class BitEvolutionaryAlgorithm : EvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, IBitEvolutionaryAlgorithm
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core.Bit;
+using EvolutionaryAlgorithm.BitImplementation.Abstract;
 
-namespace EvolutionaryAlgorithm.Core.BitAlgorithm
+namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 {
     public static class BitPopulationExtensions
     {

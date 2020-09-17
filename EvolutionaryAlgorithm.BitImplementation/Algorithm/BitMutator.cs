@@ -1,9 +1,9 @@
 ﻿using System.Collections;
+using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.Bit;
 
-namespace EvolutionaryAlgorithm.Core.BitAlgorithm
+namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 {
     public class BitMutator : Mutator<IBitIndividual, BitArray, bool>
     {

@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
-using EvolutionaryAlgorithm.Core.Bit;
 using static System.Linq.Enumerable;
 
-namespace EvolutionaryAlgorithm.Core.BitAlgorithm
+namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 {
     public class BitIndividual : IBitIndividual
     {

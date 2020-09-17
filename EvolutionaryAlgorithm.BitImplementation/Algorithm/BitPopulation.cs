@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.Bit;
 
-namespace EvolutionaryAlgorithm.Core.BitAlgorithm
+namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 {
     public class BitPopulation : Population<IBitIndividual, BitArray, bool>, IBitPopulation
     {

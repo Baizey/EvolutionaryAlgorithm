@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.Core.BitAlgorithm;
+using EvolutionaryAlgorithm.BitImplementation.Algorithm;
 using EvolutionaryAlgorithm.Template.Fitness;
 using EvolutionaryAlgorithm.Template.Mutation;
 using EvolutionaryAlgorithm.Template.ParentSelector;

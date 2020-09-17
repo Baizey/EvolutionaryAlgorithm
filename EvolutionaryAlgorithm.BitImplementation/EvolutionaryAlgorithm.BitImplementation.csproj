@@ -2,16 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <RootNamespace>EvolutionaryAlgorithm.Template</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EvolutionaryAlgorithm.BitImplementation\EvolutionaryAlgorithm.BitImplementation.csproj" />
       <ProjectReference Include="..\EvolutionaryAlgorithm.Core\EvolutionaryAlgorithm.Core.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Crossover" />
     </ItemGroup>
 
 </Project>

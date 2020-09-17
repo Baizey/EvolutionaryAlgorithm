@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
-using EvolutionaryAlgorithm.Core.Bit;
 
 namespace EvolutionaryAlgorithm.Template.Fitness
 {

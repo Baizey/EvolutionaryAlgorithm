@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Linq;
 using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm

@@ -5,9 +5,9 @@ using EvolutionaryAlgorithm.Core.Abstract;
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
     public class
-        EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> 
+        EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
         : IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
-        where TGeneStructure : ICloneable 
+        where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
@@ -32,10 +32,13 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             Statistics?.Update(this);
         }
 
-        public async Task Evolve()
+        public async Task EvolveUntil(ITermination<TIndividual, TGeneStructure, TGene> termination)
         {
             Statistics?.Start(this);
-            EvolveOneGeneration();
+
+            while (!termination.IsDone(this))
+                EvolveOneGeneration();
+
             Statistics?.Finish(this);
         }
     }

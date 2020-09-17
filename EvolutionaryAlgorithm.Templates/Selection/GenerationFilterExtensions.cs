@@ -4,7 +4,7 @@ namespace EvolutionaryAlgorithm.Template.Selection
 {
     public static class GenerationFilterExtensions
     {
-        public static IBitEvolutionaryAlgorithm UsingElitismGenerationFilter(this IBitEvolutionaryAlgorithm algo) =>
+        public static IBitEvolutionaryAlgorithm UsingStaticElitismGenerationFilter(this IBitEvolutionaryAlgorithm algo) =>
             (IBitEvolutionaryAlgorithm) algo.UsingGenerationFilter(new ElitismGenerationFilter());
     }
 }

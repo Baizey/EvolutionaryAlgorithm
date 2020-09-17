@@ -3,11 +3,11 @@ using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 
-namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
+namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
 {
     public static class MutatorExtensions
     {
-        public static IBitEvolutionaryAlgorithm UsingMutator(
+        public static IBitEvolutionaryAlgorithm UsingStaticMutator(
             this IBitEvolutionaryAlgorithm algo,
             int newIndividuals,
             IBitParentSelector initialSelector,

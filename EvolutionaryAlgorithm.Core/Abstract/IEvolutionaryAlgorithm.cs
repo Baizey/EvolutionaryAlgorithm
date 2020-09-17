@@ -59,6 +59,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract
             return this;
         }
 
-        Task Evolve();
+        Task EvolveUntil(ITermination<TIndividual, TGeneStructure, TGene> termination);
     }
 }

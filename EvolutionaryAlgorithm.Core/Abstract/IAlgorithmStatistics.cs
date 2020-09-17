@@ -12,6 +12,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public TIndividual Best { get; }
         public int StagnantGeneration { get; }
         public long Generations { get; }
+        TimeSpan RunTime => EndTime - StartTime;
 
         void Start(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo);
         void Update(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo);

@@ -11,12 +11,12 @@ namespace EvolutionaryAlgorithm.Core.Abstract
 
         public List<TIndividual> Reserves { get; set; }
 
-        int Size => Reserves.Count;
+        int NextGenerationSize { get; set; }
         IParentSelector<TIndividual, TGeneStructure, TGene> InitialSelector { get; set; }
         List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; set; }
-        
+
         IMutator<TIndividual, TGeneStructure, TGene> Then(IMutation<TIndividual, TGeneStructure, TGene> mutation);
-        
+
         List<TIndividual> GenerateNextGeneration(IPopulation<TIndividual, TGeneStructure, TGene> population);
     }
 }

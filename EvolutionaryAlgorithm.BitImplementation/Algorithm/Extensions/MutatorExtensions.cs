@@ -7,13 +7,13 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
 {
     public static class MutatorExtensions
     {
-        public static IBitEvolutionaryAlgorithm UsingStaticMutator(
+        public static IBitEvolutionaryAlgorithm UsingMutator(
             this IBitEvolutionaryAlgorithm algo,
             int newIndividuals,
             IBitParentSelector initialSelector,
             Action<IMutator<IBitIndividual, BitArray, bool>> opt)
         {
-            var mutator = new BitMutator(newIndividuals, initialSelector);
+            var mutator = new BitStaticMutator(newIndividuals, initialSelector);
             algo.UsingMutator(mutator);
             opt.Invoke(mutator);
             return algo;
@@ -24,7 +24,7 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
             int newIndividuals,
             Action<IMutator<IBitIndividual, BitArray, bool>> opt)
         {
-            var mutator = new BitMutator(newIndividuals, null);
+            var mutator = new BitStaticMutator(newIndividuals, null);
             algo.UsingMutator(mutator);
             opt.Invoke(mutator);
             return algo;

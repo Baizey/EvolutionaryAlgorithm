@@ -21,6 +21,7 @@ namespace EvolutionaryAlgorithm.Template.Mutation
                     * Math.Pow(1D / n, k)
                     * GetnCk(n, k))
                 .ToArray();
+            Console.WriteLine(_odds.Aggregate((a, b) => a + b));
         }
 
         // Reasonably efficient way of calculating
@@ -34,7 +35,7 @@ namespace EvolutionaryAlgorithm.Template.Mutation
             return Math.Pow(10, sum);
         }
 
-        public IBitIndividual Mutate(IBitIndividual child)
+        public void Mutate(IBitIndividual child)
         {
             var roll = _random.NextDouble();
 
@@ -44,8 +45,6 @@ namespace EvolutionaryAlgorithm.Template.Mutation
                 roll -= k;
                 child.Flip(_random.Next(child.Size));
             }
-
-            return child;
         }
     }
 }

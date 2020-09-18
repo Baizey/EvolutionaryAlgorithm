@@ -8,6 +8,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract
     {
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
 
-        TIndividual Mutate(TIndividual child);
+        void Mutate(TIndividual child);
     }
 }

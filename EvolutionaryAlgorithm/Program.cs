@@ -24,7 +24,7 @@ namespace EvolutionaryAlgorithm
                 .UsingBasicStatistics()
                 .UsingRandomPopulation(populationSize, geneSize)
                 .UsingOneMaxFitness()
-                .UsingStaticMutator(newIndividuals, new FirstParentSelector(), mutator => mutator
+                .UsingMutator(newIndividuals, new FirstParentSelector(), mutator => mutator
                     .ThenOneMaxStaticOptimalMutation(geneSize))
                 .UsingStaticElitismGenerationFilter();
 

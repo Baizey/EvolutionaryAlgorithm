@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using EvolutionaryAlgorithm.Core.Abstract;
 
-namespace EvolutionaryAlgorithm.Core.Algorithm
+namespace EvolutionaryAlgorithm.Core.Algorithm.Mutator
 {
-    public class Mutator<TIndividual, TGeneStructure, TGene> : IMutator<TIndividual, TGeneStructure, TGene>
+    public abstract class BaseMutator<TIndividual, TGeneStructure, TGene> : IMutator<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         private IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> _algorithm;
+        public List<TIndividual> Reserves { get; set; }
+        public int NextGenerationSize { get; set; }
 
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm
         {
@@ -23,40 +24,37 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             }
         }
 
-        public List<TIndividual> Reserves { get; set; }
         public IParentSelector<TIndividual, TGeneStructure, TGene> InitialSelector { get; set; }
 
         public List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; set; } =
             new List<IMutation<TIndividual, TGeneStructure, TGene>>();
 
-        public Mutator(int size, IParentSelector<TIndividual, TGeneStructure, TGene> initialSelector = null)
+        public BaseMutator(int nextGenerationSize,
+            IParentSelector<TIndividual, TGeneStructure, TGene> initialSelector = null)
         {
-            Reserves = Enumerable.Range(0, size)
-                .Select(_ => Activator.CreateInstance<TIndividual>())
-                .ToList();
+            Reserves = new List<TIndividual>();
+            NextGenerationSize = nextGenerationSize;
             InitialSelector = initialSelector;
-            if (initialSelector != null)
+            if (InitialSelector != null)
                 InitialSelector.Algorithm = _algorithm;
         }
 
-        public IMutator<TIndividual, TGeneStructure, TGene> Then(
-            IMutation<TIndividual, TGeneStructure, TGene> mutation)
+        public IMutator<TIndividual, TGeneStructure, TGene> Then(IMutation<TIndividual, TGeneStructure, TGene> mutation)
         {
             Mutations.Add(mutation);
             mutation.Algorithm = _algorithm;
             return this;
         }
 
-        public List<TIndividual> GenerateNextGeneration(
-            IPopulation<TIndividual, TGeneStructure, TGene> population)
+        protected void CorrectReserveSize()
         {
-            Reserves.ForEach(reserve =>
-            {
-                InitialSelector?.Select(population).CloneGenesTo(reserve);
-                Mutations.ForEach(step => step.Mutate(reserve));
-            });
-
-            return Reserves;
+            var missing = NextGenerationSize - Reserves.Count;
+            var example = Algorithm.Population.Individuals[0];
+            for (var i = 0; i < missing; i++)
+                Reserves.Add((TIndividual) example.Clone());
         }
+
+        public abstract List<TIndividual> GenerateNextGeneration(
+            IPopulation<TIndividual, TGeneStructure, TGene> population);
     }
 }

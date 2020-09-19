@@ -13,14 +13,27 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
         public double Fitness { get; set; }
         public BitArray Genes { get; set; }
 
-        public void CloneGenesTo(IIndividual<BitArray, bool> other) => other.Genes = new BitArray(Genes);
+        public void CloneGenesTo(IIndividual<BitArray, bool> other)
+        {
+            other.Genes = new BitArray(Genes);
+            other.Fitness = Fitness;
+        }
 
         public int Size => Genes.Count;
         public int Ones => this.Count(e => e);
+
         public int Zeros => Size - Ones;
 
         public BitIndividual(int size, bool defaultValue) => Genes = new BitArray(size, defaultValue);
-        public BitIndividual(BitArray genes) => Genes = genes;
+
+        public BitIndividual(IBitIndividual individual)
+        {
+            Fitness = individual.Fitness;
+            Genes = (BitArray) individual.Genes.Clone();
+        }
+
+
+        public BitIndividual(BitArray bitArray) => Genes = bitArray;
 
         public BitIndividual(bool[] genes) : this(new BitArray(genes))
         {
@@ -33,7 +46,7 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 
         public bool Flip(int i) => Genes[i] = !Genes[i];
 
-        public object Clone() => new BitIndividual((BitArray) Genes.Clone());
+        public object Clone() => new BitIndividual(this);
 
         public IEnumerator<bool> GetEnumerator() => (IEnumerator<bool>) Genes.Cast<bool>().GetEnumerator();
 

@@ -49,5 +49,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
         }
 
         public void Finish(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo) => EndTime = DateTime.Now;
+
+        public override string ToString() =>
+            $"Runtime: {(DateTime.Now - StartTime).TotalSeconds} seconds, Generations: {Generations}, Fitness: {Best.Fitness}";
     }
 }

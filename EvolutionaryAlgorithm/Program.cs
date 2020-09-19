@@ -18,7 +18,6 @@ namespace EvolutionaryAlgorithm
     {
         private static async Task Main()
         {
-            var random = new Random();
             const int
                 geneCount = 50,
                 populationSize = 1,
@@ -34,7 +33,7 @@ namespace EvolutionaryAlgorithm
                     Lambda = newIndividualsPerGeneration,
                 },
                 Statistics = new BasicEvolutionaryStatistics<IBitIndividual, BitArray, bool>(),
-                Population = BitPopulation.From(() => random.NextDouble() >= 0.5),
+                Population = BitPopulation.FromRandom(),
                 Mutator = new BitMutator
                 {
                     Mutations =
@@ -54,14 +53,12 @@ namespace EvolutionaryAlgorithm
                 .UseRandomInitialGenome()
                 .UsingMutator(mutator => mutator
                     .CloneGenesFrom(new BestFitnessParentSelector())
-                    .ThenApplyOneMaxStaticOptimalMutation())
+                    .ThenOneMaxStaticOptimalMutation())
                 .UsingOneMaxFitness()
                 .UsingElitismGenerationFilter()
                 .UsingTermination(new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount));
 
             await chainedInstance.Evolve();
-
-            Console.WriteLine(chainedInstance.Statistics.Generations + ": " + chainedInstance.Best);
         }
     }
 }

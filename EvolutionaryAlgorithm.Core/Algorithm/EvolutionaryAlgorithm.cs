@@ -8,7 +8,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
     public class EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
         : IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
-        where TIndividual : IIndividual<TGeneStructure, TGene>
+        where TIndividual : class, IIndividual<TGeneStructure, TGene>
     {
         public static EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Construct =>
             new EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>();
@@ -125,7 +125,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             var newIndividuals = GetFreshBodies(Parameters.Lambda);
 
             Mutator.Mutate(Population, newIndividuals);
-            newIndividuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
+            foreach (var individual in newIndividuals) individual.Fitness = Fitness.Evaluate(individual);
 
             var result = GenerationFilter.Filter(Population, newIndividuals);
             Population.Individuals = result.NextGeneration;

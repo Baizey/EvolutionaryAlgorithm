@@ -6,7 +6,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public bool IsDone(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm);
+        public bool ShouldTerminate(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm);
     }
 
     public class FitnessTermination<TIndividual, TGeneStructure, TGene>
@@ -21,7 +21,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public FitnessTermination(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, double> limit) =>
             _limit = limit;
 
-        public bool IsDone(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
+        public bool ShouldTerminate(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
             algorithm.Best.Fitness >= _limit.Invoke(algorithm);
     }
 
@@ -37,7 +37,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public StagnationTermination(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, double> limit) =>
             _limit = limit;
 
-        public bool IsDone(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
+        public bool ShouldTerminate(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
             algorithm.Statistics.StagnantGeneration >= _limit.Invoke(algorithm);
     }
 
@@ -50,7 +50,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
 
         public TimeoutTermination(TimeSpan limit) => _limit = limit;
 
-        public bool IsDone(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
+        public bool ShouldTerminate(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
             algorithm.Statistics.RunTime >= _limit;
     }
 }

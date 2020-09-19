@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
@@ -7,6 +8,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
-        public TIndividual Select(IPopulation<TIndividual, TGeneStructure, TGene> population);
+        public TIndividual Select(List<TIndividual> population);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using EvolutionaryAlgorithm.Core.Abstract;
 
-namespace EvolutionaryAlgorithm.Core.Algorithm
+namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
 {
     public class BasicEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
         : IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
@@ -10,28 +10,36 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
     {
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
-
         public TIndividual Best { get; private set; }
+        public TIndividual Previous { get; private set; }
+        public TIndividual Current { get; private set; }
         public int StagnantGeneration { get; private set; }
-
         public long Generations { get; private set; }
 
         public void Start(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
         {
             StartTime = DateTime.Now;
-            Best = (TIndividual) algo.Best.Clone();
+            Current = (TIndividual) algo.Best.Clone();
+            Best = Current;
+            Previous = Current;
         }
 
         public void Update(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
         {
-            Generations++;
-            if (algo.Best.Fitness <= Best.Fitness)
-                StagnantGeneration++;
-            else
-                StagnantGeneration = 0;
+            Previous = Current;
+            Current = (TIndividual) algo.Best.Clone();
 
-            if (algo.Best.Fitness > Best.Fitness)
-                Best = (TIndividual) algo.Best.Clone();
+            Generations++;
+
+            if (Current.Fitness <= Best.Fitness)
+            {
+                StagnantGeneration++;
+            }
+            else
+            {
+                Best = Current;
+                StagnantGeneration = 0;
+            }
         }
 
         public void Finish(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo) => EndTime = DateTime.Now;

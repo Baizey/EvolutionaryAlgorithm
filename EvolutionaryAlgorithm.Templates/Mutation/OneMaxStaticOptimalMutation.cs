@@ -21,7 +21,6 @@ namespace EvolutionaryAlgorithm.Template.Mutation
                     * Math.Pow(1D / n, k)
                     * GetnCk(n, k))
                 .ToArray();
-            Console.WriteLine(_odds.Aggregate((a, b) => a + b));
         }
 
         // Reasonably efficient way of calculating

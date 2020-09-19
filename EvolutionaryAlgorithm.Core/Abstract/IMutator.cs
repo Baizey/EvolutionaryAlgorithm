@@ -8,15 +8,9 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
-
-        public List<TIndividual> Reserves { get; set; }
-
-        int NextGenerationSize { get; set; }
         IParentSelector<TIndividual, TGeneStructure, TGene> InitialSelector { get; set; }
         List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; set; }
-
-        IMutator<TIndividual, TGeneStructure, TGene> Then(IMutation<TIndividual, TGeneStructure, TGene> mutation);
-
-        List<TIndividual> GenerateNextGeneration(IPopulation<TIndividual, TGeneStructure, TGene> population);
+        IMutator<TIndividual, TGeneStructure, TGene> ThenApply(IMutation<TIndividual, TGeneStructure, TGene> mutation);
+        void Mutate(IPopulation<TIndividual, TGeneStructure, TGene> oldIndividuals, List<TIndividual> newIndividuals);
     }
 }

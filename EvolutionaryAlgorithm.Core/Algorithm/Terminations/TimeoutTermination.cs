@@ -12,7 +12,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
 
         public TimeoutTermination(TimeSpan limit) => _limit = limit;
 
-        public bool IsDone(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
+        public bool ShouldTerminate(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
             algorithm.Statistics.RunTime >= _limit;
     }
 }

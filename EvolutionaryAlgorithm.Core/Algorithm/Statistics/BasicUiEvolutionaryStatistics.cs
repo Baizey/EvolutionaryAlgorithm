@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EvolutionaryAlgorithm.Core.Abstract;
 
-namespace EvolutionaryAlgorithm.Core.Algorithm
+namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
 {
     public class BasicUiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
         : BasicEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>,
@@ -18,12 +18,21 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
         public List<TIndividual> History { get; private set; } = new List<TIndividual>();
 
-        public BasicUiEvolutionaryStatistics(int maxDataPoints) => _maxDataPoints = maxDataPoints;
+        public BasicUiEvolutionaryStatistics(int maxDataPoints) => _maxDataPoints = maxDataPoints % 2 == 0
+            ? maxDataPoints
+            : maxDataPoints + 1;
 
         public new void Start(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
         {
             base.Start(algo);
             History.Add(Best);
+        }
+
+        private void Resize()
+        {
+            StepSize *= 2;
+            var keep = false;
+            History = History.Where(e => keep = !keep).ToList();
         }
 
         public new void Update(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
@@ -33,13 +42,11 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             // Only add every x datapoint
             if (++_counter < StepSize) return;
             _counter = 0;
-            History.Add((TIndividual) algo.Best.Clone());
 
             // If we have more datapoints than we are allowed, trim them to keep every other
-            if (History.Count < _maxDataPoints) return;
-            StepSize *= 2;
-            var keep = true;
-            History = History.Where(e => keep = !keep).ToList();
+            if (History.Count >= _maxDataPoints) Resize();
+
+            History.Add((TIndividual) algo.Best.Clone());
         }
     }
 }

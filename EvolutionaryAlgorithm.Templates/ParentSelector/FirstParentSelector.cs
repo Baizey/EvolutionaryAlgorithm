@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 
@@ -8,6 +9,7 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
     {
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
-        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) => population[0];
+        public IBitIndividual Select(List<IBitIndividual> population) =>
+            population[0];
     }
 }

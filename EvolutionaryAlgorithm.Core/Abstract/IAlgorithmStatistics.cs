@@ -10,6 +10,8 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public DateTime StartTime { get; }
         public DateTime EndTime { get; }
         public TIndividual Best { get; }
+        public TIndividual Current { get; }
+        public TIndividual Previous { get; }
         public int StagnantGeneration { get; }
         public long Generations { get; }
         TimeSpan RunTime => EndTime - StartTime;

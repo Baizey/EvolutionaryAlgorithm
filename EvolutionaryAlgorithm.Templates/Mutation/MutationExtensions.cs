@@ -8,14 +8,14 @@ namespace EvolutionaryAlgorithm.Template.Mutation
     {
         public static IMutator<IBitIndividual, BitArray, bool>
             ThenOneMaxStaticOptimalMutation(this IMutator<IBitIndividual, BitArray, bool> mutator, int geneSize) =>
-            mutator.Then(new OneMaxStaticOptimalMutation(geneSize));
+            mutator.ThenApply(new OneMaxStaticOptimalMutation(geneSize));
 
         public static IMutator<IBitIndividual, BitArray, bool> 
             ThenAllOnes(this IMutator<IBitIndividual, BitArray, bool> mutator) =>
-            mutator.Then(new AllOnes());
+            mutator.ThenApply(new AllOnes());
 
         public static IMutator<IBitIndividual, BitArray, bool>
             ThenAllZeros(this IMutator<IBitIndividual, BitArray, bool> mutator) =>
-            mutator.Then(new AllZeros());
+            mutator.ThenApply(new AllZeros());
     }
 }

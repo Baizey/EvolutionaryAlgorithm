@@ -15,7 +15,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
         public StagnationTermination(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, double> limit) =>
             _limit = limit;
 
-        public bool IsDone(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
+        public bool ShouldTerminate(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
             algorithm.Statistics.StagnantGeneration >= _limit.Invoke(algorithm);
     }
 }

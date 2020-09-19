@@ -7,58 +7,23 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public IParameters<TIndividual, TGeneStructure, TGene> Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
         public IMutator<TIndividual, TGeneStructure, TGene> Mutator { get; set; }
         public IGenerationFilter<TIndividual, TGeneStructure, TGene> GenerationFilter { get; set; }
         public TIndividual Best { get; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
-        
-        void Initiate()
-        {
-            if (Population != null && Fitness != null)
-                Population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
-        }
+        public Task EvolveOneGeneration();
 
-        IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> UsingPopulation(
-            IPopulation<TIndividual, TGeneStructure, TGene> initialPopulation)
+        public async Task EvolveUntil(ITermination<TIndividual, TGeneStructure, TGene> termination)
         {
-            Population = initialPopulation;
-            Initiate();
-            return this;
-        }
+            Statistics.Start(this);
 
-        IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> UsingStatistics(
-            IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> statistics)
-        {
-            Statistics = statistics;
-            return this;
-        }
+            while (!termination.ShouldTerminate(this))
+                await EvolveOneGeneration();
 
-        IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> UsingFitness(IFitness<TIndividual, TGeneStructure, TGene> fitness)
-        {
-            Fitness = fitness;
-            Fitness.Algorithm = this;
-            Initiate();
-            return this;
+            Statistics.Finish(this);
         }
-
-        IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> UsingMutator(
-            IMutator<TIndividual, TGeneStructure, TGene> mutator)
-        {
-            Mutator = mutator;
-            Mutator.Algorithm = this;
-            return this;
-        }
-
-        IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> UsingGenerationFilter(
-            IGenerationFilter<TIndividual, TGeneStructure, TGene> generationFilter)
-        {
-            GenerationFilter = generationFilter;
-            GenerationFilter.Algorithm = this;
-            return this;
-        }
-
-        Task EvolveUntil(ITermination<TIndividual, TGeneStructure, TGene> termination);
     }
 }

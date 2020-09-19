@@ -4,7 +4,7 @@ using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
 {
-    public abstract class CrossoverBase<TIndividual, TGeneStructure, TGene>
+    public abstract class MultiParentCrossoverBase<TIndividual, TGeneStructure, TGene>
         : IMutation<TIndividual, TGeneStructure, TGene>
         where TIndividual : IIndividual<TGeneStructure, TGene>
         where TGeneStructure : ICloneable
@@ -20,10 +20,10 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
                 ParentsSelector.Algorithm = Algorithm;
             }
         }
-
+        
         private IMultiParentSelector<TIndividual, TGeneStructure, TGene> ParentsSelector { get; }
 
-        public CrossoverBase(IMultiParentSelector<TIndividual, TGeneStructure, TGene> parentsSelector) =>
+        public MultiParentCrossoverBase(IMultiParentSelector<TIndividual, TGeneStructure, TGene> parentsSelector) =>
             ParentsSelector = parentsSelector;
 
         public void Initialize() => ParentsSelector.Initialize();

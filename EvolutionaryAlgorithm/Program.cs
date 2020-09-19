@@ -21,8 +21,8 @@ namespace EvolutionaryAlgorithm
             var random = new Random();
             const int
                 geneCount = 50,
-                mu = 1,
-                lambda = 1,
+                populationSize = 1,
+                newIndividualsPerGeneration = 1,
                 jump = 1;
 
             var classicInstance = new BitEvolutionaryAlgorithm
@@ -30,8 +30,8 @@ namespace EvolutionaryAlgorithm
                 Parameters = new BitStaticParameters
                 {
                     GeneCount = geneCount,
-                    Lambda = lambda,
-                    Mu = mu
+                    Mu = populationSize,
+                    Lambda = newIndividualsPerGeneration,
                 },
                 Statistics = new BasicEvolutionaryStatistics<IBitIndividual, BitArray, bool>(),
                 Population = BitPopulation.From(() => random.NextDouble() >= 0.5),
@@ -49,17 +49,12 @@ namespace EvolutionaryAlgorithm
             };
 
             var chainedInstance = BitEvolutionaryAlgorithm.Construct
-                .UsingParameters(new BitStaticParameters
-                {
-                    GeneCount = geneCount,
-                    Lambda = lambda,
-                    Mu = mu
-                })
+                .UsingStaticParameters(geneCount, populationSize, newIndividualsPerGeneration)
                 .UsingBasicStatistics()
                 .UseRandomInitialGenome()
                 .UsingMutator(mutator => mutator
                     .CloneGenesFrom(new BestFitnessParentSelector())
-                    .ThenOneMaxStaticOptimalMutation())
+                    .ThenApplyOneMaxStaticOptimalMutation())
                 .UsingOneMaxFitness()
                 .UsingElitismGenerationFilter()
                 .UsingTermination(new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount));

@@ -32,7 +32,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             IMutation<TIndividual, TGeneStructure, TGene> mutation)
         {
             Mutations.Add(mutation);
-            mutation.Algorithm = _algorithm;
+            mutation.Algorithm = Algorithm;
             return this;
         }
 

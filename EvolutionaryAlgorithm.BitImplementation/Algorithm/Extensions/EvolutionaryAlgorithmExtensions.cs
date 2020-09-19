@@ -20,7 +20,7 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
             algo.Termination = termination;
             return algo;
         }
-        
+
         public static IBitEvolutionaryAlgorithm UsingInitialGenome(this IBitEvolutionaryAlgorithm algo,
             IBitPopulation initialPopulation)
         {
@@ -45,16 +45,6 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
             Action<IBitMutator> usingMutations)
         {
             var mutator = new BitMutator();
-            algo.Mutator = mutator;
-            usingMutations.Invoke(mutator);
-            return algo;
-        }
-
-        public static IBitEvolutionaryAlgorithm UsingMutator(this IBitEvolutionaryAlgorithm algo,
-            IBitParentSelector parentSelector,
-            Action<IBitMutator> usingMutations)
-        {
-            var mutator = new BitMutator(parentSelector);
             algo.Mutator = mutator;
             usingMutations.Invoke(mutator);
             return algo;

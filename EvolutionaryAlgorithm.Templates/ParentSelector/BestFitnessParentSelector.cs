@@ -14,7 +14,7 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
         {
         }
 
-        public IBitIndividual Select(List<IBitIndividual> population) =>
-            population.Aggregate((a, b) => a.Fitness > b.Fitness ? a : b);
+        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
+            population.Best;
     }
 }

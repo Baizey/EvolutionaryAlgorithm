@@ -13,7 +13,8 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
         {
         }
 
-        public IBitIndividual Select(List<IBitIndividual> population) =>
+        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
             population[0];
+
     }
 }

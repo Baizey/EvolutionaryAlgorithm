@@ -63,24 +63,12 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
             UsingMutator<TIndividual, TGeneStructure, TGene>(
                 this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
-                IParentSelector<TIndividual, TGeneStructure, TGene> parentSelector,
                 Action<IMutator<TIndividual, TGeneStructure, TGene>> usingMutations)
             where TIndividual : IIndividual<TGeneStructure, TGene>
             where TGeneStructure : ICloneable
         {
-            algo.Mutator = new Mutator<TIndividual, TGeneStructure, TGene>(parentSelector);
+            algo.Mutator = new Mutator<TIndividual, TGeneStructure, TGene>();
             usingMutations.Invoke(algo.Mutator);
-            return algo;
-        }
-
-        public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
-            UsingMutator<TIndividual, TGeneStructure, TGene>(
-                this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
-                IMutator<TIndividual, TGeneStructure, TGene> mutator)
-            where TIndividual : IIndividual<TGeneStructure, TGene>
-            where TGeneStructure : ICloneable
-        {
-            algo.Mutator = mutator;
             return algo;
         }
 

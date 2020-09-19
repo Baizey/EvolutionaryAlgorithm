@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.BitImplementation.Algorithm;
 using EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions;
+using EvolutionaryAlgorithm.Core.Algorithm.Crossover;
 using EvolutionaryAlgorithm.Core.Algorithm.Statistics;
 using EvolutionaryAlgorithm.Core.Algorithm.Terminations;
 using EvolutionaryAlgorithm.Template.Fitness;
@@ -36,7 +37,9 @@ namespace EvolutionaryAlgorithm
                 Fitness = new OneMaxFitness(),
                 Population = BitPopulation.From(() => random.NextDouble() >= 0.5),
                 GenerationFilter = new ElitismGenerationFilter(),
-                Mutator = new BitMutator().ThenOneMaxStaticOptimalMutation(),
+                Mutator = new BitMutator()
+                    .CloneGenesFrom(new FirstParentSelector())
+                    .ThenOneMaxStaticOptimalMutation(),
                 Termination = new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount)
             };
 
@@ -50,7 +53,8 @@ namespace EvolutionaryAlgorithm
                 .UsingBasicStatistics()
                 .UsingOneMaxFitness()
                 .UseRandomInitialGenome()
-                .UsingMutator(new FirstParentSelector(), mutator => mutator
+                .UsingMutator(mutator => mutator
+                    .CloneGenesFrom(new FirstParentSelector())
                     .ThenOneMaxStaticOptimalMutation())
                 .UsingElitismGenerationFilter()
                 .UsingTermination(new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount));

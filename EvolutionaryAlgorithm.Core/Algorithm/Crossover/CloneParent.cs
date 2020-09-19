@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
 {
-    public class CloneParent<TIndividual, TGeneStructure, TGene> : IMutation<TIndividual, TGeneStructure, TGene>
+    public class CloneParent<TIndividual, TGeneStructure, TGene> 
+        : IMutation<TIndividual, TGeneStructure, TGene>
         where TIndividual : IIndividual<TGeneStructure, TGene>
         where TGeneStructure : ICloneable
     {

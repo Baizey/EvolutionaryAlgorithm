@@ -4,8 +4,8 @@ using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
 {
-    public abstract class
-        CrossoverBase<TIndividual, TGeneStructure, TGene> : IMutation<TIndividual, TGeneStructure, TGene>
+    public abstract class CrossoverBase<TIndividual, TGeneStructure, TGene>
+        : IMutation<TIndividual, TGeneStructure, TGene>
         where TIndividual : IIndividual<TGeneStructure, TGene>
         where TGeneStructure : ICloneable
     {

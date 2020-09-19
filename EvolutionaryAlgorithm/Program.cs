@@ -25,7 +25,7 @@ namespace EvolutionaryAlgorithm
                 lambda = 1,
                 jump = 1;
 
-            var algo2 = new BitEvolutionaryAlgorithm
+            var classicInstance = new BitEvolutionaryAlgorithm
             {
                 Parameters = new BitStaticParameters
                 {
@@ -34,16 +34,21 @@ namespace EvolutionaryAlgorithm
                     Mu = mu
                 },
                 Statistics = new BasicEvolutionaryStatistics<IBitIndividual, BitArray, bool>(),
-                Fitness = new OneMaxFitness(),
                 Population = BitPopulation.From(() => random.NextDouble() >= 0.5),
+                Mutator = new BitMutator
+                {
+                    Mutations =
+                    {
+                        new CloneParent<IBitIndividual, BitArray, bool>(new BestFitnessParentSelector()),
+                        new OneMaxStaticOptimalMutation()
+                    }
+                },
+                Fitness = new OneMaxFitness(),
                 GenerationFilter = new ElitismGenerationFilter(),
-                Mutator = new BitMutator()
-                    .CloneGenesFrom(new FirstParentSelector())
-                    .ThenOneMaxStaticOptimalMutation(),
                 Termination = new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount)
             };
 
-            var algo = new BitEvolutionaryAlgorithm()
+            var chainedInstance = BitEvolutionaryAlgorithm.Construct
                 .UsingParameters(new BitStaticParameters
                 {
                     GeneCount = geneCount,
@@ -51,17 +56,17 @@ namespace EvolutionaryAlgorithm
                     Mu = mu
                 })
                 .UsingBasicStatistics()
-                .UsingOneMaxFitness()
                 .UseRandomInitialGenome()
                 .UsingMutator(mutator => mutator
-                    .CloneGenesFrom(new FirstParentSelector())
+                    .CloneGenesFrom(new BestFitnessParentSelector())
                     .ThenOneMaxStaticOptimalMutation())
+                .UsingOneMaxFitness()
                 .UsingElitismGenerationFilter()
                 .UsingTermination(new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount));
 
-            await algo.Evolve();
+            await chainedInstance.Evolve();
 
-            Console.WriteLine(algo.Statistics.Generations + ": " + algo.Best);
+            Console.WriteLine(chainedInstance.Statistics.Generations + ": " + chainedInstance.Best);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Algorithm.Terminations;
 

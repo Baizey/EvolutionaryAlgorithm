@@ -8,6 +8,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
         private readonly Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, double> _limit;
 
         public StagnationTermination(double limit) => _limit = _ => limit;
@@ -15,7 +16,11 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
         public StagnationTermination(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, double> limit) =>
             _limit = limit;
 
-        public bool ShouldTerminate(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
-            algorithm.Statistics.StagnantGeneration >= _limit.Invoke(algorithm);
+        public bool ShouldTerminate() =>
+            Algorithm.Statistics.StagnantGeneration >= _limit.Invoke(Algorithm);
+
+        public void Initialize()
+        {
+        }
     }
 }

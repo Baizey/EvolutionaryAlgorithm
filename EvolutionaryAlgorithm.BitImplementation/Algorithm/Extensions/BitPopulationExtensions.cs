@@ -7,16 +7,14 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
     {
         private static readonly Random Random = new Random();
 
-        public static IBitEvolutionaryAlgorithm UsingRandomPopulation(this IBitEvolutionaryAlgorithm algo,
-            int populationSize, int geneSize) =>
-            algo.UsingPopulation(BitPopulation.From(populationSize, geneSize, Random.NextDouble() >= 0.5));
+        public static IBitEvolutionaryAlgorithm UseRandomInitialGenome(this IBitEvolutionaryAlgorithm algo) =>
+            algo.UsingInitialGenome(BitPopulation.From(() => Random.NextDouble() >= 0.5));
 
-        public static IBitEvolutionaryAlgorithm UsingPopulation(this IBitEvolutionaryAlgorithm algo, int populationSize,
-            int geneSize, Func<bool> geneGenerator) =>
-            algo.UsingPopulation(BitPopulation.From(populationSize, geneSize, geneGenerator));
+        public static IBitEvolutionaryAlgorithm UsingPopulation(this IBitEvolutionaryAlgorithm algo,
+            Func<bool> geneGenerator) => algo.UsingInitialGenome(BitPopulation.From(geneGenerator));
 
-        public static IBitEvolutionaryAlgorithm UsingPopulation(this IBitEvolutionaryAlgorithm algo, int populationSize,
-            int geneSize, bool defaultValue) =>
-            algo.UsingPopulation(BitPopulation.From(populationSize, geneSize, defaultValue));
+        public static IBitEvolutionaryAlgorithm
+            UsingPopulation(this IBitEvolutionaryAlgorithm algo, bool defaultValue) =>
+            algo.UsingInitialGenome(BitPopulation.From(() => defaultValue));
     }
 }

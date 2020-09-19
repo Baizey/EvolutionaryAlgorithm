@@ -8,11 +8,16 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
         private readonly TimeSpan _limit;
 
         public TimeoutTermination(TimeSpan limit) => _limit = limit;
 
-        public bool ShouldTerminate(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
-            algorithm.Statistics.RunTime >= _limit;
+        public bool ShouldTerminate() => Algorithm.Statistics.RunTime >= _limit;
+
+        public void Initialize()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

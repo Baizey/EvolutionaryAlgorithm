@@ -7,8 +7,8 @@ namespace EvolutionaryAlgorithm.Template.Mutation
     public static class MutationExtensions
     {
         public static IMutator<IBitIndividual, BitArray, bool>
-            ThenOneMaxStaticOptimalMutation(this IMutator<IBitIndividual, BitArray, bool> mutator, int geneSize) =>
-            mutator.ThenApply(new OneMaxStaticOptimalMutation(geneSize));
+            ThenOneMaxStaticOptimalMutation(this IMutator<IBitIndividual, BitArray, bool> mutator) =>
+            mutator.ThenApply(new OneMaxStaticOptimalMutation());
 
         public static IMutator<IBitIndividual, BitArray, bool> 
             ThenAllOnes(this IMutator<IBitIndividual, BitArray, bool> mutator) =>

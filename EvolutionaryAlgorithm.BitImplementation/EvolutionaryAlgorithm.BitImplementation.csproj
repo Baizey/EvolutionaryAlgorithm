@@ -8,8 +8,4 @@
       <ProjectReference Include="..\EvolutionaryAlgorithm.Core\EvolutionaryAlgorithm.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Builder" />
-    </ItemGroup>
-
 </Project>

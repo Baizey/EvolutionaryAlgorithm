@@ -8,6 +8,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
+
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
         public TIndividual Best { get; private set; }
@@ -15,6 +17,10 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
         public TIndividual Current { get; private set; }
         public int StagnantGeneration { get; private set; }
         public long Generations { get; private set; }
+
+        public void Initialize()
+        {
+        }
 
         public void Start(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
         {

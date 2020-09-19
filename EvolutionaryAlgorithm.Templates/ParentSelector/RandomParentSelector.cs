@@ -10,6 +10,10 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
     {
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
+        public void Initialize()
+        {
+        }
+
         private readonly Random _random;
 
         public RandomParentSelector() => _random = new Random();

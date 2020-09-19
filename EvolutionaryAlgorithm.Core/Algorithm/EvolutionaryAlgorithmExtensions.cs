@@ -6,6 +6,17 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
     public static class EvolutionaryAlgorithmExtensions
     {
         public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
+            UsingTermination<TIndividual, TGeneStructure, TGene>(
+                this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
+                ITermination<TIndividual, TGeneStructure, TGene> termination)
+            where TIndividual : IIndividual<TGeneStructure, TGene>
+            where TGeneStructure : ICloneable
+        {
+            algo.Termination = termination;
+            return algo;
+        }
+
+        public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
             UsingGlobalParameters<TIndividual, TGeneStructure, TGene>(
                 this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
                 IParameters<TIndividual, TGeneStructure, TGene> parameters)

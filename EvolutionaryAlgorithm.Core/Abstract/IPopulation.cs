@@ -4,9 +4,11 @@ using System.Collections.Generic;
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
     public interface IPopulation<TIndividual, TGeneStructure, TGene> :
+        IInitialization<TIndividual, TGeneStructure, TGene>,
         ICloneable,
         IEnumerable<TIndividual>
-        where TGeneStructure : ICloneable
+        where TGeneStructure : ICloneable 
+        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public int Count { get; }
         public List<TIndividual> Individuals { get; set; }

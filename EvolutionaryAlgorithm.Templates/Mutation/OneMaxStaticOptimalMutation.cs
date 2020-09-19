@@ -10,12 +10,13 @@ namespace EvolutionaryAlgorithm.Template.Mutation
     {
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
-        private readonly double[] _odds;
-        private readonly Random _random;
+        private double[] _odds;
+        private Random _random;
 
-        public OneMaxStaticOptimalMutation(int n)
+        public void Initialize()
         {
             _random = new Random();
+            var n = Algorithm.Population[0].Size;
             _odds = Enumerable.Range(0, 10).Select(k =>
                     Math.Pow(1D - 1D / n, n - k)
                     * Math.Pow(1D / n, k)

@@ -7,14 +7,21 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
 {
     public static class BitEvolutionaryAlgorithmExtensions
     {
-        public static IBitEvolutionaryAlgorithm UsingGlobalParameters(this IBitEvolutionaryAlgorithm algo,
+        public static IBitEvolutionaryAlgorithm UsingParameters(this IBitEvolutionaryAlgorithm algo,
             IParameters<IBitIndividual, BitArray, bool> parameters)
         {
             algo.Parameters = parameters;
             return algo;
         }
 
-        public static IBitEvolutionaryAlgorithm UsingPopulation(this IBitEvolutionaryAlgorithm algo,
+        public static IBitEvolutionaryAlgorithm UsingTermination(this IBitEvolutionaryAlgorithm algo,
+            ITermination<IBitIndividual, BitArray, bool> termination)
+        {
+            algo.Termination = termination;
+            return algo;
+        }
+        
+        public static IBitEvolutionaryAlgorithm UsingInitialGenome(this IBitEvolutionaryAlgorithm algo,
             IBitPopulation initialPopulation)
         {
             algo.Population = initialPopulation;

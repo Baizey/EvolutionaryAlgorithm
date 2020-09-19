@@ -10,6 +10,10 @@ namespace EvolutionaryAlgorithm.Template.Fitness
     {
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
+        public void Initialize()
+        {
+        }
+
         public double Evaluate(IBitIndividual individual)
         {
             var ones = individual.Count(e => e);

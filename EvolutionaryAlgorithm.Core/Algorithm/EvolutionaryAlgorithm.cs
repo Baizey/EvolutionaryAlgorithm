@@ -5,8 +5,7 @@ using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
-    public class
-        EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
+    public class EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
         : IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
@@ -20,8 +19,30 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         private IMutator<TIndividual, TGeneStructure, TGene> _mutator;
         private IGenerationFilter<TIndividual, TGeneStructure, TGene> _generationFilter;
         private IParameters<TIndividual, TGeneStructure, TGene> _parameters;
+        private IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> _statistics;
+        private ITermination<TIndividual, TGeneStructure, TGene> _termination;
         public TIndividual Best => Population.Best;
-        public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
+        bool IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>.IsInitialized { get; set; }
+
+        public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics
+        {
+            get => _statistics;
+            set
+            {
+                _statistics = value;
+                _statistics.Algorithm = this;
+            }
+        }
+
+        public ITermination<TIndividual, TGeneStructure, TGene> Termination
+        {
+            get => _termination;
+            set
+            {
+                _termination = value;
+                _termination.Algorithm = this;
+            }
+        }
 
         public IParameters<TIndividual, TGeneStructure, TGene> Parameters
         {
@@ -39,8 +60,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             set
             {
                 _population = value;
-                if (_fitness != null)
-                    _population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
+                _population.Algorithm = this;
             }
         }
 
@@ -51,7 +71,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             {
                 _fitness = value;
                 _fitness.Algorithm = this;
-                _population?.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
             }
         }
 
@@ -108,7 +127,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             Mutator.Mutate(Population, newIndividuals);
             newIndividuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
 
-            var result = GenerationFilter.Filter(Parameters.Mu, Population, newIndividuals);
+            var result = GenerationFilter.Filter(Population, newIndividuals);
             Population.Individuals = result.NextGeneration;
             AddUnusedBodiesFrom(result.Discarded);
 

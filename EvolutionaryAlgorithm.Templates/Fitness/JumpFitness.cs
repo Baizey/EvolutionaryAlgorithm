@@ -9,6 +9,10 @@ namespace EvolutionaryAlgorithm.Template.Fitness
     {
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
+        public void Initialize()
+        {
+        }
+
         private readonly int _total, _limit;
 
         public JumpFitness(int total, int jump)

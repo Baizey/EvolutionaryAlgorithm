@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
     public interface IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
+        : IInitialization<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {

@@ -1,5 +1,4 @@
 ﻿using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.BitImplementation.Algorithm;
 using EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions;
 
 namespace EvolutionaryAlgorithm.Template.Selection

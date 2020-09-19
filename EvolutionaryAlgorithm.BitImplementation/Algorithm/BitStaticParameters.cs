@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Algorithm.GlobalParameters;
+using EvolutionaryAlgorithm.Core.Algorithm.Parameters;
 
 namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 {

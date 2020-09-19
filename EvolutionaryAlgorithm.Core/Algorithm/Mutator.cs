@@ -22,6 +22,11 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             }
         }
 
+        public void Initialize()
+        {
+            Mutations.ForEach(mutation => mutation.Initialize());
+        }
+
         public IParentSelector<TIndividual, TGeneStructure, TGene> InitialSelector { get; set; }
 
         public List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; set; } =
@@ -42,7 +47,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             return this;
         }
 
-        public void Mutate(IPopulation<TIndividual, TGeneStructure, TGene> oldIndividuals, List<TIndividual> newIndividuals)
+        public void Mutate(IPopulation<TIndividual, TGeneStructure, TGene> oldIndividuals,
+            List<TIndividual> newIndividuals)
         {
             newIndividuals.ForEach(body =>
             {

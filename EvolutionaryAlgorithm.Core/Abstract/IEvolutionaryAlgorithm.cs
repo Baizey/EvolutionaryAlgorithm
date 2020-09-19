@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EvolutionaryAlgorithm.Core.Algorithm;
 
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
@@ -7,6 +8,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public ITermination<TIndividual, TGeneStructure, TGene> Termination { get; set; }
         public IParameters<TIndividual, TGeneStructure, TGene> Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
@@ -15,12 +17,55 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public TIndividual Best { get; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
         public Task EvolveOneGeneration();
+        public bool IsInitialized { get; protected set; }
 
-        public async Task EvolveUntil(ITermination<TIndividual, TGeneStructure, TGene> termination)
+        private void ArgumentValidation()
         {
+            if (Parameters == null)
+                throw new EvolutionaryAlgorithmArgumentException(
+                    $"IEvolutionaryAlgorithm.{nameof(Parameters)} cannot by null");
+            if (Statistics == null)
+                throw new EvolutionaryAlgorithmArgumentException(
+                    $"IEvolutionaryAlgorithm.{nameof(Statistics)} cannot by null");
+            if (Population == null)
+                throw new EvolutionaryAlgorithmArgumentException(
+                    $"IEvolutionaryAlgorithm.{nameof(Population)} cannot by null");
+            if (Fitness == null)
+                throw new EvolutionaryAlgorithmArgumentException(
+                    $"IEvolutionaryAlgorithm.{nameof(Fitness)} cannot by null");
+            if (Mutator == null)
+                throw new EvolutionaryAlgorithmArgumentException(
+                    $"IEvolutionaryAlgorithm.{nameof(Mutator)} cannot by null");
+            if (GenerationFilter == null)
+                throw new EvolutionaryAlgorithmArgumentException(
+                    $"IEvolutionaryAlgorithm.{nameof(GenerationFilter)} cannot by null");
+            if (Termination == null)
+                throw new EvolutionaryAlgorithmArgumentException(
+                    $"IEvolutionaryAlgorithm.{nameof(Termination)} cannot by null");
+        }
+
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Initialize()
+        {
+            IsInitialized = true;
+            ArgumentValidation();
+            Parameters.Initialize();
+            Statistics.Initialize();
+            Population.Initialize();
+            Fitness.Initialize();
+            Mutator.Initialize();
+            GenerationFilter.Initialize();
+            Termination.Initialize();
+            Population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
+            return this;
+        }
+
+        public async Task Evolve()
+        {
+            if (!IsInitialized) Initialize();
+
             Statistics.Start(this);
 
-            while (!termination.ShouldTerminate(this))
+            while (!Termination.ShouldTerminate())
                 await EvolveOneGeneration();
 
             Statistics.Finish(this);

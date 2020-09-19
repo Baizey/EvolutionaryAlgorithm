@@ -8,14 +8,18 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
         private readonly Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, long> _limit;
 
         public GenerationTermination(long limit) => _limit = _ => limit;
-        
+
         public GenerationTermination(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, long> limit) =>
             _limit = limit;
 
-        public bool ShouldTerminate(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algorithm) =>
-            algorithm.Statistics.Generations >= _limit.Invoke(algorithm);
+        public bool ShouldTerminate() => Algorithm.Statistics.Generations >= _limit.Invoke(Algorithm);
+
+        public void Initialize()
+        {
+        }
     }
 }

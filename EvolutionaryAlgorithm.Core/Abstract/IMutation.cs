@@ -7,6 +7,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        void Mutate(TIndividual child);
+        void Mutate(int index, TIndividual child);
     }
 }

@@ -35,7 +35,7 @@ namespace EvolutionaryAlgorithm.Template.Mutation
             return Math.Pow(10, sum);
         }
 
-        public void Mutate(IBitIndividual child)
+        public void Mutate(int index, IBitIndividual child)
         {
             var roll = _random.NextDouble();
 

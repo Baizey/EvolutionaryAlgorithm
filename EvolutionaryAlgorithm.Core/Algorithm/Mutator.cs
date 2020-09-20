@@ -37,7 +37,10 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         }
 
         public void Mutate(IPopulation<TIndividual, TGeneStructure, TGene> oldIndividuals,
-            List<TIndividual> newIndividuals) =>
-            newIndividuals.ForEach(body => Mutations.ForEach(step => step.Mutate(body)));
+            List<TIndividual> newIndividuals)
+        {
+            for (var i = 0; i < newIndividuals.Count; i++)
+                Mutations[i].Mutate(i, newIndividuals[i]);
+        }
     }
 }

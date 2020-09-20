@@ -12,6 +12,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public double Fitness { get; set; }
         public TGeneStructure Genes { get; set; }
         public void CloneGenesTo(IIndividual<TGeneStructure, TGene> other);
+        public void Reset();
     }
 
     public interface IObjectIndividual<T> :

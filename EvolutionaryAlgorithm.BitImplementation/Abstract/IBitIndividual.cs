@@ -13,7 +13,7 @@ namespace EvolutionaryAlgorithm.BitImplementation.Abstract
 
         bool Flip(int i);
 
-        int Ones { get; }
+        int Ones { get; set; }
         int Zeros { get; }
     }
 }

@@ -25,7 +25,7 @@ namespace EvolutionaryAlgorithm.Template.Fitness
 
         public double Evaluate(IBitIndividual individual)
         {
-            var flipped = individual.Count(e => e);
+            var flipped = individual.Ones;
             if (flipped == _total) return _total;
             return flipped < _limit ? flipped : _total - flipped;
         }

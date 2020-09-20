@@ -10,6 +10,7 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 {
     public class BitIndividual : IBitIndividual
     {
+        private int _ones = -1;
         public double Fitness { get; set; }
         public BitArray Genes { get; set; }
 
@@ -19,8 +20,18 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
             other.Fitness = Fitness;
         }
 
+        public void Reset()
+        {
+            _ones = -1;
+        }
+
         public int Size => Genes.Count;
-        public int Ones => this.Count(e => e);
+
+        public int Ones
+        {
+            get => _ones == -1 ? _ones = this.Count(e => e) : _ones;
+            set => _ones = value;
+        }
 
         public int Zeros => Size - Ones;
 

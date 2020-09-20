@@ -19,6 +19,6 @@ namespace EvolutionaryAlgorithm.Template.Fitness
 
         public static IBitEvolutionaryAlgorithm
             UsingJumpFitness(this IBitEvolutionaryAlgorithm algo, int geneSize, int jump) =>
-            (IBitEvolutionaryAlgorithm) algo.UsingFitness(new JumpFitness(geneSize, jump));
+            (IBitEvolutionaryAlgorithm) algo.UsingFitness(new JumpFitness(jump));
     }
 }

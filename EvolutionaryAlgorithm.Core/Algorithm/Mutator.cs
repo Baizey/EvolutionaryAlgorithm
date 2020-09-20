@@ -40,7 +40,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             List<TIndividual> newIndividuals)
         {
             for (var i = 0; i < newIndividuals.Count; i++)
-                Mutations[i].Mutate(i, newIndividuals[i]);
+                foreach (var t in Mutations)
+                    t.Mutate(i, newIndividuals[i]);
         }
     }
 }

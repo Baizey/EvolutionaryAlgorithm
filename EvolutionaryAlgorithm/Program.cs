@@ -59,6 +59,7 @@ namespace EvolutionaryAlgorithm
                 .UsingTermination(new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount));
 
             await chainedInstance.Evolve();
+            Console.WriteLine(chainedInstance.Statistics);
         }
     }
 }

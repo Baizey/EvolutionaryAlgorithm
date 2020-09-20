@@ -11,14 +11,16 @@ namespace EvolutionaryAlgorithm.Template.Fitness
 
         public void Initialize()
         {
+            _total = Algorithm.Parameters.GeneCount;
+            _limit = _total - _jump;
         }
 
-        private readonly int _total, _limit;
+        private int _total, _limit;
+        private readonly int _jump;
 
-        public JumpFitness(int total, int jump)
+        public JumpFitness(int jump)
         {
-            _total = total;
-            _limit = _total - jump;
+            _jump = jump;
         }
 
         public double Evaluate(IBitIndividual individual)

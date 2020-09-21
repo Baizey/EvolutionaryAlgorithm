@@ -19,7 +19,7 @@ namespace EvolutionaryAlgorithm
         private static async Task Main()
         {
             const int
-                geneCount = 50,
+                geneCount = 500,
                 populationSize = 1,
                 newIndividualsPerGeneration = 1,
                 jump = 1;

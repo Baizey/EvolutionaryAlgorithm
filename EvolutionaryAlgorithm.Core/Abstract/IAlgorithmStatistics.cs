@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace EvolutionaryAlgorithm.Core.Abstract
 {
     public interface IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
-        : IInitialization<TIndividual, TGeneStructure, TGene>
+        : IEvolutionary<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
@@ -16,10 +16,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public int StagnantGeneration { get; }
         public long Generations { get; }
         TimeSpan RunTime => EndTime - StartTime;
-
-        void Start(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo);
-        void Update(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo);
-        void Finish(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo);
+        void Finish();
     }
 
     public interface IUiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>

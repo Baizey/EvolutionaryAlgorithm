@@ -20,20 +20,16 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
 
         public void Initialize()
         {
-        }
-
-        public void Start(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
-        {
             StartTime = DateTime.Now;
-            Current = (TIndividual) algo.Best.Clone();
+            Current = (TIndividual) Algorithm.Best.Clone();
             Best = Current;
             Previous = Current;
         }
 
-        public void Update(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
+        public void Update()
         {
             Previous = Current;
-            Current = (TIndividual) algo.Best.Clone();
+            Current = (TIndividual) Algorithm.Best.Clone();
 
             Generations++;
 
@@ -47,8 +43,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
                 StagnantGeneration = 0;
             }
         }
-
-        public void Finish(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo) => EndTime = DateTime.Now;
+        
+        public void Finish() => EndTime = DateTime.Now;
 
         public override string ToString() =>
             $"Runtime: {(DateTime.Now - StartTime).TotalSeconds} seconds, Generations: {Generations}, Fitness: {Best.Fitness}";

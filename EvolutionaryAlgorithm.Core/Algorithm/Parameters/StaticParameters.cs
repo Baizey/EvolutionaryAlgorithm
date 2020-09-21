@@ -13,13 +13,12 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Parameters
         public void Initialize()
         {
         }
+        public void Update()
+        {
+        }
 
         public int GeneCount { get; set; }
         public int Mu { get; set; }
         public int Lambda { get; set; }
-
-        public void UpdateParameters()
-        {
-        }
     }
 }

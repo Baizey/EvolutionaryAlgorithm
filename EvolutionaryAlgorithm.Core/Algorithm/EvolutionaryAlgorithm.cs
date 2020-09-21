@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Core.Abstract;
 
@@ -94,8 +95,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             }
         }
 
-        private void AddUnusedBodiesFrom(IEnumerable<TIndividual> individuals) => _reserves.AddRange(individuals);
-
         private List<TIndividual> GetFreshBodies(int generationSize)
         {
             if (_reserves.Count < generationSize)
@@ -109,7 +108,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             if (_reserves.Count == generationSize)
             {
                 var used = _reserves;
-                _reserves = new List<TIndividual>();
+                _reserves = null;
                 return used;
             }
             else
@@ -120,19 +119,24 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             }
         }
 
-        public Task EvolveOneGeneration()
+        private void UpdateBodies(GenerationFilterResult<TIndividual, TGeneStructure, TGene> result)
+        {
+            Population.Individuals = result.NextGeneration;
+            if (_reserves == null)
+                _reserves = result.Discarded;
+            else
+                _reserves.AddRange(result.Discarded);
+        }
+
+        public async Task EvolveOneGeneration()
         {
             var newIndividuals = GetFreshBodies(Parameters.Lambda);
 
-            Mutator.Mutate(Population, newIndividuals);
-            foreach (var individual in newIndividuals) individual.Fitness = Fitness.Evaluate(individual);
+            await Mutator.Mutate(Population, newIndividuals);
 
-            var result = GenerationFilter.Filter(Population, newIndividuals);
-            Population.Individuals = result.NextGeneration;
-            AddUnusedBodiesFrom(result.Discarded);
+            Parallel.ForEach(newIndividuals, i => i.Fitness = Fitness.Evaluate(i));
 
-            Statistics.Update(this);
-            return Task.CompletedTask;
+            UpdateBodies(GenerationFilter.Filter(Population, newIndividuals));
         }
     }
 }

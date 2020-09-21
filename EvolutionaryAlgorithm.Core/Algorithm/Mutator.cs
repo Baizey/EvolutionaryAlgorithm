@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
@@ -20,10 +21,9 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             }
         }
 
-        public void Initialize()
-        {
-            Mutations.ForEach(mutation => mutation.Initialize());
-        }
+        public void Initialize() => Mutations.ForEach(mutation => mutation.Initialize());
+
+        public void Update() => Mutations.ForEach(mutation => mutation.Update());
 
         public List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; set; } =
             new List<IMutation<TIndividual, TGeneStructure, TGene>>();
@@ -36,7 +36,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             return this;
         }
 
-        public void Mutate(IPopulation<TIndividual, TGeneStructure, TGene> oldIndividuals,
+        public async Task Mutate(IPopulation<TIndividual, TGeneStructure, TGene> oldIndividuals,
             List<TIndividual> newIndividuals)
         {
             for (var i = 0; i < newIndividuals.Count; i++)

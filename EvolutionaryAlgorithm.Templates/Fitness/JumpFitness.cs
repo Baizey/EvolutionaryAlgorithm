@@ -15,6 +15,10 @@ namespace EvolutionaryAlgorithm.Template.Fitness
             _limit = _total - _jump;
         }
 
+        public void Update()
+        {
+        }
+
         private int _total, _limit;
         private readonly int _jump;
 

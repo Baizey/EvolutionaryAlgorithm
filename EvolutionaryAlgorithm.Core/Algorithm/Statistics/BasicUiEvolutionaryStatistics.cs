@@ -22,22 +22,21 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
             ? maxDataPoints
             : maxDataPoints + 1;
 
-        public new void Start(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
-        {
-            base.Start(algo);
-            History.Add(Best);
-        }
-
         private void Resize()
         {
             StepSize *= 2;
             var keep = false;
             History = History.Where(e => keep = !keep).ToList();
         }
-
-        public new void Update(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo)
+        public new void Initialize()
         {
-            base.Update(algo);
+            base.Initialize();
+            History.Add(Best);
+        }
+
+        public new void Update()
+        {
+            base.Update();
 
             // Only add every x datapoint
             if (++_counter < StepSize) return;
@@ -46,7 +45,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
             // If we have more datapoints than we are allowed, trim them to keep every other
             if (History.Count >= _maxDataPoints) Resize();
 
-            History.Add((TIndividual) algo.Best.Clone());
+            History.Add((TIndividual) Algorithm.Best.Clone());
         }
     }
 }

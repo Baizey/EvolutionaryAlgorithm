@@ -13,6 +13,10 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
         {
         }
 
+        public void Update()
+        {
+        }
+
         public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
             population.Aggregate((a, b) => a.Fitness < b.Fitness ? a : b);
     }

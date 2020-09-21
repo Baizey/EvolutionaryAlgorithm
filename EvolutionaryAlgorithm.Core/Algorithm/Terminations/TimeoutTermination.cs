@@ -17,7 +17,10 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
 
         public void Initialize()
         {
-            throw new NotImplementedException();
+        }
+
+        public void Update()
+        {
         }
     }
 }

@@ -23,5 +23,9 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
         public void Initialize()
         {
         }
+
+        public void Update()
+        {
+        }
     }
 }

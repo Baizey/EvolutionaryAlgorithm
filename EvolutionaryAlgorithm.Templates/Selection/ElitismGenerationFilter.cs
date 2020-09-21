@@ -13,6 +13,10 @@ namespace EvolutionaryAlgorithm.Template.Selection
         {
         }
 
+        public void Update()
+        {
+        }
+
         private static readonly List<IBitIndividual> Empty = new List<IBitIndividual>();
 
         public GenerationFilterResult<IBitIndividual, BitArray, bool> Filter(

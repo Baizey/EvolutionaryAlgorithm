@@ -17,6 +17,10 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
         {
         }
 
+        public void Update()
+        {
+        }
+
         public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
             _selector.Invoke(population);
     }

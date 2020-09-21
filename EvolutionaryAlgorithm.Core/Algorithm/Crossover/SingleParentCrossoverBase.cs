@@ -26,6 +26,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
             ParentSelector = parentsSelector;
 
         public void Initialize() => ParentSelector.Initialize();
+        public void Update() => ParentSelector.Update();
 
         public abstract void Crossover(TIndividual child, TIndividual parent);
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 
@@ -13,6 +12,17 @@ namespace EvolutionaryAlgorithm.Template.Fitness
         {
         }
 
-        public double Evaluate(IBitIndividual individual) => individual.TakeWhile(e => e).Count();
+        public void Update()
+        {
+        }
+
+        public double Evaluate(IBitIndividual individual)
+        {
+            var i = 0;
+            for (; i < individual.Size; i++)
+                if (!individual[i])
+                    break;
+            return i;
+        }
     }
 }

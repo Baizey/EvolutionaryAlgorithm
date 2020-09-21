@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
@@ -29,7 +28,15 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 
         public int Ones
         {
-            get => _ones == -1 ? _ones = this.Count(e => e) : _ones;
+            get
+            {
+                if (_ones != -1) return _ones;
+                _ones = 0;
+                for (var i = 0; i < Size; i++)
+                    if (Genes[i])
+                        _ones++;
+                return _ones;
+            }
             set => _ones = value;
         }
 
@@ -59,13 +66,9 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 
         public object Clone() => new BitIndividual(this);
 
-        public IEnumerator<bool> GetEnumerator() => (IEnumerator<bool>) Genes.Cast<bool>().GetEnumerator();
-
         public int CompareTo(IIndividual<BitArray, bool> other) => Math.Sign(Fitness - other.Fitness);
 
         public override string ToString() =>
             Fitness + " -> " + string.Join("", Genes.Cast<bool>().Select(e => e ? "1" : "0"));
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

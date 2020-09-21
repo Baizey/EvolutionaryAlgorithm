@@ -13,6 +13,10 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
         {
         }
 
+        public void Update()
+        {
+        }
+
         private readonly Random _random;
 
         public RandomParentSelector() => _random = new Random();

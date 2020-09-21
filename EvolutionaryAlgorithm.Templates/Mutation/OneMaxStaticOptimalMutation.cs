@@ -24,6 +24,10 @@ namespace EvolutionaryAlgorithm.Template.Mutation
                 .ToArray();
         }
 
+        public void Update()
+        {
+        }
+
         // Reasonably efficient way of calculating
         // n! / ((n - k)! * k!)
         // Source: https://stackoverflow.com/questions/12983731/algorithm-for-calculating-binomial-coefficient/12992171

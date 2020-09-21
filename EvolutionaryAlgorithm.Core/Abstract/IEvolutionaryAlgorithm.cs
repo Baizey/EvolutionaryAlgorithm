@@ -49,8 +49,8 @@ namespace EvolutionaryAlgorithm.Core.Abstract
             IsInitialized = true;
             ArgumentValidation();
             Parameters.Initialize();
-            Statistics.Initialize();
             Population.Initialize();
+            Statistics.Initialize();
             Fitness.Initialize();
             Mutator.Initialize();
             GenerationFilter.Initialize();
@@ -59,16 +59,28 @@ namespace EvolutionaryAlgorithm.Core.Abstract
             return this;
         }
 
+        private void Update()
+        {
+            Statistics.Update();
+            Parameters.Update();
+            Population.Update();
+            Fitness.Update();
+            Mutator.Update();
+            GenerationFilter.Update();
+            Termination.Update();
+        }
+
         public async Task Evolve()
         {
             if (!IsInitialized) Initialize();
 
-            Statistics.Start(this);
-
             while (!Termination.ShouldTerminate())
+            {
                 await EvolveOneGeneration();
+                Update();
+            }
 
-            Statistics.Finish(this);
+            Statistics.Finish();
         }
     }
 }

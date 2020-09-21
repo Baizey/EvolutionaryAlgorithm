@@ -12,6 +12,10 @@ namespace EvolutionaryAlgorithm.Template.Mutation
         {
         }
 
+        public void Update()
+        {
+        }
+
         public void Mutate(int index, IBitIndividual child) => child.Genes.SetAll(false);
     }
 }

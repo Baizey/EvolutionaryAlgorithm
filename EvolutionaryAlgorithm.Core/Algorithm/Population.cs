@@ -43,5 +43,9 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             .Range(0, Algorithm.Parameters.Mu)
             .Select(_ => _generator.Invoke(Algorithm.Parameters.GeneCount))
             .ToList();
+
+        public void Update()
+        {
+        }
     }
 }

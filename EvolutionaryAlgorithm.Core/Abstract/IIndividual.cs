@@ -5,8 +5,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
 {
     public interface IIndividual<TGeneStructure, TGene> :
         ICloneable,
-        IComparable<IIndividual<TGeneStructure, TGene>>,
-        IEnumerable<TGene>
+        IComparable<IIndividual<TGeneStructure, TGene>>
     {
         public int Size { get; }
         public double Fitness { get; set; }
@@ -15,8 +14,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public void Reset();
     }
 
-    public interface IObjectIndividual<T> :
-        IIndividual<List<T>, T>
+    public interface IObjectIndividual<T> : IIndividual<List<T>, T>
         where T : ICloneable
     {
         public T this[int i]

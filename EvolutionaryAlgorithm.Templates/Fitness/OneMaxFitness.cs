@@ -13,6 +13,10 @@ namespace EvolutionaryAlgorithm.Template.Fitness
         {
         }
 
+        public void Update()
+        {
+        }
+
         public double Evaluate(IBitIndividual individual) => individual.Ones;
     }
 }

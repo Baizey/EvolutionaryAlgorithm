@@ -28,6 +28,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
             var keep = false;
             History = History.Where(e => keep = !keep).ToList();
         }
+
         public new void Initialize()
         {
             base.Initialize();

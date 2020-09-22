@@ -13,7 +13,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public TIndividual Best { get; }
         public TIndividual Current { get; }
         public TIndividual Previous { get; }
-        public int StagnantGeneration { get; }
+        public long StagnantGeneration { get; }
         public long Generations { get; }
         TimeSpan RunTime => EndTime - StartTime;
         void Finish();

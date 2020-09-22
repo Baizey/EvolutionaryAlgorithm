@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EvolutionaryAlgorithm.Core.Abstract
@@ -11,6 +12,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract
     {
         List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; set; }
         IMutator<TIndividual, TGeneStructure, TGene> ThenApply(IMutation<TIndividual, TGeneStructure, TGene> mutation);
-        Task Mutate(IPopulation<TIndividual, TGeneStructure, TGene> oldIndividuals, List<TIndividual> newIndividuals);
+        Task Mutate(List<TIndividual> newIndividuals);
     }
 }

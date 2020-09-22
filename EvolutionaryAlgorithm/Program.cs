@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.BitImplementation.Algorithm;
@@ -19,7 +20,7 @@ namespace EvolutionaryAlgorithm
         private static async Task Main()
         {
             const int
-                geneCount = 500,
+                geneCount = 5000,
                 populationSize = 1,
                 newIndividualsPerGeneration = 1,
                 jump = 1;
@@ -59,6 +60,9 @@ namespace EvolutionaryAlgorithm
                 .UsingTermination(new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount));
 
             await chainedInstance.Evolve();
+
+            chainedInstance.Cancel();
+
             Console.WriteLine(chainedInstance.Statistics);
         }
     }

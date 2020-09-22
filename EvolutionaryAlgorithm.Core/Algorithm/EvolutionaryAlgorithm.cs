@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Dasync.Collections;
 using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
@@ -9,12 +9,11 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
     public class EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
         : IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
-        where TIndividual : class, IIndividual<TGeneStructure, TGene>
+        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public static EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Construct =>
             new EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>();
 
-        private List<TIndividual> _reserves = new List<TIndividual>();
         private IFitness<TIndividual, TGeneStructure, TGene> _fitness;
         private IPopulation<TIndividual, TGeneStructure, TGene> _population;
         private IMutator<TIndividual, TGeneStructure, TGene> _mutator;
@@ -22,6 +21,10 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         private IParameters<TIndividual, TGeneStructure, TGene> _parameters;
         private IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> _statistics;
         private ITermination<TIndividual, TGeneStructure, TGene> _termination;
+
+        public EvolutionaryAlgorithm() =>
+            CancellationTokenSource = new CancellationTokenSource();
+
         public TIndividual Best => Population.Best;
         bool IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>.IsInitialized { get; set; }
 
@@ -34,6 +37,9 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
                 _statistics.Algorithm = this;
             }
         }
+
+        public IIndividualStorage<TIndividual, TGeneStructure, TGene> Storage { get; set; }
+        public CancellationTokenSource CancellationTokenSource { get; set; }
 
         public ITermination<TIndividual, TGeneStructure, TGene> Termination
         {
@@ -95,48 +101,18 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             }
         }
 
-        private List<TIndividual> GetFreshBodies(int generationSize)
-        {
-            if (_reserves.Count < generationSize)
-            {
-                var example = Population[0];
-                var missing = generationSize - _reserves.Count;
-                for (var i = 0; i < missing; i++)
-                    _reserves.Add((TIndividual) example.Clone());
-            }
-
-            if (_reserves.Count == generationSize)
-            {
-                var used = _reserves;
-                _reserves = null;
-                return used;
-            }
-            else
-            {
-                var used = _reserves.GetRange(0, generationSize);
-                _reserves = _reserves.GetRange(generationSize, _reserves.Count - generationSize);
-                return used;
-            }
-        }
-
-        private void UpdateBodies(GenerationFilterResult<TIndividual, TGeneStructure, TGene> result)
-        {
-            Population.Individuals = result.NextGeneration;
-            if (_reserves == null)
-                _reserves = result.Discarded;
-            else
-                _reserves.AddRange(result.Discarded);
-        }
-
         public async Task EvolveOneGeneration()
         {
-            var newIndividuals = GetFreshBodies(Parameters.Lambda);
+            var newIndividuals = Storage.Get(Parameters.Lambda);
 
-            await Mutator.Mutate(Population, newIndividuals);
+            await Mutator.Mutate(newIndividuals);
 
-            Parallel.ForEach(newIndividuals, i => i.Fitness = Fitness.Evaluate(i));
+            await newIndividuals.ParallelForEachAsync(async i => i.Fitness = Fitness.Evaluate(i));
 
-            UpdateBodies(GenerationFilter.Filter(Population, newIndividuals));
+            var result = GenerationFilter.Filter(Population, newIndividuals);
+
+            Population.Individuals = result.NextGeneration;
+            Storage.Dump(result.Discarded);
         }
     }
 }

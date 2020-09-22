@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Core.Algorithm;
 
@@ -8,6 +9,8 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public IIndividualStorage<TIndividual, TGeneStructure, TGene> Storage { set; }
+        public CancellationTokenSource CancellationTokenSource { get; set; }
         public ITermination<TIndividual, TGeneStructure, TGene> Termination { get; set; }
         public IParameters<TIndividual, TGeneStructure, TGene> Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
@@ -17,6 +20,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public TIndividual Best { get; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
         public Task EvolveOneGeneration();
+        public void Cancel() => CancellationTokenSource.Cancel();
         public bool IsInitialized { get; protected set; }
 
         private void ArgumentValidation()
@@ -48,36 +52,50 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         {
             IsInitialized = true;
             ArgumentValidation();
+
             Parameters.Initialize();
+
             Population.Initialize();
-            Statistics.Initialize();
             Fitness.Initialize();
+            Population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
+
+            Parameters.Initialize();
+            Statistics.Initialize();
             Mutator.Initialize();
             GenerationFilter.Initialize();
             Termination.Initialize();
-            Population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
+
+            Storage = new IndividualStorage<TIndividual, TGeneStructure, TGene>(Population[0]);
             return this;
         }
 
         private void Update()
         {
-            Statistics.Update();
             Parameters.Update();
-            Population.Update();
+
             Fitness.Update();
+            Population.Update();
+
+            Statistics.Update();
             Mutator.Update();
             GenerationFilter.Update();
             Termination.Update();
         }
 
+
         public async Task Evolve()
         {
+            CancellationTokenSource = new CancellationTokenSource();
+            var token = CancellationTokenSource.Token;
             if (!IsInitialized) Initialize();
 
             while (!Termination.ShouldTerminate())
             {
                 await EvolveOneGeneration();
                 Update();
+                if (!token.IsCancellationRequested) continue;
+                Statistics.Finish();
+                return;
             }
 
             Statistics.Finish();

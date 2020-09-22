@@ -13,17 +13,6 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
         public double Fitness { get; set; }
         public BitArray Genes { get; set; }
 
-        public void CloneGenesTo(IIndividual<BitArray, bool> other)
-        {
-            other.Genes = new BitArray(Genes);
-            other.Fitness = Fitness;
-        }
-
-        public void Reset()
-        {
-            _ones = -1;
-        }
-
         public int Size => Genes.Count;
 
         public int Ones
@@ -60,6 +49,17 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
         public BitIndividual(int size, Func<bool> generator)
             : this(Range(0, size).Select(_ => generator.Invoke()).ToArray())
         {
+        }
+        
+        public void CloneGenesTo(IIndividual<BitArray, bool> other)
+        {
+            other.Genes = new BitArray(Genes);
+            other.Fitness = Fitness;
+        }
+
+        public void Reset()
+        {
+            _ones = -1;
         }
 
         public bool Flip(int i) => Genes[i] = !Genes[i];

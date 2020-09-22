@@ -15,7 +15,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
         public TIndividual Best { get; private set; }
         public TIndividual Previous { get; private set; }
         public TIndividual Current { get; private set; }
-        public int StagnantGeneration { get; private set; }
+        public long StagnantGeneration { get; private set; }
         public long Generations { get; private set; }
 
         public void Initialize()
@@ -33,17 +33,15 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
 
             Generations++;
 
-            if (Current.Fitness <= Best.Fitness)
-            {
+            if (Current.Fitness <= Previous.Fitness)
                 StagnantGeneration++;
-            }
             else
-            {
-                Best = Current;
                 StagnantGeneration = 0;
-            }
+
+            if (Current.Fitness > Best.Fitness)
+                Best = Current;
         }
-        
+
         public void Finish() => EndTime = DateTime.Now;
 
         public override string ToString() =>

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Dasync.Collections;
 using EvolutionaryAlgorithm.Core.Abstract;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
@@ -36,15 +39,14 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             return this;
         }
 
-        public async Task Mutate(IPopulation<TIndividual, TGeneStructure, TGene> oldIndividuals,
-            List<TIndividual> newIndividuals)
+        public async Task Mutate(List<TIndividual> newIndividuals)
         {
-            for (var i = 0; i < newIndividuals.Count; i++)
+            await Enumerable.Range(0, newIndividuals.Count).ParallelForEachAsync(async i =>
             {
                 newIndividuals[i].Reset();
                 foreach (var t in Mutations)
                     t.Mutate(i, newIndividuals[i]);
-            }
+            });
         }
     }
 }

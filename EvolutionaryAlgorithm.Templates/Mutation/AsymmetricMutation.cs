@@ -57,6 +57,11 @@ namespace EvolutionaryAlgorithm.Template.Mutation
             throw new NotImplementedException();
         }
 
+        public void Update()
+        {
+            UpdateObservations();
+            UpdateRates();
+        }
 
         private void LowerR0()
         {
@@ -91,12 +96,6 @@ namespace EvolutionaryAlgorithm.Template.Mutation
 
             _observationCounter = _observationPhase;
             _b = 0;
-        }
-
-        public void Update()
-        {
-            UpdateObservations();
-            UpdateRates();
         }
     }
 }

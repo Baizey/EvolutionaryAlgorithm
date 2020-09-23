@@ -53,14 +53,11 @@ namespace EvolutionaryAlgorithm.Core.Abstract
             IsInitialized = true;
             ArgumentValidation();
 
-            Parameters.Initialize();
-
             Population.Initialize();
             Fitness.Initialize();
             Population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
-
-            Parameters.Initialize();
             Statistics.Initialize();
+            Parameters.Initialize();
             Mutator.Initialize();
             GenerationFilter.Initialize();
             Termination.Initialize();
@@ -71,12 +68,10 @@ namespace EvolutionaryAlgorithm.Core.Abstract
 
         private void Update()
         {
-            Parameters.Update();
-
-            Fitness.Update();
             Population.Update();
-
+            Fitness.Update();
             Statistics.Update();
+            Parameters.Update();
             Mutator.Update();
             GenerationFilter.Update();
             Termination.Update();

@@ -8,13 +8,14 @@ namespace EvolutionaryAlgorithm.Template.Mutation
     public class AsymmetricMutation : IBitMutation
     {
         private readonly int _observationPhase;
-        private readonly double _learningRate;
+        private readonly double _learningRate, _learningCap;
 
         private int _b, _observationCounter;
         private double _r0, _r1;
 
         private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
         private readonly Random _random;
+        private bool _oddGeneration;
 
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
@@ -25,7 +26,9 @@ namespace EvolutionaryAlgorithm.Template.Mutation
             _observationPhase = observationPhase;
             _observationCounter = _observationPhase;
 
+            _oddGeneration = true;
             _learningRate = learningRate;
+            _learningCap = 2 * _learningRate;
             _r0 = 0.5;
             _r1 = 1D - _r0;
             _b = 0;
@@ -39,7 +42,7 @@ namespace EvolutionaryAlgorithm.Template.Mutation
         public void Mutate(int index, IBitIndividual child)
         {
             double zeroRate, oneRate;
-            if (_statistics.Generations % 2 == 0)
+            if (_oddGeneration)
             {
                 zeroRate = _r0 + _learningRate;
                 oneRate = _r1 - _learningRate;
@@ -57,23 +60,24 @@ namespace EvolutionaryAlgorithm.Template.Mutation
 
         private void LowerR0()
         {
-            _r0 = Math.Max(_r0 - _learningRate, 2 * _learningRate);
+            _r0 = Math.Max(_r0 - _learningRate, _learningCap);
             _r1 = 1D - _r0;
         }
 
         private void RaiseR0()
         {
-            _r0 = Math.Min(_r0 + _learningRate, 1D - 2 * _learningRate);
-            _r1 = 1D - _r0;
+            _r1 = Math.Max(_r1 - _learningRate, _learningCap);
+            _r0 = 1D - _r1;
         }
 
         private void UpdateObservations()
         {
             if (_statistics.StagnantGeneration != 0) return;
-            if (_statistics.Generations % 2 == 0)
+            if (_oddGeneration)
                 _b++;
             else
                 _b--;
+            _oddGeneration = !_oddGeneration;
         }
 
         private void UpdateRates()

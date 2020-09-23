@@ -15,7 +15,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public IParameters<TIndividual, TGeneStructure, TGene> Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
-        public IMutator<TIndividual, TGeneStructure, TGene> Mutator { get; set; }
+        public IHyperMutator<TIndividual, TGeneStructure, TGene> HyperMutator { get; set; }
         public IGenerationFilter<TIndividual, TGeneStructure, TGene> GenerationFilter { get; set; }
         public TIndividual Best { get; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
@@ -37,9 +37,9 @@ namespace EvolutionaryAlgorithm.Core.Abstract
             if (Fitness == null)
                 throw new EvolutionaryAlgorithmArgumentException(
                     $"IEvolutionaryAlgorithm.{nameof(Fitness)} cannot by null");
-            if (Mutator == null)
+            if (HyperMutator == null)
                 throw new EvolutionaryAlgorithmArgumentException(
-                    $"IEvolutionaryAlgorithm.{nameof(Mutator)} cannot by null");
+                    $"IEvolutionaryAlgorithm.{nameof(HyperMutator)} cannot by null");
             if (GenerationFilter == null)
                 throw new EvolutionaryAlgorithmArgumentException(
                     $"IEvolutionaryAlgorithm.{nameof(GenerationFilter)} cannot by null");
@@ -58,7 +58,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
             Population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
             Statistics.Initialize();
             Parameters.Initialize();
-            Mutator.Initialize();
+            HyperMutator.Initialize();
             GenerationFilter.Initialize();
             Termination.Initialize();
 
@@ -72,7 +72,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract
             Fitness.Update();
             Statistics.Update();
             Parameters.Update();
-            Mutator.Update();
+            HyperMutator.Update();
             GenerationFilter.Update();
             Termination.Update();
         }

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Dasync.Collections;
 using EvolutionaryAlgorithm.Core.Abstract;
 
-namespace EvolutionaryAlgorithm.Core.Algorithm
+namespace EvolutionaryAlgorithm.Core.Algorithm.Mutator
 {
     public class Mutator<TIndividual, TGeneStructure, TGene> : IMutator<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable

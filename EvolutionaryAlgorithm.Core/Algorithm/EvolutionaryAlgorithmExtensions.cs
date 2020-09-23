@@ -1,5 +1,6 @@
 ﻿using System;
 using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Algorithm.Mutator;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
@@ -67,8 +68,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             where TIndividual : IIndividual<TGeneStructure, TGene>
             where TGeneStructure : ICloneable
         {
-            algo.Mutator = new Mutator<TIndividual, TGeneStructure, TGene>();
-            usingMutations.Invoke(algo.Mutator);
+            algo.HyperMutator = new SimpleHyperMutator<TIndividual, TGeneStructure, TGene>(new Mutator<TIndividual, TGeneStructure, TGene>());
+            usingMutations.Invoke(algo.HyperMutator.States[0]);
             return algo;
         }
 

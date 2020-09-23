@@ -11,6 +11,9 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
             algo.UsingInitialGenome(BitPopulation.From(() => Random.NextDouble() >= 0.5));
 
         public static IBitEvolutionaryAlgorithm UsingPopulation(this IBitEvolutionaryAlgorithm algo,
+            IBitPopulation population) => algo.UsingInitialGenome(population);
+
+        public static IBitEvolutionaryAlgorithm UsingPopulation(this IBitEvolutionaryAlgorithm algo,
             Func<bool> geneGenerator) => algo.UsingInitialGenome(BitPopulation.From(geneGenerator));
 
         public static IBitEvolutionaryAlgorithm

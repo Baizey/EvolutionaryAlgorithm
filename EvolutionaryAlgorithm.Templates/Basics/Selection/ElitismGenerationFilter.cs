@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 
-namespace EvolutionaryAlgorithm.Template.Selection
+namespace EvolutionaryAlgorithm.Template.Basics.Selection
 {
     public class ElitismGenerationFilter : IBitGenerationFilter
     {

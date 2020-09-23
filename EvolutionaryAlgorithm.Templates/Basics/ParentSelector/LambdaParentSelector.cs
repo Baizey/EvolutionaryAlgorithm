@@ -3,7 +3,7 @@ using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 
-namespace EvolutionaryAlgorithm.Template.ParentSelector
+namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
 {
     public class LambdaParentSelector : IBitParentSelector
     {

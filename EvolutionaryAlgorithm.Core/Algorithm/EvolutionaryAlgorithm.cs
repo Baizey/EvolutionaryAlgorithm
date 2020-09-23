@@ -16,7 +16,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
         private IFitness<TIndividual, TGeneStructure, TGene> _fitness;
         private IPopulation<TIndividual, TGeneStructure, TGene> _population;
-        private IMutator<TIndividual, TGeneStructure, TGene> _mutator;
+        private IHyperMutator<TIndividual, TGeneStructure, TGene> _hyperMutator;
         private IGenerationFilter<TIndividual, TGeneStructure, TGene> _generationFilter;
         private IParameters<TIndividual, TGeneStructure, TGene> _parameters;
         private IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> _statistics;
@@ -81,13 +81,13 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             }
         }
 
-        public IMutator<TIndividual, TGeneStructure, TGene> Mutator
+        public IHyperMutator<TIndividual, TGeneStructure, TGene> HyperMutator
         {
-            get => _mutator;
+            get => _hyperMutator;
             set
             {
-                _mutator = value;
-                _mutator.Algorithm = this;
+                _hyperMutator = value;
+                _hyperMutator.Algorithm = this;
             }
         }
 
@@ -105,7 +105,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         {
             var newIndividuals = Storage.Get(Parameters.Lambda);
 
-            await Mutator.Mutate(newIndividuals);
+            await HyperMutator.Mutate(newIndividuals);
 
             await newIndividuals.ParallelForEachAsync(async i => i.Fitness = Fitness.Evaluate(i));
 

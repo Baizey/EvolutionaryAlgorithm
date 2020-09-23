@@ -2,6 +2,7 @@
 using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Algorithm.Mutator;
 
 namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
 {
@@ -45,7 +46,8 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
             Action<IBitMutator> usingMutations)
         {
             var mutator = new BitMutator();
-            algo.Mutator = mutator;
+            var stateMutator = new SimpleHyperMutator<IBitIndividual, BitArray, bool>(mutator);
+            algo.HyperMutator = stateMutator;
             usingMutations.Invoke(mutator);
             return algo;
         }

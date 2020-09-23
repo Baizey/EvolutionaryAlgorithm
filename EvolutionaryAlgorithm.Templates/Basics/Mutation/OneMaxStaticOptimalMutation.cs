@@ -4,7 +4,7 @@ using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 
-namespace EvolutionaryAlgorithm.Template.Mutation
+namespace EvolutionaryAlgorithm.Template.Basics.Mutation
 {
     public class OneMaxStaticOptimalMutation : IBitMutation
     {

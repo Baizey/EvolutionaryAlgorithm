@@ -3,7 +3,7 @@ using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 
-namespace EvolutionaryAlgorithm.Template.Mutation
+namespace EvolutionaryAlgorithm.Template.Asymmetric
 {
     public class AsymmetricMutation : IBitMutation
     {
@@ -63,25 +63,10 @@ namespace EvolutionaryAlgorithm.Template.Mutation
             UpdateRates();
         }
 
-        private void LowerR0()
-        {
-            _r0 = Math.Max(_r0 - _learningRate, _learningCap);
-            _r1 = 1D - _r0;
-        }
-
-        private void RaiseR0()
-        {
-            _r1 = Math.Max(_r1 - _learningRate, _learningCap);
-            _r0 = 1D - _r1;
-        }
-
         private void UpdateObservations()
         {
-            if (_statistics.StagnantGeneration != 0) return;
-            if (_oddGeneration)
-                _b++;
-            else
-                _b--;
+            if (_statistics.StagnantGeneration > 0) return;
+            _b += _oddGeneration ? 1 : -1;
             _oddGeneration = !_oddGeneration;
         }
 
@@ -96,6 +81,18 @@ namespace EvolutionaryAlgorithm.Template.Mutation
 
             _observationCounter = _observationPhase;
             _b = 0;
+        }
+
+        private void LowerR0()
+        {
+            _r0 = Math.Max(_r0 - _learningRate, _learningCap);
+            _r1 = 1D - _r0;
+        }
+
+        private void RaiseR0()
+        {
+            _r1 = Math.Max(_r1 - _learningRate, _learningCap);
+            _r0 = 1D - _r1;
         }
     }
 }

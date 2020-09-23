@@ -4,39 +4,38 @@ using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.Algorithm.Crossover;
 
 namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 {
-    public class CrossoverPhase : SingleParentCrossoverBase<IBitIndividual, BitArray, bool>
+    public class MutantParentSelector : IBitParentSelector
     {
-        private readonly int _lambdaC;
+        private IIndividualStorage<IBitIndividual, BitArray, bool> _storage;
         private readonly IParentSelector<IBitIndividual, BitArray, bool> _select;
-        private IndividualStorage<IBitIndividual, BitArray, bool> _storage;
+        private readonly int _lambdaM;
 
-        public CrossoverPhase(
+        public MutantParentSelector(
             IParentSelector<IBitIndividual, BitArray, bool> initialSelector,
-            int lambdaM,
-            int lambdaC
-        )
-            : base(new MutationPhase(initialSelector, lambdaM))
+            int lambdaM)
         {
-            _lambdaC = lambdaC;
+            _lambdaM = lambdaM;
             _select = initialSelector;
         }
 
-        public new void Initialize()
+        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+
+        public void Initialize()
         {
-            base.Initialize();
             _storage = new IndividualStorage<IBitIndividual, BitArray, bool>(Algorithm);
+            _select.Algorithm = Algorithm;
+            _select.Initialize();
         }
 
-        public new void Update() => base.Update();
+        public void Update() => _select.Update();
 
-        public override void Crossover(IBitIndividual child, IBitIndividual parent)
+        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population)
         {
-            var bodies = _storage.Get(_lambdaC);
             var initial = _select.Select(Algorithm.Population);
+            var bodies = _storage.Get(_lambdaM);
 
             foreach (var body in bodies)
             {
@@ -46,9 +45,8 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
             }
 
             bodies.ForEach(b => b.Fitness = Algorithm.Fitness.Evaluate(b));
-            var best = bodies.Aggregate((a, b) => a.Fitness > b.Fitness ? a : b);
-            best.CloneGenesTo(child);
             _storage.Dump(bodies);
+            return bodies.Aggregate((a, b) => a.Fitness > b.Fitness ? a : b);
         }
     }
 }

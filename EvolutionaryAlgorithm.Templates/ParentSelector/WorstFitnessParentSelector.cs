@@ -7,17 +7,13 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
     public class WorstFitnessParentSelector : IBitParentSelector
     {
+        private IBitIndividual _worst;
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
-        public void Initialize()
-        {
-        }
+        public void Initialize() => Update();
 
-        public void Update()
-        {
-        }
+        public void Update() => _worst = Algorithm.Population.Aggregate((a, b) => a.Fitness < b.Fitness ? a : b);
 
-        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
-            population.Aggregate((a, b) => a.Fitness < b.Fitness ? a : b);
+        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) => _worst;
     }
 }

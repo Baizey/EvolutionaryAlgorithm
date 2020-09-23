@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EvolutionaryAlgorithm.Core.Abstract;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
@@ -11,6 +12,16 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
     {
         private List<TIndividual> _reserves;
         private readonly TIndividual _example;
+
+        public IndividualStorage(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> example)
+            : this(example.Population)
+        {
+        }
+
+        public IndividualStorage(IPopulation<TIndividual, TGeneStructure, TGene> example)
+            : this(example[0])
+        {
+        }
 
         public IndividualStorage(TIndividual example) => _example = example;
 

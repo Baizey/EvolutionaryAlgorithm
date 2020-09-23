@@ -17,8 +17,6 @@ namespace EvolutionaryAlgorithm.Template.Selection
         {
         }
 
-        private static readonly List<IBitIndividual> Empty = new List<IBitIndividual>();
-
         public GenerationFilterResult<IBitIndividual, BitArray, bool> Filter(
             IPopulation<IBitIndividual, BitArray, bool> oldIndividuals,
             List<IBitIndividual> newIndividuals)
@@ -33,7 +31,7 @@ namespace EvolutionaryAlgorithm.Template.Selection
                 return new GenerationFilterResult<IBitIndividual, BitArray, bool>
                 {
                     NextGeneration = nextGeneration,
-                    Discarded = Empty
+                    Discarded = new List<IBitIndividual>()
                 };
 
             nextGeneration.Sort((a, b) => b.CompareTo(a));

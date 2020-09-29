@@ -11,7 +11,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        Task<GenerationFilterResult<TIndividual, TGeneStructure, TGene>> Filter(List<TIndividual> newIndividuals);
+        Task<GenerationFilterResult<TIndividual, TGeneStructure, TGene>> Filter(List<TIndividual> bodies);
     }
 
 
@@ -25,7 +25,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase
         public abstract void Update();
 
         public abstract Task<GenerationFilterResult<TIndividual, TGeneStructure, TGene>> Filter(
-            List<TIndividual> newIndividuals);
+            List<TIndividual> bodies);
     }
 
     public class GenerationFilterResult<TIndividual, TGeneStructure, TGene>

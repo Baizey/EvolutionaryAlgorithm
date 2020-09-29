@@ -19,7 +19,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase
         public Task<List<TIndividual>> Generate(int amount);
     }
 
-    public class GenerationGeneratorBase<TIndividual, TGeneStructure, TGene>
+    public class GenerationGenerator<TIndividual, TGeneStructure, TGene>
         : IGenerationGenerator<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>

@@ -32,27 +32,6 @@ namespace EvolutionaryAlgorithm
                 learningRate = 32,
                 jump = 1;
 
-            var classicInstance = new BitEvolutionaryAlgorithm
-            {
-                Parameters = new BitStaticParameters
-                {
-                    GeneCount = geneCount,
-                    Mu = populationSize,
-                    Lambda = newIndividualsPerGeneration,
-                },
-                Statistics = new BasicEvolutionaryStatistics<IBitIndividual, BitArray, bool>(),
-                HyperHeuristic = new SingleHeuristic<IBitIndividual, BitArray, bool>(
-                    new GenerationGeneratorBase<IBitIndividual, BitArray, bool>
-                    {
-                        Mutator = new BitMutator()
-                            .ThenApply(new CloneParent<IBitIndividual, BitArray, bool>(new BestFitnessParentSelector()))
-                            .ThenApply(new OneMaxStaticOptimalMutation()),
-                        Filter = new ElitismGenerationFilter(true)
-                    }),
-                Fitness = new OneMaxFitness(),
-                Termination = new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount)
-            };
-
             var endogenous = new EvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool>()
                 .UsingParameters(new StaticParameters<IEndogenousBitIndividual, BitArray, bool>
                 {
@@ -65,27 +44,6 @@ namespace EvolutionaryAlgorithm
                     EndogenousBitIndividual.Generate(learningRate)))
                 .UsingGenerationGenerator(new EndogenousGenerationGenerator(learningRate))
                 .UsingTermination(new FitnessTermination<IEndogenousBitIndividual, BitArray, bool>(geneCount));
-
-
-            var chainedInstance = BitEvolutionaryAlgorithm.Construct
-                .UsingStaticParameters(geneCount, populationSize, newIndividualsPerGeneration)
-                .UsingBasicStatistics()
-                .UsingPopulation(BitPopulation.FromRandom())
-                .UsingGenerationGenerator(new GenerationGeneratorBase<IBitIndividual, BitArray, bool>
-                {
-                    Mutator = new BitMutator()
-                        .ThenApply(new CloneParent<IBitIndividual, BitArray, bool>(new BestFitnessParentSelector()))
-                        .ThenApply(new OneMaxStaticOptimalMutation()),
-                    Filter = new ElitismGenerationFilter(true)
-                })
-                .UsingFitness(new OneMaxFitness())
-                .UsingTermination(new FitnessTermination<IBitIndividual, BitArray, bool>(geneCount));
-
-            await chainedInstance.Evolve();
-
-            chainedInstance.Cancel();
-
-            Console.WriteLine(chainedInstance.Statistics);
         }
     }
 }

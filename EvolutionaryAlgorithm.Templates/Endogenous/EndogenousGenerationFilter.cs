@@ -19,26 +19,26 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
         }
 
         public async Task<GenerationFilterResult<IEndogenousBitIndividual, BitArray, bool>> Filter(
-            List<IEndogenousBitIndividual> newIndividuals)
+            List<IEndogenousBitIndividual> bodies)
         {
             var oldRate = Algorithm.Population[0].MutationRate;
 
             var index = 0;
-            for (var i = 1; i < newIndividuals.Count; i++)
-                if (newIndividuals[i].Fitness > newIndividuals[index].Fitness)
+            for (var i = 1; i < bodies.Count; i++)
+                if (bodies[i].Fitness > bodies[index].Fitness)
                     index = i;
-                else if (newIndividuals[i].Fitness == newIndividuals[index].Fitness &&
-                         newIndividuals[i].MutationRate < oldRate)
+                else if (bodies[i].Fitness == bodies[index].Fitness &&
+                         bodies[i].MutationRate < oldRate)
                     index = i;
 
-            var best = newIndividuals[index];
-            newIndividuals[index] = Algorithm.Population[0];
+            var best = bodies[index];
+            bodies[index] = Algorithm.Population[0];
             Algorithm.Population.Individuals[0] = best;
 
             return new GenerationFilterResult<IEndogenousBitIndividual, BitArray, bool>
             {
                 NextGeneration = Algorithm.Population.Individuals,
-                Discarded = newIndividuals
+                Discarded = bodies
             };
         }
     }

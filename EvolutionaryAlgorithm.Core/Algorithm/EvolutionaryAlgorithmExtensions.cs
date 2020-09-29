@@ -2,6 +2,8 @@
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers;
+using EvolutionaryAlgorithm.Core.Algorithm.Crossover;
 using EvolutionaryAlgorithm.Core.Algorithm.Mutator;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
@@ -84,5 +86,13 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             algo.HyperHeuristic = new SingleHeuristic<TIndividual, TGeneStructure, TGene>(generator);
             return algo;
         }
+
+        public static IMutator<TIndividual, TGeneStructure, TGene>
+            CloneGenesFrom<TIndividual, TGeneStructure, TGene>(
+                this IMutator<TIndividual, TGeneStructure, TGene> mutator,
+                ISingleParentSelector<TIndividual, TGeneStructure, TGene> parentSelector)
+            where TIndividual : IIndividual<TGeneStructure, TGene>
+            where TGeneStructure : ICloneable =>
+            mutator.ThenApply(new CloneParent<TIndividual, TGeneStructure, TGene>(parentSelector));
     }
 }

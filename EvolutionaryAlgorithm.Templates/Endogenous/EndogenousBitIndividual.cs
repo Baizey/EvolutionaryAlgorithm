@@ -16,12 +16,7 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
         public static Func<int, EndogenousBitIndividual> Generate(int learningRate)
         {
             var random = new Random();
-            return g =>
-            {
-                var i = new EndogenousBitIndividual(g, () => random.NextDouble() >= 0.5);
-                i.MutationRate = learningRate;
-                return i;
-            };
+            return g => new EndogenousBitIndividual(g, () => random.NextDouble() >= 0.5) {MutationRate = learningRate};
         }
 
         public int MutationRate { get; set; }

@@ -26,6 +26,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
 
     public class StagnationDetectionMutation : IBitMutation
     {
+        private readonly MutationApplier _applier = new MutationApplier();
         private IParameters<IBitIndividual, BitArray, bool> _parameters;
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
@@ -36,6 +37,6 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
         }
 
         public async Task Mutate(int index, IBitIndividual child) =>
-            DynamicMutation.Instance.Mutate(child, Algorithm.Parameters.GeneCount, 2 * _parameters.MutationRate);
+            _applier.Mutate(child, 2 * _parameters.MutationRate, Algorithm.Parameters.GeneCount);
     }
 }

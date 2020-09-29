@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
+using EvolutionaryAlgorithm.BitImplementation.Algorithm;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 using EvolutionaryAlgorithm.Template.Basics.Mutation;
@@ -10,6 +11,7 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
     public class EndogenousMutation
         : IMutation<IEndogenousBitIndividual, BitArray, bool>
     {
+        private readonly MutationApplier _applier = new MutationApplier();
         private readonly int _learningRate;
         private readonly Random _random = new Random();
         private int _geneCount;
@@ -17,10 +19,7 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
 
         public EndogenousMutation(int learningRate) => _learningRate = learningRate;
 
-        public void Initialize()
-        {
-            _geneCount = Algorithm.Parameters.GeneCount;
-        }
+        public void Initialize() => _geneCount = Algorithm.Parameters.GeneCount;
 
         public void Update()
         {
@@ -32,7 +31,7 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
                 child.MutationRate /= _learningRate;
             else
                 child.MutationRate *= _learningRate;
-            DynamicMutation.Instance.Mutate(child, _geneCount, child.MutationRate);
+            _applier.Mutate(child, child.MutationRate, _geneCount);
             return Task.CompletedTask;
         }
     }

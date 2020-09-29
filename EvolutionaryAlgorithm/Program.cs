@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.BitImplementation.Algorithm;
@@ -44,6 +46,18 @@ namespace EvolutionaryAlgorithm
                     EndogenousBitIndividual.Generate(learningRate)))
                 .UsingGenerationGenerator(new EndogenousGenerationGenerator(learningRate))
                 .UsingTermination(new FitnessTermination<IEndogenousBitIndividual, BitArray, bool>(geneCount));
+
+            var applier = new MutationApplier();
+
+            var a = 1000;
+            for (var i = 1; i < a / 2; i++)
+                Print(applier.GetOdds(i, a));
+        }
+
+
+        static void Print(double[] arr)
+        {
+            Console.WriteLine("{0}", arr.Length, string.Join(", ", arr));
         }
     }
 }

@@ -27,7 +27,9 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public List<IGenerationGenerator<TIndividual, TGeneStructure, TGene>> States { get; set; }
+        public List<IGenerationGenerator<TIndividual, TGeneStructure, TGene>> States { get; set; } =
+            new List<IGenerationGenerator<TIndividual, TGeneStructure, TGene>>();
+
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
 
         public void Initialize() => States.ForEach(s =>

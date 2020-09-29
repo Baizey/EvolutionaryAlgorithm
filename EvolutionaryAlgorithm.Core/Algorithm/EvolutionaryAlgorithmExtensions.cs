@@ -83,7 +83,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             where TIndividual : IIndividual<TGeneStructure, TGene>
             where TGeneStructure : ICloneable
         {
-            algo.HyperHeuristic = new SingleHeuristic<TIndividual, TGeneStructure, TGene>(generator);
+            algo.HyperHeuristic = new SimpleHeuristic<TIndividual, TGeneStructure, TGene>(generator);
             return algo;
         }
 

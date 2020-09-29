@@ -29,6 +29,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
 
         public class SelfAdjustingLambdaMutation : IBitMutation
         {
+            private readonly MutationApplier _applier = new MutationApplier();
             private IParameters<IBitIndividual, BitArray, bool> _parameters;
             public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
@@ -42,11 +43,11 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
             {
                 // Create x_i by flipping each bit in a copy of x independently with probability [r / 2n] if [i ≤ λ/2] and with probability [2r / n] otherwise.
                 if (index < _parameters.Lambda / 2)
-                    DynamicMutation.Instance.Mutate(child,
-                        2 * Algorithm.Parameters.GeneCount,
-                        _parameters.MutationRate);
+                    _applier.Mutate(child,
+                        _parameters.MutationRate,
+                        2 * Algorithm.Parameters.GeneCount);
                 else
-                    DynamicMutation.Instance.Mutate(child,
+                    _applier.Mutate(child,
                         Algorithm.Parameters.GeneCount,
                         2 * _parameters.MutationRate);
 

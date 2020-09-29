@@ -53,7 +53,7 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
         public static IBitEvolutionaryAlgorithm UsingGenerationGenerator(this IBitEvolutionaryAlgorithm algo,
             IGenerationGenerator<IBitIndividual, BitArray, bool> generationGenerator)
         {
-            algo.HyperHeuristic = new SingleHeuristic<IBitIndividual, BitArray, bool>(generationGenerator);
+            algo.HyperHeuristic = new SimpleHeuristic<IBitIndividual, BitArray, bool>(generationGenerator);
             return algo;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Parameters
 {
@@ -20,5 +21,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Parameters
         public int GeneCount { get; set; }
         public int Mu { get; set; }
         public int Lambda { get; set; }
+        public int MutationRate { get; set; }
     }
 }

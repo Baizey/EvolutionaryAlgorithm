@@ -1,6 +1,7 @@
 ﻿using System;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 
-namespace EvolutionaryAlgorithm.Core.Abstract
+namespace EvolutionaryAlgorithm.Core.Abstract.Core
 {
     public interface ITermination<TIndividual, TGeneStructure, TGene>
         : IEvolutionary<TIndividual, TGeneStructure, TGene>

@@ -1,5 +1,7 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 using EvolutionaryAlgorithm.Core.Algorithm.Mutator;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
@@ -18,7 +20,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         }
 
         public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
-            UsingGlobalParameters<TIndividual, TGeneStructure, TGene>(
+            UsingParameters<TIndividual, TGeneStructure, TGene>(
                 this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
                 IParameters<TIndividual, TGeneStructure, TGene> parameters)
             where TIndividual : IIndividual<TGeneStructure, TGene>
@@ -62,25 +64,24 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         }
 
         public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
-            UsingMutator<TIndividual, TGeneStructure, TGene>(
+            UsingHyperHeuristic<TIndividual, TGeneStructure, TGene>(
                 this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
-                Action<IMutator<TIndividual, TGeneStructure, TGene>> usingMutations)
+                IHyperHeuristic<TIndividual, TGeneStructure, TGene> heuristic)
             where TIndividual : IIndividual<TGeneStructure, TGene>
             where TGeneStructure : ICloneable
         {
-            algo.HyperMutator = new SimpleHyperMutator<TIndividual, TGeneStructure, TGene>(new Mutator<TIndividual, TGeneStructure, TGene>());
-            usingMutations.Invoke(algo.HyperMutator.States[0]);
+            algo.HyperHeuristic = heuristic;
             return algo;
         }
 
         public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
-            UsingGenerationFilter<TIndividual, TGeneStructure, TGene>(
+            UsingGenerationGenerator<TIndividual, TGeneStructure, TGene>(
                 this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
-                IGenerationFilter<TIndividual, TGeneStructure, TGene> generationFilter)
+                IGenerationGenerator<TIndividual, TGeneStructure, TGene> generator)
             where TIndividual : IIndividual<TGeneStructure, TGene>
             where TGeneStructure : ICloneable
         {
-            algo.GenerationFilter = generationFilter;
+            algo.HyperHeuristic = new SingleHeuristic<TIndividual, TGeneStructure, TGene>(generator);
             return algo;
         }
     }

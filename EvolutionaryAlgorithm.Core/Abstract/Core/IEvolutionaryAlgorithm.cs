@@ -1,27 +1,45 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 using EvolutionaryAlgorithm.Core.Algorithm;
 
-namespace EvolutionaryAlgorithm.Core.Abstract
+namespace EvolutionaryAlgorithm.Core.Abstract.Core
 {
     public interface IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public IIndividualStorage<TIndividual, TGeneStructure, TGene> Storage { set; }
+        public CancellationTokenSource CancellationTokenSource { get; set; }
+        public void Cancel() => CancellationTokenSource.Cancel();
+        public IParameters<TIndividual, TGeneStructure, TGene> Parameters { get; set; }
+        public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
+        public IHyperHeuristic<TIndividual, TGeneStructure, TGene> HyperHeuristic { get; set; }
+        public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
+        public ITermination<TIndividual, TGeneStructure, TGene> Termination { get; set; }
+        public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
+        public TIndividual Best => Population.Best;
+        public bool IsInitialized { get; set; }
+        public void Initialize();
+        public void Update();
+        public Task EvolveOneGeneration();
+        public Task Evolve();
+    }
+
+    public class EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
+        : IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
+        where TGeneStructure : ICloneable
+        where TIndividual : IIndividual<TGeneStructure, TGene>
+    {
         public CancellationTokenSource CancellationTokenSource { get; set; }
         public ITermination<TIndividual, TGeneStructure, TGene> Termination { get; set; }
         public IParameters<TIndividual, TGeneStructure, TGene> Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
-        public IHyperMutator<TIndividual, TGeneStructure, TGene> HyperMutator { get; set; }
-        public IGenerationFilter<TIndividual, TGeneStructure, TGene> GenerationFilter { get; set; }
-        public TIndividual Best { get; }
+        public IHyperHeuristic<TIndividual, TGeneStructure, TGene> HyperHeuristic { get; set; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
-        public Task EvolveOneGeneration();
-        public void Cancel() => CancellationTokenSource.Cancel();
-        public bool IsInitialized { get; protected set; }
+        public bool IsInitialized { get; set; }
 
         private void ArgumentValidation()
         {
@@ -37,46 +55,49 @@ namespace EvolutionaryAlgorithm.Core.Abstract
             if (Fitness == null)
                 throw new EvolutionaryAlgorithmArgumentException(
                     $"IEvolutionaryAlgorithm.{nameof(Fitness)} cannot by null");
-            if (HyperMutator == null)
+            if (HyperHeuristic == null)
                 throw new EvolutionaryAlgorithmArgumentException(
-                    $"IEvolutionaryAlgorithm.{nameof(HyperMutator)} cannot by null");
-            if (GenerationFilter == null)
-                throw new EvolutionaryAlgorithmArgumentException(
-                    $"IEvolutionaryAlgorithm.{nameof(GenerationFilter)} cannot by null");
+                    $"IEvolutionaryAlgorithm.{nameof(HyperHeuristic)} cannot by null");
             if (Termination == null)
                 throw new EvolutionaryAlgorithmArgumentException(
                     $"IEvolutionaryAlgorithm.{nameof(Termination)} cannot by null");
         }
 
-        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Initialize()
+        public void Initialize()
         {
             IsInitialized = true;
             ArgumentValidation();
+
+            Population.Algorithm = this;
+            Fitness.Algorithm = this;
+            Statistics.Algorithm = this;
+            Parameters.Algorithm = this;
+            HyperHeuristic.Algorithm = this;
+            Termination.Algorithm = this;
 
             Population.Initialize();
             Fitness.Initialize();
             Population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
             Statistics.Initialize();
             Parameters.Initialize();
-            HyperMutator.Initialize();
-            GenerationFilter.Initialize();
+            HyperHeuristic.Initialize();
             Termination.Initialize();
-
-            Storage = new IndividualStorage<TIndividual, TGeneStructure, TGene>(Population[0]);
-            return this;
         }
 
-        private void Update()
+        public void Update()
         {
             Population.Update();
             Fitness.Update();
             Statistics.Update();
             Parameters.Update();
-            HyperMutator.Update();
-            GenerationFilter.Update();
+            HyperHeuristic.Update();
             Termination.Update();
         }
 
+        public async Task EvolveOneGeneration()
+        {
+            Population.Individuals = await HyperHeuristic.Generate(Parameters.Lambda);
+        }
 
         public async Task Evolve()
         {

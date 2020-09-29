@@ -2,19 +2,21 @@
 using System.Collections;
 using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers;
 using EvolutionaryAlgorithm.Core.Algorithm;
 
 namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 {
-    public class MutantParentSelector : IBitParentSelector
+    public class MutantParentSelector : IBitSingleParentSelector
     {
         private IIndividualStorage<IBitIndividual, BitArray, bool> _storage;
-        private readonly IParentSelector<IBitIndividual, BitArray, bool> _select;
+        private readonly ISingleParentSelector<IBitIndividual, BitArray, bool> _select;
         private readonly int _lambdaM;
 
         public MutantParentSelector(
-            IParentSelector<IBitIndividual, BitArray, bool> initialSelector,
+            ISingleParentSelector<IBitIndividual, BitArray, bool> initialSelector,
             int lambdaM)
         {
             _lambdaM = lambdaM;
@@ -32,10 +34,10 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 
         public void Update() => _select.Update();
 
-        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population)
+        public IBitIndividual Select(int index, IPopulation<IBitIndividual, BitArray, bool> population)
         {
-            var initial = _select.Select(Algorithm.Population);
-            var bodies = _storage.Get(_lambdaM);
+            var initial = _select.Select(index, Algorithm.Population);
+            var bodies = _storage.Get(index, _lambdaM);
 
             foreach (var body in bodies)
             {
@@ -45,7 +47,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
             }
 
             bodies.ForEach(b => b.Fitness = Algorithm.Fitness.Evaluate(b));
-            _storage.Dump(bodies);
+            _storage.Dump(index, bodies);
             return bodies.Aggregate((a, b) => a.Fitness > b.Fitness ? a : b);
         }
     }

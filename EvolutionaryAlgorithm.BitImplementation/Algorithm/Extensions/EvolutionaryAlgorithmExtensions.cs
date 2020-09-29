@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 using EvolutionaryAlgorithm.Core.Algorithm.Mutator;
 
 namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
@@ -42,20 +43,17 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
             return algo;
         }
 
-        public static IBitEvolutionaryAlgorithm UsingMutator(this IBitEvolutionaryAlgorithm algo,
-            Action<IBitMutator> usingMutations)
+        public static IBitEvolutionaryAlgorithm UsingHyperHeuristic(this IBitEvolutionaryAlgorithm algo,
+            IBitHyperHeuristic hyperHeuristic)
         {
-            var mutator = new BitMutator();
-            var stateMutator = new SimpleHyperMutator<IBitIndividual, BitArray, bool>(mutator);
-            algo.HyperMutator = stateMutator;
-            usingMutations.Invoke(mutator);
+            algo.HyperHeuristic = hyperHeuristic;
             return algo;
         }
-
-        public static IBitEvolutionaryAlgorithm UsingGenerationFilter(this IBitEvolutionaryAlgorithm algo,
-            IBitGenerationFilter generationFilter)
+        
+        public static IBitEvolutionaryAlgorithm UsingGenerationGenerator(this IBitEvolutionaryAlgorithm algo,
+            IGenerationGenerator<IBitIndividual, BitArray, bool> generationGenerator)
         {
-            algo.GenerationFilter = generationFilter;
+            algo.HyperHeuristic = new SingleHeuristic<IBitIndividual, BitArray, bool>(generationGenerator);
             return algo;
         }
     }

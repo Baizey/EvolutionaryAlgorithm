@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 {

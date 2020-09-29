@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {

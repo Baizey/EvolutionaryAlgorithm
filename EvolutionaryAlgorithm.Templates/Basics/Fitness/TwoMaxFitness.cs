@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
 
-namespace EvolutionaryAlgorithm.Template.Fitness
+namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 {
     public class TwoMaxFitness : IBitFitness
     {

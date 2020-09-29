@@ -1,6 +1,7 @@
 ﻿using System;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
 
-namespace EvolutionaryAlgorithm.Core.Abstract
+namespace EvolutionaryAlgorithm.Core.Abstract.Infrastructure
 {
     public interface IParameters<TIndividual, TGeneStructure, TGene>
         : IEvolutionary<TIndividual, TGeneStructure, TGene>
@@ -10,5 +11,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract
         public int GeneCount { get; set; }
         public int Mu { get; set; }
         public int Lambda { get; set; }
+        public int MutationRate { get; set; }
     }
 }

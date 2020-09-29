@@ -1,12 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 
 namespace EvolutionaryAlgorithm.Template.Basics.Selection
 {
     public class ElitismGenerationFilter : IBitGenerationFilter
     {
+        private readonly bool _preferNew;
+
+        public ElitismGenerationFilter(bool preferNew) => _preferNew = preferNew;
+
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public void Initialize()
@@ -17,15 +23,31 @@ namespace EvolutionaryAlgorithm.Template.Basics.Selection
         {
         }
 
-        public GenerationFilterResult<IBitIndividual, BitArray, bool> Filter(
-            IPopulation<IBitIndividual, BitArray, bool> oldIndividuals,
+        public async Task<GenerationFilterResult<IBitIndividual, BitArray, bool>> Filter(
             List<IBitIndividual> newIndividuals)
         {
             var keep = Algorithm.Parameters.Mu;
+            var oldIndividuals = Algorithm.Population.Individuals;
 
-            var nextGeneration = new List<IBitIndividual>(oldIndividuals.Count + newIndividuals.Count);
-            nextGeneration.AddRange(oldIndividuals);
-            nextGeneration.AddRange(newIndividuals);
+            oldIndividuals.Sort((a, b) => b.CompareTo(a));
+            newIndividuals.Sort((a, b) => b.CompareTo(a));
+
+            int i = 0, j = 0;
+            for (; i < oldIndividuals.Count && j < newIndividuals.Count && i + j < keep;)
+            {
+                if (oldIndividuals[i].Fitness > newIndividuals[j].Fitness)
+                    i++;
+                else if (oldIndividuals[i].Fitness < newIndividuals[j].Fitness)
+                    j++;
+                else if (_preferNew)
+                    j++;
+                else
+                    i++;
+            }
+
+            var nextGeneration = new List<IBitIndividual>(keep);
+            if (i > 0) nextGeneration.AddRange(oldIndividuals.GetRange(0, i));
+            if (j > 0) nextGeneration.AddRange(newIndividuals.GetRange(0, j));
 
             if (keep >= nextGeneration.Count)
                 return new GenerationFilterResult<IBitIndividual, BitArray, bool>
@@ -34,11 +56,14 @@ namespace EvolutionaryAlgorithm.Template.Basics.Selection
                     Discarded = new List<IBitIndividual>()
                 };
 
-            nextGeneration.Sort((a, b) => b.CompareTo(a));
+            var discarded = new List<IBitIndividual>(oldIndividuals.Count + newIndividuals.Count - keep);
+            if (i < oldIndividuals.Count) discarded.AddRange(oldIndividuals.GetRange(i, oldIndividuals.Count - i));
+            if (j < newIndividuals.Count) discarded.AddRange(newIndividuals.GetRange(j, newIndividuals.Count - j));
+
             return new GenerationFilterResult<IBitIndividual, BitArray, bool>
             {
-                NextGeneration = nextGeneration.GetRange(0, keep),
-                Discarded = nextGeneration.GetRange(keep, nextGeneration.Count - keep)
+                NextGeneration = nextGeneration,
+                Discarded = discarded
             };
         }
     }

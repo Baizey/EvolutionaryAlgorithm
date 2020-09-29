@@ -1,22 +1,26 @@
-﻿using System.Collections;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract;
+﻿using System;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers;
 
 namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
 {
-    public class FirstParentSelector : IBitParentSelector
+    public class
+        FirstParentSelector<TIndividual, TGeneStructure, TGene> : ISingleParentSelector<TIndividual, TGeneStructure,
+            TGene>
+        where TIndividual : IIndividual<TGeneStructure, TGene>
+        where TGeneStructure : ICloneable
     {
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
 
         public void Initialize()
         {
         }
-        
+
         public void Update()
         {
         }
 
-        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
+        public TIndividual Select(int index, IPopulation<TIndividual, TGeneStructure, TGene> population) =>
             population[0];
     }
 }

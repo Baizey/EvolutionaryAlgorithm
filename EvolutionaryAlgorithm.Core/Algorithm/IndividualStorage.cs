@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using EvolutionaryAlgorithm.Core.Abstract;
-using Microsoft.VisualBasic.CompilerServices;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
@@ -10,7 +10,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        private List<TIndividual> _reserves;
+        private Dictionary<int, List<TIndividual>> _reserves = new Dictionary<int, List<TIndividual>>();
         private readonly TIndividual _example;
 
         public IndividualStorage(IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> example)
@@ -25,37 +25,37 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
         public IndividualStorage(TIndividual example) => _example = example;
 
-        private void Refill(int amount)
+        private void Refill(int key, int amount)
         {
-            _reserves ??= new List<TIndividual>(amount);
+            _reserves[key] ??= new List<TIndividual>(amount);
             var missing = amount - _reserves.Count;
             for (var i = 0; i < missing; i++)
-                _reserves.Add((TIndividual) _example.Clone());
+                _reserves[key].Add((TIndividual) _example.Clone());
         }
 
-        public List<TIndividual> Get(int amount)
+        public List<TIndividual> Get(int key, int amount)
         {
-            Refill(amount);
+            Refill(key, amount);
             if (_reserves.Count == amount)
             {
-                var used = _reserves;
-                _reserves = null;
+                var used = _reserves[key];
+                _reserves[key] = null;
                 return used;
             }
             else
             {
-                var used = _reserves.GetRange(0, amount);
-                _reserves = _reserves.GetRange(amount, _reserves.Count - amount);
+                var used = _reserves[key].GetRange(0, amount);
+                _reserves[key] = _reserves[key].GetRange(amount, _reserves.Count - amount);
                 return used;
             }
         }
 
-        public void Dump(List<TIndividual> bodies)
+        public void Dump(int key, List<TIndividual> bodies)
         {
-            if (_reserves == null)
-                _reserves = bodies;
+            if (_reserves[key] == null)
+                _reserves[key] = bodies;
             else
-                _reserves.AddRange(bodies);
+                _reserves[key].AddRange(bodies);
         }
     }
 }

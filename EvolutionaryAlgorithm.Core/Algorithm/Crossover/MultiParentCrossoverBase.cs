@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using EvolutionaryAlgorithm.Core.Abstract;
+using System.Threading.Tasks;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
 {
@@ -9,19 +12,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
         where TIndividual : IIndividual<TGeneStructure, TGene>
         where TGeneStructure : ICloneable
     {
-        private IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> _algorithm;
-
-        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm
-        {
-            get => _algorithm;
-            set
-            {
-                _algorithm = value;
-                ParentsSelector.Algorithm = Algorithm;
-            }
-        }
-        
-        private IMultiParentSelector<TIndividual, TGeneStructure, TGene> ParentsSelector { get; }
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
+        public IMultiParentSelector<TIndividual, TGeneStructure, TGene> ParentsSelector { get; }
 
         public MultiParentCrossoverBase(IMultiParentSelector<TIndividual, TGeneStructure, TGene> parentsSelector) =>
             ParentsSelector = parentsSelector;
@@ -34,8 +26,9 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
 
         public void Update() => ParentsSelector.Update();
 
-        public abstract void Crossover(TIndividual child, List<TIndividual> parents);
+        public abstract Task Crossover(TIndividual child, List<TIndividual> parents);
         
-        public void Mutate(int index, TIndividual child) => Crossover(child, ParentsSelector.Select(Algorithm.Population));
+        public async Task Mutate(int index, TIndividual child) =>
+            Crossover(child, ParentsSelector.Select(Algorithm.Population));
     }
 }

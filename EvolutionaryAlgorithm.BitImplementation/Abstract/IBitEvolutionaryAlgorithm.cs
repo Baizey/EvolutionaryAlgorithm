@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.BitImplementation.Abstract
 {

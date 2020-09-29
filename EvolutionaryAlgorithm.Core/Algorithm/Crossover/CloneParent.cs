@@ -1,5 +1,7 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract;
+using System.Threading.Tasks;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
 {
@@ -8,10 +10,11 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
         where TIndividual : IIndividual<TGeneStructure, TGene>
         where TGeneStructure : ICloneable
     {
-        public CloneParent(IParentSelector<TIndividual, TGeneStructure, TGene> parentsSelector) : base(parentsSelector)
+        public CloneParent(ISingleParentSelector<TIndividual, TGeneStructure, TGene> parentsSelector)
+            : base(parentsSelector)
         {
         }
 
-        public override void Crossover(TIndividual child, TIndividual parent) => parent.CloneGenesTo(child);
+        public override async Task Crossover(int index, TIndividual child, TIndividual parent) => parent.CloneGenesTo(child);
     }
 }

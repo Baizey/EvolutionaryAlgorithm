@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
 {
-    public class LambdaParentSelector : IBitParentSelector
+    public class LambdaParentSelector : IBitSingleParentSelector
     {
         private readonly Func<IPopulation<IBitIndividual, BitArray, bool>, IBitIndividual> _selector;
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
@@ -21,7 +21,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
         {
         }
 
-        public IBitIndividual Select(IPopulation<IBitIndividual, BitArray, bool> population) =>
+        public IBitIndividual Select(int index, IPopulation<IBitIndividual, BitArray, bool> population) =>
             _selector.Invoke(population);
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 
-namespace EvolutionaryAlgorithm.Core.Abstract
+namespace EvolutionaryAlgorithm.Core.Abstract.Core
 {
     public interface IPopulation<TIndividual, TGeneStructure, TGene> :
         IEvolutionary<TIndividual, TGeneStructure, TGene>,

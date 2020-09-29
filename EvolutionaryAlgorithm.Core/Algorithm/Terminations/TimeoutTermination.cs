@@ -1,5 +1,5 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
 {

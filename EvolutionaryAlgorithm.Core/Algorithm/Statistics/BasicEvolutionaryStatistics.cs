@@ -1,5 +1,6 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
 {

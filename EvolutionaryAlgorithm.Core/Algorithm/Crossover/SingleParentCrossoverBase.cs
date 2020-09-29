@@ -1,5 +1,8 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract;
+using System.Threading.Tasks;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
+using EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
 {
@@ -8,21 +11,10 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
         where TIndividual : IIndividual<TGeneStructure, TGene>
         where TGeneStructure : ICloneable
     {
-        private IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> _algorithm;
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
+        public ISingleParentSelector<TIndividual, TGeneStructure, TGene> ParentSelector { get; set; }
 
-        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm
-        {
-            get => _algorithm;
-            set
-            {
-                _algorithm = value;
-                ParentSelector.Algorithm = Algorithm;
-            }
-        }
-
-        protected IParentSelector<TIndividual, TGeneStructure, TGene> ParentSelector { get; set; }
-
-        public SingleParentCrossoverBase(IParentSelector<TIndividual, TGeneStructure, TGene> parentsSelector) =>
+        public SingleParentCrossoverBase(ISingleParentSelector<TIndividual, TGeneStructure, TGene> parentsSelector) =>
             ParentSelector = parentsSelector;
 
         public void Initialize()
@@ -33,9 +25,9 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
 
         public void Update() => ParentSelector.Update();
 
-        public abstract void Crossover(TIndividual child, TIndividual parent);
+        public abstract Task Crossover(int index, TIndividual child, TIndividual parent);
 
-        public void Mutate(int index, TIndividual child) =>
-            Crossover(child, ParentSelector.Select(Algorithm.Population));
+        public async Task Mutate(int index, TIndividual child) =>
+            await Crossover(index, child, ParentSelector.Select(index, Algorithm.Population));
     }
 }

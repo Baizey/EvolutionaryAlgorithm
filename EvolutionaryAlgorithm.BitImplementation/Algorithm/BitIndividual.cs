@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
 using static System.Linq.Enumerable;
 
 namespace EvolutionaryAlgorithm.BitImplementation.Algorithm

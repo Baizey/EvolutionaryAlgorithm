@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract;
+using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 
 namespace EvolutionaryAlgorithm.Template.Asymmetric
 {
@@ -39,7 +41,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
             _statistics = Algorithm.Statistics;
         }
 
-        public void Mutate(int index, IBitIndividual child)
+        public async Task Mutate(int index, IBitIndividual child)
         {
             double zeroRate, oneRate;
             if (_oddGeneration)

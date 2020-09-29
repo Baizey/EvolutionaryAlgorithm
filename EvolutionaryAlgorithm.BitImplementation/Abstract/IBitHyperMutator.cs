@@ -3,7 +3,7 @@ using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 
 namespace EvolutionaryAlgorithm.BitImplementation.Abstract
 {
-    public interface IBitMutator : IMutator<IBitIndividual, BitArray, bool>
+    public interface IBitHyperHeuristic : IHyperHeuristic<IBitIndividual, BitArray, bool>
     {
     }
 }

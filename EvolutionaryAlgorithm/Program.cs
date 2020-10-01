@@ -27,7 +27,6 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
-                    LearningRate = learningRate,
                     Lambda = lambda,
                     Mu = 1,
                 })
@@ -41,7 +40,6 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
-                    LearningRate = learningRate,
                     Lambda = lambda,
                     Mu = 1,
                 })
@@ -56,7 +54,6 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
-                    LearningRate = learningRate,
                     Lambda = 1,
                     Mu = 1,
                 })
@@ -72,7 +69,6 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
-                    LearningRate = learningRate,
                     Lambda = lambda,
                     Mu = 1,
                 })

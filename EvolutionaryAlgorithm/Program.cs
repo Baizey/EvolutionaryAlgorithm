@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.BitImplementation.Algorithm;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Algorithm.Parameters;
-using EvolutionaryAlgorithm.Core.Algorithm.Statistics;
-using EvolutionaryAlgorithm.Core.Algorithm.Terminations;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
 using EvolutionaryAlgorithm.Template.Endogenous;
-using EvolutionaryAlgorithm.Template.Stagnation;
 
 namespace EvolutionaryAlgorithm
 {
@@ -27,23 +22,15 @@ namespace EvolutionaryAlgorithm
             var mutationRate = 2;
             var observationPhase = 5;
 
-            var parameters = new Parameters
-            {
-                GeneCount = geneCount,
-                Lambda = lambda,
-                Mu = mu,
-                MutationRate = mutationRate
-            };
-
             var endogenous = new EvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
+                    LearningRate = learningRate,
                     Lambda = lambda,
                     Mu = 1,
                 })
-                .UsingParameters(parameters)
                 .UsingBasicStatistics()
                 .UsingRandomPopulation(learningRate)
                 .UsingEndogenousGeneration(learningRate)
@@ -54,6 +41,7 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
+                    LearningRate = learningRate,
                     Lambda = lambda,
                     Mu = 1,
                 })
@@ -68,6 +56,7 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
+                    LearningRate = learningRate,
                     Lambda = 1,
                     Mu = 1,
                 })
@@ -83,6 +72,7 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
+                    LearningRate = learningRate,
                     Lambda = lambda,
                     Mu = 1,
                 })

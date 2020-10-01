@@ -1,6 +1,8 @@
-﻿namespace EvolutionaryAlgorithm.Core.Abstract.Infrastructure
+﻿using System;
+
+namespace EvolutionaryAlgorithm.Core.Abstract.Infrastructure
 {
-    public interface IParameters
+    public interface IParameters : ICloneable
     {
         public int GeneCount { get; set; }
         public int Mu { get; set; }

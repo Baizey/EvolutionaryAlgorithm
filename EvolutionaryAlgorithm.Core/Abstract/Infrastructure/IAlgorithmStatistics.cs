@@ -19,13 +19,4 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Infrastructure
         TimeSpan RunTime => EndTime - StartTime;
         void Finish();
     }
-
-    public interface IUiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
-        : IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
-        where TGeneStructure : ICloneable
-        where TIndividual : IIndividual<TGeneStructure, TGene>
-    {
-        public int StepSize { get; }
-        public List<TIndividual> History { get; }
-    }
 }

@@ -22,7 +22,7 @@ namespace EvolutionaryAlgorithm
 
 
             var endogenous = new EvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool>()
-                .UsingParameters(new StaticParameters<IEndogenousBitIndividual, BitArray, bool>
+                .UsingParameters(new StaticParameters
                 {
                     GeneCount = geneCount,
                     Lambda = lambda,

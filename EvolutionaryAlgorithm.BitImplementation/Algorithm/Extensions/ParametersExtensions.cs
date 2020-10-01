@@ -9,7 +9,7 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
         public static IBitEvolutionaryAlgorithm UsingStaticParameters(this IBitEvolutionaryAlgorithm algo,
             int geneCount, int populationSize, int newIndividualsSize)
         {
-            algo.Parameters = new StaticParameters<IBitIndividual, BitArray, bool>
+            algo.Parameters = new StaticParameters
             {
                 GeneCount = geneCount,
                 Lambda = newIndividualsSize,

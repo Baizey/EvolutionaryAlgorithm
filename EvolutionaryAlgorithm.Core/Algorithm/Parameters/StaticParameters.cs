@@ -1,26 +1,27 @@
-﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
+﻿using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Parameters
 {
-    public class StaticParameters<TIndividual, TGeneStructure, TGene>
+    public class StaticParameters
         : IParameters
-        where TGeneStructure : ICloneable
-        where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
-
-        public void Initialize()
+        public StaticParameters()
         {
         }
-        public void Update()
+
+        public StaticParameters(IParameters parameters)
         {
+            GeneCount = parameters.GeneCount;
+            Mu = parameters.Mu;
+            Lambda = parameters.Lambda;
+            MutationRate = parameters.MutationRate;
         }
 
         public int GeneCount { get; set; }
         public int Mu { get; set; }
         public int Lambda { get; set; }
         public int MutationRate { get; set; }
+
+        public object Clone() => new StaticParameters(this);
     }
 }

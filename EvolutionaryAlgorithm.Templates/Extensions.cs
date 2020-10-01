@@ -27,10 +27,9 @@ namespace EvolutionaryAlgorithm.Template
             this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,
             int learningRate) =>
             algorithm.UsingGenerationGenerator(new EndogenousGenerationGenerator(learningRate));
-
-        public
-            public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingRandomPopulation(
-                this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm) =>
+        
+        public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingRandomPopulation(
+            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm) =>
             algorithm.UsingPopulation(BitPopulation.FromRandom());
 
         public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingRandomPopulation(

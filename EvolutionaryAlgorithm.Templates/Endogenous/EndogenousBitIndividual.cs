@@ -11,6 +11,7 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
         public int MutationRate { get; set; }
     }
 
+
     public class EndogenousBitIndividual : BitIndividual, IEndogenousBitIndividual
     {
         public static Func<int, EndogenousBitIndividual> Generate(int learningRate)

@@ -14,10 +14,6 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
         {
         }
 
-        public void Update()
-        {
-        }
-
         public double Evaluate(TIndividual individual) => Math.Max(individual.Ones, individual.Zeros);
     }
 }

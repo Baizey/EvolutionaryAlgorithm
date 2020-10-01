@@ -24,7 +24,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
         private bool _inStagnationDetection;
         private readonly IGenerationGenerator<IBitIndividual, BitArray, bool> _mutationModule;
         private readonly StagnationDetectorGenerationGenerator _sdModule;
-        private IParameters<IBitIndividual, BitArray, bool> _parameters;
+        private IParameters _parameters;
         private int _n;
 
         public StagnationDetectionHyperHeuristic(int initialStagnantLearningRate)

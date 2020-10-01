@@ -5,7 +5,7 @@ using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 namespace EvolutionaryAlgorithm.Core.Algorithm.Parameters
 {
     public class StaticParameters<TIndividual, TGeneStructure, TGene>
-        : IParameters<TIndividual, TGeneStructure, TGene>
+        : IParameters
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {

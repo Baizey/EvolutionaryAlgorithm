@@ -4,29 +4,30 @@ using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.Algorithm.Terminations;
 
 namespace EvolutionaryAlgorithm.Core.Abstract.Core
 {
     public interface IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
+        : IUpdates, IInitializes
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public CancellationTokenSource CancellationTokenSource { get; set; }
-        public void Cancel() => CancellationTokenSource.Cancel();
-        public IParameters<TIndividual, TGeneStructure, TGene> Parameters { get; set; }
+        public void Terminate();
+        public IParameters Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IHyperHeuristic<TIndividual, TGeneStructure, TGene> HyperHeuristic { get; set; }
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
-        public ITermination<TIndividual, TGeneStructure, TGene> Termination { get; set; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
         public Action<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>> OnGenerationProgress { get; set; }
 
         public TIndividual Best => Population.Best;
         public bool IsInitialized { get; set; }
-        public void Initialize();
-        public void Update();
         public Task EvolveOneGeneration();
-        public Task Evolve();
+        public Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination);
+
+        public Task Evolve(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, bool> termination) =>
+            Evolve(new LambdaTermination<TIndividual, TGeneStructure, TGene>(termination));
     }
 
     public class EvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
@@ -34,9 +35,9 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Core
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public CancellationTokenSource CancellationTokenSource { get; set; }
-        public ITermination<TIndividual, TGeneStructure, TGene> Termination { get; set; }
-        public IParameters<TIndividual, TGeneStructure, TGene> Parameters { get; set; }
+        private CancellationTokenSource _cancellationTokenSource;
+        public void Terminate() => _cancellationTokenSource.Cancel();
+        public IParameters Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
         public IHyperHeuristic<TIndividual, TGeneStructure, TGene> HyperHeuristic { get; set; }
@@ -61,9 +62,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Core
             if (HyperHeuristic == null)
                 throw new EvolutionaryAlgorithmArgumentException(
                     $"IEvolutionaryAlgorithm.{nameof(HyperHeuristic)} cannot by null");
-            if (Termination == null)
-                throw new EvolutionaryAlgorithmArgumentException(
-                    $"IEvolutionaryAlgorithm.{nameof(Termination)} cannot by null");
         }
 
         public void Initialize()
@@ -74,17 +72,13 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Core
             Population.Algorithm = this;
             Fitness.Algorithm = this;
             Statistics.Algorithm = this;
-            Parameters.Algorithm = this;
             HyperHeuristic.Algorithm = this;
-            Termination.Algorithm = this;
 
             Population.Initialize();
             Fitness.Initialize();
             Population.Individuals.ForEach(i => i.Fitness = Fitness.Evaluate(i));
             Statistics.Initialize();
-            Parameters.Initialize();
             HyperHeuristic.Initialize();
-            Termination.Initialize();
 
             OnGenerationProgress ??= _ => { };
             OnGenerationProgress(this);
@@ -92,23 +86,19 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Core
 
         public void Update()
         {
-            Population.Update();
-            Fitness.Update();
             Statistics.Update();
-            Parameters.Update();
             HyperHeuristic.Update();
-            Termination.Update();
         }
 
         public async Task EvolveOneGeneration() => Population.Individuals = await HyperHeuristic.Generate();
 
-        public async Task Evolve()
+        public async Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination)
         {
-            CancellationTokenSource = new CancellationTokenSource();
-            var token = CancellationTokenSource.Token;
+            termination.Algorithm = this;
+            var token = (_cancellationTokenSource = new CancellationTokenSource()).Token;
             if (!IsInitialized) Initialize();
 
-            while (!Termination.ShouldTerminate())
+            while (!termination.ShouldTerminate())
             {
                 await EvolveOneGeneration();
                 Update();

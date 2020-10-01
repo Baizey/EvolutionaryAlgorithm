@@ -3,7 +3,8 @@ using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 
 namespace EvolutionaryAlgorithm.Core.Abstract.Core
 {
-    public interface IFitness<TIndividual, TGeneStructure, TGene> : IEvolutionary<TIndividual, TGeneStructure, TGene>
+    public interface IFitness<TIndividual, TGeneStructure, TGene> 
+        : IInitializes, IKeepsReference<TIndividual, TGeneStructure, TGene> 
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {

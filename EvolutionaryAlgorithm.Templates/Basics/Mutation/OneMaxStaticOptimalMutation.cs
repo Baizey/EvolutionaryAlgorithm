@@ -24,7 +24,6 @@ namespace EvolutionaryAlgorithm.Template.Basics.Mutation
         {
         }
 
-        public async Task Mutate(int index, IBitIndividual child) => 
-            _applier.Mutate(child, 1, _geneCount);
+        public async Task Mutate(int index, IBitIndividual child) => _applier.Mutate(child, 1, _geneCount);
     }
 }

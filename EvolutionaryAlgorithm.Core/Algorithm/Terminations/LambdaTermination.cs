@@ -3,16 +3,17 @@ using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
 {
-    public class TimeoutTermination<TIndividual, TGeneStructure, TGene>
+    public class LambdaTermination<TIndividual, TGeneStructure, TGene>
         : ITermination<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
-        private readonly TimeSpan _limit;
+        private readonly Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, bool> _function;
 
-        public TimeoutTermination(TimeSpan limit) => _limit = limit;
+        public LambdaTermination(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, bool> limit) =>
+            _function = limit;
 
-        public bool ShouldTerminate() => Algorithm.Statistics.RunTime >= _limit;
+        public bool ShouldTerminate() => _function.Invoke(Algorithm);
     }
 }

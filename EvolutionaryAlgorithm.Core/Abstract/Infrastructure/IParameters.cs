@@ -1,12 +1,6 @@
-﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
-
-namespace EvolutionaryAlgorithm.Core.Abstract.Infrastructure
+﻿namespace EvolutionaryAlgorithm.Core.Abstract.Infrastructure
 {
-    public interface IParameters<TIndividual, TGeneStructure, TGene>
-        : IEvolutionary<TIndividual, TGeneStructure, TGene>
-        where TIndividual : IIndividual<TGeneStructure, TGene>
-        where TGeneStructure : ICloneable
+    public interface IParameters
     {
         public int GeneCount { get; set; }
         public int Mu { get; set; }

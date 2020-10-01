@@ -13,10 +13,6 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
         {
         }
 
-        public void Update()
-        {
-        }
-
         public double Evaluate(TIndividual individual)
         {
             var i = 0;

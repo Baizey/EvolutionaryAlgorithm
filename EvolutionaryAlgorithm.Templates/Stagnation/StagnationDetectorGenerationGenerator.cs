@@ -27,7 +27,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
     public class StagnationDetectionMutation : IBitMutation
     {
         private readonly MutationApplier _applier = new MutationApplier();
-        private IParameters<IBitIndividual, BitArray, bool> _parameters;
+        private IParameters _parameters;
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public void Initialize() => _parameters = Algorithm.Parameters;

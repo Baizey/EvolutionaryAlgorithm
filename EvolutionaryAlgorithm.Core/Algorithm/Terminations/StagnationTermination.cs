@@ -18,13 +18,5 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
 
         public bool ShouldTerminate() =>
             Algorithm.Statistics.StagnantGeneration >= _limit.Invoke(Algorithm);
-
-        public void Initialize()
-        {
-        }
-
-        public void Update()
-        {
-        }
     }
 }

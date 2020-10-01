@@ -19,13 +19,5 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Terminations
             _limit = limit;
 
         public bool ShouldTerminate() => Algorithm.Best.Fitness >= _limit.Invoke(Algorithm);
-
-        public void Initialize()
-        {
-        }
-
-        public void Update()
-        {
-        }
     }
 }

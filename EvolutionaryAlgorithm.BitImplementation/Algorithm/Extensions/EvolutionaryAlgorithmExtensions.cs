@@ -10,16 +10,9 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions
     public static class BitEvolutionaryAlgorithmExtensions
     {
         public static IBitEvolutionaryAlgorithm UsingParameters(this IBitEvolutionaryAlgorithm algo,
-            IParameters<IBitIndividual, BitArray, bool> parameters)
+            IParameters parameters)
         {
             algo.Parameters = parameters;
-            return algo;
-        }
-
-        public static IBitEvolutionaryAlgorithm UsingTermination(this IBitEvolutionaryAlgorithm algo,
-            ITermination<IBitIndividual, BitArray, bool> termination)
-        {
-            algo.Termination = termination;
             return algo;
         }
 

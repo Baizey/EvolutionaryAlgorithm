@@ -6,7 +6,8 @@ using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
-    public class Population<TIndividual, TGeneStructure, TGene> : IPopulation<TIndividual, TGeneStructure, TGene>
+    public class Population<TIndividual, TGeneStructure, TGene> 
+        : IPopulation<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
@@ -39,7 +40,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public override string ToString() => Individuals.ToString();
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
 
-        public void Initialize() => Individuals = Enumerable
+        public void Initialize() => Individuals ??= Enumerable
             .Range(0, Algorithm.Parameters.Mu)
             .Select(_ => _generator.Invoke(Algorithm.Parameters.GeneCount))
             .ToList();

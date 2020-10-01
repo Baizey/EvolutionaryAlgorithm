@@ -5,10 +5,11 @@ using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 namespace EvolutionaryAlgorithm.Core.Abstract.Core
 {
     public interface IPopulation<TIndividual, TGeneStructure, TGene> :
-        IEvolutionary<TIndividual, TGeneStructure, TGene>,
+        IKeepsReference<TIndividual, TGeneStructure, TGene>,
+        IInitializes,
         ICloneable,
         IEnumerable<TIndividual>
-        where TGeneStructure : ICloneable 
+        where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public int Count { get; }

@@ -6,7 +6,7 @@ using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {
-    public class Population<TIndividual, TGeneStructure, TGene> 
+    public class Population<TIndividual, TGeneStructure, TGene>
         : IPopulation<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>

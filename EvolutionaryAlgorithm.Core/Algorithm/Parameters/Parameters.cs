@@ -2,14 +2,14 @@
 
 namespace EvolutionaryAlgorithm.Core.Algorithm.Parameters
 {
-    public class StaticParameters
+    public class Parameters
         : IParameters
     {
-        public StaticParameters()
+        public Parameters()
         {
         }
 
-        public StaticParameters(IParameters parameters)
+        public Parameters(IParameters parameters)
         {
             GeneCount = parameters.GeneCount;
             Mu = parameters.Mu;
@@ -22,6 +22,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Parameters
         public int Lambda { get; set; }
         public int MutationRate { get; set; }
 
-        public object Clone() => new StaticParameters(this);
+        public object Clone() => new Parameters(this);
     }
 }

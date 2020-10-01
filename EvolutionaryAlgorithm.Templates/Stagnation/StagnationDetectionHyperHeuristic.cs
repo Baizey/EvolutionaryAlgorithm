@@ -3,19 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions;
 using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 
 namespace EvolutionaryAlgorithm.Template.Stagnation
 {
-    public static class StagnationDetectionExtensions
-    {
-        public static IBitEvolutionaryAlgorithm UsingStagnationDetection(this IBitEvolutionaryAlgorithm algorithm,
-            int initialStagnantLearningRate) =>
-            algorithm.UsingHyperHeuristic(new StagnationDetectionHyperHeuristic(initialStagnantLearningRate));
-    }
-
     public class StagnationDetectionHyperHeuristic : HyperHeuristicBase<IBitIndividual, BitArray, bool>,
         IBitHyperHeuristic
     {

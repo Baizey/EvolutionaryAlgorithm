@@ -3,6 +3,7 @@ using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.BitImplementation.Algorithm;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Core.Algorithm;
 
 namespace EvolutionaryAlgorithm.Template.Endogenous
 {
@@ -14,6 +15,9 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
 
     public class EndogenousBitIndividual : BitIndividual, IEndogenousBitIndividual
     {
+        public static Population<IEndogenousBitIndividual, BitArray, bool> FromRandom(int learningRate) =>
+            new Population<IEndogenousBitIndividual, BitArray, bool>(Generate(learningRate));
+
         public static Func<int, EndogenousBitIndividual> Generate(int learningRate)
         {
             var random = new Random();

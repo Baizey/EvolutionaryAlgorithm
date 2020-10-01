@@ -19,7 +19,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase
             set => States[i] = value;
         }
 
-        public Task<List<TIndividual>> Generate(int amount);
+        public Task<List<TIndividual>> Generate();
     }
 
     public abstract class HyperHeuristicBase<TIndividual, TGeneStructure, TGene>
@@ -32,14 +32,14 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase
 
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
 
-        public void Initialize() => States.ForEach(s =>
+        public virtual void Initialize() => States.ForEach(s =>
         {
             s.Algorithm = Algorithm;
             s.Initialize();
         });
 
-        public void Update() => States.ForEach(s => s.Update());
+        public virtual void Update() => States.ForEach(s => s.Update());
 
-        public abstract Task<List<TIndividual>> Generate(int amount);
+        public abstract Task<List<TIndividual>> Generate();
     }
 }

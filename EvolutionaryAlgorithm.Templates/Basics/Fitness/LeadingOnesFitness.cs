@@ -4,9 +4,10 @@ using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 {
-    public class LeadingOnesFitness : IBitFitness
+    public class LeadingOnesFitness<TIndividual> : IFitness<TIndividual, BitArray, bool>
+        where TIndividual : IBitIndividual
     {
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<TIndividual, BitArray, bool> Algorithm { get; set; }
 
         public void Initialize()
         {
@@ -16,7 +17,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
         {
         }
 
-        public double Evaluate(IBitIndividual individual)
+        public double Evaluate(TIndividual individual)
         {
             var i = 0;
             for (; i < individual.Size; i++)

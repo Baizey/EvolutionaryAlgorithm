@@ -17,13 +17,13 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
         public SingleParentCrossoverBase(ISingleParentSelector<TIndividual, TGeneStructure, TGene> parentsSelector) =>
             ParentSelector = parentsSelector;
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             ParentSelector.Algorithm = Algorithm;
             ParentSelector.Initialize();
         }
 
-        public void Update() => ParentSelector.Update();
+        public virtual void Update() => ParentSelector.Update();
 
         public abstract Task Crossover(int index, TIndividual child, TIndividual parent);
 

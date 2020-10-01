@@ -31,6 +31,7 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
                          bodies[i].MutationRate < oldRate)
                     index = i;
 
+            var curr = Algorithm.Population[0];
             var best = bodies[index];
             bodies[index] = Algorithm.Population[0];
             Algorithm.Population.Individuals[0] = best;

@@ -19,7 +19,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
         public long StagnantGeneration { get; private set; }
         public long Generations { get; private set; }
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             StartTime = DateTime.Now;
             Current = (TIndividual) Algorithm.Best.Clone();
@@ -27,7 +27,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
             Previous = Current;
         }
 
-        public void Update()
+        public virtual void Update()
         {
             Previous = Current;
             Current = (TIndividual) Algorithm.Best.Clone();
@@ -43,7 +43,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
                 Best = Current;
         }
 
-        public void Finish() => EndTime = DateTime.Now;
+        public virtual void Finish() => EndTime = DateTime.Now;
 
         public override string ToString() =>
             $"Runtime: {(DateTime.Now - StartTime).TotalSeconds} seconds, Generations: {Generations}, Fitness: {Best.Fitness}";

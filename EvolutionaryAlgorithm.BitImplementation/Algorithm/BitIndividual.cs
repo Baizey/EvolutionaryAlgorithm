@@ -50,8 +50,8 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
             : this(Range(0, size).Select(_ => generator.Invoke()).ToArray())
         {
         }
-        
-        public void CloneGenesTo(IIndividual<BitArray, bool> other)
+
+        public virtual void CloneGenesTo(IIndividual<BitArray, bool> other)
         {
             other.Genes = new BitArray(Genes);
             other.Fitness = Fitness;
@@ -64,7 +64,7 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
 
         public bool Flip(int i) => Genes[i] = !Genes[i];
 
-        public object Clone() => new BitIndividual(this);
+        public virtual object Clone() => new BitIndividual(this);
 
         public int CompareTo(IIndividual<BitArray, bool> other) => Math.Sign(Fitness - other.Fitness);
 

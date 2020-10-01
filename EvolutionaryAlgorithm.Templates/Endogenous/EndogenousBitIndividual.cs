@@ -21,10 +21,15 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
 
         public int MutationRate { get; set; }
 
-        public new void CloneGenesTo(IIndividual<BitArray, bool> other)
+        public override void CloneGenesTo(IIndividual<BitArray, bool> other)
         {
             base.CloneGenesTo(other);
             ((IEndogenousBitIndividual) other).MutationRate = MutationRate;
+        }
+
+        public override object Clone()
+        {
+            return new EndogenousBitIndividual(this);
         }
 
         public EndogenousBitIndividual(int size, bool defaultValue) : base(size, defaultValue)

@@ -16,7 +16,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase
 
         public IGenerationFilter<TIndividual, TGeneStructure, TGene> Filter { get; set; }
 
-        public Task<List<TIndividual>> Generate(int amount);
+        public Task<List<TIndividual>> Generate();
     }
 
     public class GenerationGenerator<TIndividual, TGeneStructure, TGene>
@@ -29,7 +29,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase
         public IMutator<TIndividual, TGeneStructure, TGene> Mutator { get; set; }
         public IGenerationFilter<TIndividual, TGeneStructure, TGene> Filter { get; set; }
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             _storage = new IndividualStorage<TIndividual, TGeneStructure, TGene>(Algorithm);
             Mutator.Algorithm = Algorithm;
@@ -38,15 +38,15 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase
             Filter.Initialize();
         }
 
-        public void Update()
+        public virtual void Update()
         {
             Mutator.Update();
             Filter.Update();
         }
 
-        public async Task<List<TIndividual>> Generate(int amount)
+        public virtual async Task<List<TIndividual>> Generate()
         {
-            var bodies = _storage.Get(0, amount);
+            var bodies = _storage.Get(0, Algorithm.Parameters.Lambda);
             await Mutator.Mutate(bodies);
 
             bodies.ForEach(b => b.Fitness = Algorithm.Fitness.Evaluate(b));

@@ -14,6 +14,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Mutator
         public SimpleHeuristic(IGenerationGenerator<TIndividual, TGeneStructure, TGene> generationGenerator) =>
             States.Add(generationGenerator);
 
-        public override async Task<List<TIndividual>> Generate(int amount) => await States[0].Generate(amount);
+        public override async Task<List<TIndividual>> Generate() => await States[0].Generate();
     }
 }

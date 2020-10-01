@@ -7,6 +7,6 @@ namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
     public class BitEvolutionaryAlgorithm
         : EvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, IBitEvolutionaryAlgorithm
     {
-        public new static BitEvolutionaryAlgorithm Construct => new BitEvolutionaryAlgorithm();
+        public static BitEvolutionaryAlgorithm Construct => new BitEvolutionaryAlgorithm();
     }
 }

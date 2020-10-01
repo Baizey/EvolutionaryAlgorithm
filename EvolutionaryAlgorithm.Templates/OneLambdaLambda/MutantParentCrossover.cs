@@ -26,13 +26,11 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
             _select = initialSelector;
         }
 
-        public new void Initialize()
+        public override void Initialize()
         {
             base.Initialize();
             _storage = new IndividualStorage<IBitIndividual, BitArray, bool>(Algorithm);
         }
-
-        public new void Update() => base.Update();
 
         public override async Task Crossover(int index, IBitIndividual child, IBitIndividual parent)
         {

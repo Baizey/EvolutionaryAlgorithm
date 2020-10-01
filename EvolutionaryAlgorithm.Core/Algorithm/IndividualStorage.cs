@@ -27,8 +27,9 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
         private void Refill(int key, int amount)
         {
-            _reserves[key] ??= new List<TIndividual>(amount);
-            var missing = amount - _reserves.Count;
+            if (!_reserves.ContainsKey(key))
+                _reserves[key] = new List<TIndividual>(amount);
+            var missing = amount - _reserves[key].Count;
             for (var i = 0; i < missing; i++)
                 _reserves[key].Add((TIndividual) _example.Clone());
         }
@@ -36,7 +37,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public List<TIndividual> Get(int key, int amount)
         {
             Refill(key, amount);
-            if (_reserves.Count == amount)
+            if (_reserves[key].Count == amount)
             {
                 var used = _reserves[key];
                 _reserves[key] = null;

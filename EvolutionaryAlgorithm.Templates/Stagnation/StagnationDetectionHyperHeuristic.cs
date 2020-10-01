@@ -38,7 +38,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
             _initialStagnantLearningRate = initialStagnantLearningRate;
         }
 
-        public new void Initialize()
+        public override void Initialize()
         {
             _parameters = Algorithm.Parameters;
             _n = _parameters.GeneCount;
@@ -85,7 +85,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
             }
         }
 
-        public new void Update()
+        public override void Update()
         {
             if (_inStagnationDetection)
             {
@@ -99,8 +99,8 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
             }
         }
 
-        public override Task<List<IBitIndividual>> Generate(int amount) => _inStagnationDetection
-            ? _sdModule.Generate(amount)
-            : _mutationModule.Generate(amount);
+        public override Task<List<IBitIndividual>> Generate() => _inStagnationDetection
+            ? _sdModule.Generate()
+            : _mutationModule.Generate();
     }
 }

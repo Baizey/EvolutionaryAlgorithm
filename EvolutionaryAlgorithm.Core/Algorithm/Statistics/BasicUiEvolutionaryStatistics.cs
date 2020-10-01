@@ -30,13 +30,13 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Statistics
             History = History.Where(e => keep = !keep).ToList();
         }
 
-        public new void Initialize()
+        public override void Initialize()
         {
             base.Initialize();
             History.Add(Best);
         }
 
-        public new void Update()
+        public override void Update()
         {
             base.Update();
 

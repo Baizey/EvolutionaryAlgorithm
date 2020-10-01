@@ -22,14 +22,14 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
             _learningRate = learningRate;
         }
 
-        public new void Initialize()
+        public override void Initialize()
         {
             var g = Algorithm.Parameters.GeneCount;
             _maxRate = (int) Math.Pow(_learningRate, Math.Log(g / (2D * _learningRate), _learningRate));
             base.Initialize();
         }
 
-        public new void Update()
+        public override void Update()
         {
             var individual = Algorithm.Population[0];
             var r = individual.MutationRate;

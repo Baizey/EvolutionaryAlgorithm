@@ -1,25 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.BitImplementation.Algorithm;
-using EvolutionaryAlgorithm.BitImplementation.Algorithm.Extensions;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.Algorithm.Crossover;
-using EvolutionaryAlgorithm.Core.Algorithm.Mutator;
 using EvolutionaryAlgorithm.Core.Algorithm.Parameters;
 using EvolutionaryAlgorithm.Core.Algorithm.Statistics;
 using EvolutionaryAlgorithm.Core.Algorithm.Terminations;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
-using EvolutionaryAlgorithm.Template.Basics.Mutation;
-using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
-using EvolutionaryAlgorithm.Template.Basics.Selection;
 using EvolutionaryAlgorithm.Template.Endogenous;
-using EvolutionaryAlgorithm.Template.Stagnation;
 
 namespace EvolutionaryAlgorithm
 {
@@ -27,37 +16,38 @@ namespace EvolutionaryAlgorithm
     {
         private static async Task Main()
         {
-            const int
-                geneCount = 5000,
-                populationSize = 1,
-                newIndividualsPerGeneration = 1,
-                learningRate = 32,
-                jump = 1;
+            var geneCount = 50;
+            var learningRate = 2;
+            var mu = 1;
+            var lambda = (int) Math.Log(geneCount);
+
 
             var endogenous = new EvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool>()
                 .UsingParameters(new StaticParameters<IEndogenousBitIndividual, BitArray, bool>
                 {
                     GeneCount = geneCount,
-                    Lambda = newIndividualsPerGeneration,
-                    Mu = populationSize
+                    Lambda = lambda,
+                    Mu = mu,
+                    MutationRate = 2
                 })
                 .UsingStatistics(new BasicEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool>())
-                .UsingPopulation(new Population<IEndogenousBitIndividual, BitArray, bool>(
-                    EndogenousBitIndividual.Generate(learningRate)))
+                .UsingPopulation(
+                    new Population<IEndogenousBitIndividual, BitArray, bool>(
+                        EndogenousBitIndividual.Generate(learningRate)))
                 .UsingGenerationGenerator(new EndogenousGenerationGenerator(learningRate))
-                .UsingTermination(new FitnessTermination<IEndogenousBitIndividual, BitArray, bool>(geneCount));
+                .UsingTermination(new FitnessTermination<IEndogenousBitIndividual, BitArray, bool>(geneCount))
+                .UsingFitness(new OneMaxFitness<IEndogenousBitIndividual>());
 
-            var applier = new MutationApplier();
+            endogenous.OnGenerationProgress = algo => Console.WriteLine(endogenous.Statistics);
 
-            var a = 1000;
-            for (var i = 1; i < a / 2; i++)
-                Print(applier.GetOdds(i, a));
+            await endogenous.Evolve();
+            Console.WriteLine(endogenous.Statistics);
         }
 
 
         static void Print(double[] arr)
         {
-            Console.WriteLine("{0}", arr.Length, string.Join(", ", arr));
+            Console.WriteLine("{0}: {1}", arr.Length, arr.Sum() * 100);
         }
     }
 }

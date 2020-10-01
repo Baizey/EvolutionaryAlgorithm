@@ -4,9 +4,10 @@ using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 {
-    public class OneMaxFitness : IBitFitness
+    public class OneMaxFitness<TIndividual> : IFitness<TIndividual, BitArray, bool>
+        where TIndividual : IBitIndividual
     {
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<TIndividual, BitArray, bool> Algorithm { get; set; }
 
         public void Initialize()
         {
@@ -16,6 +17,6 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
         {
         }
 
-        public double Evaluate(IBitIndividual individual) => individual.Ones;
+        public double Evaluate(TIndividual individual) => individual.Ones;
     }
 }

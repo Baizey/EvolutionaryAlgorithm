@@ -19,6 +19,8 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Core
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
         public ITermination<TIndividual, TGeneStructure, TGene> Termination { get; set; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
+        public Action<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>> OnGenerationProgress { get; set; }
+
         public TIndividual Best => Population.Best;
         public bool IsInitialized { get; set; }
         public void Initialize();
@@ -39,6 +41,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Core
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
         public IHyperHeuristic<TIndividual, TGeneStructure, TGene> HyperHeuristic { get; set; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
+        public Action<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>> OnGenerationProgress { get; set; }
         public bool IsInitialized { get; set; }
 
         private void ArgumentValidation()
@@ -82,6 +85,9 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Core
             Parameters.Initialize();
             HyperHeuristic.Initialize();
             Termination.Initialize();
+
+            OnGenerationProgress ??= _ => { };
+            OnGenerationProgress(this);
         }
 
         public void Update()
@@ -94,10 +100,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Core
             Termination.Update();
         }
 
-        public async Task EvolveOneGeneration()
-        {
-            Population.Individuals = await HyperHeuristic.Generate(Parameters.Lambda);
-        }
+        public async Task EvolveOneGeneration() => Population.Individuals = await HyperHeuristic.Generate();
 
         public async Task Evolve()
         {
@@ -109,6 +112,7 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Core
             {
                 await EvolveOneGeneration();
                 Update();
+                OnGenerationProgress(this);
                 if (!token.IsCancellationRequested) continue;
                 Statistics.Finish();
                 return;

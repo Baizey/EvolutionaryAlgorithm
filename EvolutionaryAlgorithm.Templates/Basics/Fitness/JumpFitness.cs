@@ -4,9 +4,10 @@ using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 {
-    public class JumpFitness : IBitFitness
+    public class JumpFitness<TIndividual> : IFitness<TIndividual, BitArray, bool>
+        where TIndividual : IBitIndividual
     {
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<TIndividual, BitArray, bool> Algorithm { get; set; }
 
         public void Initialize()
         {
@@ -26,7 +27,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
             _jump = jump;
         }
 
-        public double Evaluate(IBitIndividual individual)
+        public double Evaluate(TIndividual individual)
         {
             var flipped = individual.Ones;
             if (flipped == _total) return _total;

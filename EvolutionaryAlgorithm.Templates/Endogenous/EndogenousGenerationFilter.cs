@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using EvolutionaryAlgorithm.Bit.Abstract;
+using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 
 namespace EvolutionaryAlgorithm.Template.Endogenous
 {
-    public class EndogenousGenerationFilter : IGenerationFilter<IEndogenousBitIndividual, BitArray, bool>
+    public class EndogenousGenerationFilter : IBitGenerationFilter<IEndogenousBitIndividual>
     {
         public IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> Algorithm { get; set; }
 

@@ -1,6 +1,7 @@
-﻿using System.Collections;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.BitImplementation.Algorithm;
+﻿using System;
+using System.Collections;
+using EvolutionaryAlgorithm.Bit.Abstract;
+using EvolutionaryAlgorithm.Bit.Algorithm;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Algorithm.Statistics;
@@ -27,10 +28,14 @@ namespace EvolutionaryAlgorithm.Template
             this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,
             int learningRate) =>
             algorithm.UsingGenerationGenerator(new EndogenousGenerationGenerator(learningRate));
-        
+
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingRandomPopulation(
-            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm) =>
-            algorithm.UsingPopulation(BitPopulation.FromRandom());
+            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm)
+        {
+            var random = new Random();
+            return algorithm.UsingPopulation(
+                new BitPopulation<IBitIndividual>(g => new BitIndividual(g, () => random.NextDouble() >= 0.5)));
+        }
 
         public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingRandomPopulation(
             this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,

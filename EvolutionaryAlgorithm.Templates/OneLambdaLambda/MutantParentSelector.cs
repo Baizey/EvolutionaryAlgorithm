@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using EvolutionaryAlgorithm.Bit.Abstract;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
@@ -9,7 +10,7 @@ using EvolutionaryAlgorithm.Core.Algorithm;
 
 namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 {
-    public class MutantParentSelector : IBitSingleParentSelector
+    public class MutantParentSelector : IBitSingleParentSelector<IBitIndividual>
     {
         private IIndividualStorage<IBitIndividual, BitArray, bool> _storage;
         private readonly ISingleParentSelector<IBitIndividual, BitArray, bool> _select;

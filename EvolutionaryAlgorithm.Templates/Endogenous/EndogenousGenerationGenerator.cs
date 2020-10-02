@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
+using EvolutionaryAlgorithm.Bit.Algorithm;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Algorithm.Mutator;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
 namespace EvolutionaryAlgorithm.Template.Endogenous
 {
-    public class EndogenousGenerationGenerator
-        : GenerationGenerator<IEndogenousBitIndividual, BitArray, bool>
+    public class EndogenousGenerationGenerator : BitGenerationGenerator<IEndogenousBitIndividual>
     {
         private readonly int _learningRate;
         private int _maxRate;

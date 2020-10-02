@@ -1,19 +1,20 @@
 ﻿using System.Collections;
 using System.Linq;
+using EvolutionaryAlgorithm.Bit.Abstract;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
 {
-    public class WorstFitnessParentSelector : IBitSingleParentSelector
+    public class WorstFitnessParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
     {
-        private IBitIndividual _worst;
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        private T _worst;
+        public IEvolutionaryAlgorithm<T, BitArray, bool> Algorithm { get; set; }
 
         public void Initialize() => Update();
 
         public void Update() => _worst = Algorithm.Population.Aggregate((a, b) => a.Fitness < b.Fitness ? a : b);
 
-        public IBitIndividual Select(int index, IPopulation<IBitIndividual, BitArray, bool> population) => _worst;
+        public T Select(int index, IPopulation<T, BitArray, bool> population) => _worst;
     }
 }

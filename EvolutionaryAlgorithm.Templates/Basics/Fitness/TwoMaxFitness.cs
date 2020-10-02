@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
+using EvolutionaryAlgorithm.Bit.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Template.Basics.Fitness

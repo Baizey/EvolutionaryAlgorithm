@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 
-namespace EvolutionaryAlgorithm.BitImplementation.Abstract
+namespace EvolutionaryAlgorithm.Bit.Abstract
 {
     public interface IBitIndividual : IIndividual<BitArray, bool>
     {

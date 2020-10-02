@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
+using EvolutionaryAlgorithm.Bit.Abstract;
 
-namespace EvolutionaryAlgorithm.BitImplementation.Algorithm
+namespace EvolutionaryAlgorithm.Bit.Algorithm
 {
     //
     // Calculates and applies mutation on bits with p/n chance of independently flipping

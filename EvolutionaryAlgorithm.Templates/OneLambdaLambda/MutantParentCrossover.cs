@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
+using EvolutionaryAlgorithm.Bit.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Algorithm.Crossover;

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
+using EvolutionaryAlgorithm.Bit.Abstract;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 
 namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
 {
-    public class RandomParentSelector : IBitSingleParentSelector
+    public class RandomParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
     {
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<T, BitArray, bool> Algorithm { get; set; }
 
         public void Initialize()
         {
@@ -21,7 +22,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
 
         public RandomParentSelector() => _random = new Random();
 
-        public IBitIndividual Select(int index, IPopulation<IBitIndividual, BitArray, bool> population) =>
+        public T Select(int index, IPopulation<T, BitArray, bool> population) =>
             population[_random.Next(population.Count)];
     }
 }

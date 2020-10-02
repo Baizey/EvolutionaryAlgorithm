@@ -14,6 +14,8 @@ namespace EvolutionaryAlgorithm.Core.Abstract.Infrastructure
         public TIndividual Best { get; }
         public TIndividual Current { get; }
         public TIndividual Previous { get; }
+
+        public bool ImprovedFitness => Current.Fitness > Previous.Fitness;
         public long StagnantGeneration { get; }
         public long Generations { get; }
         TimeSpan RunTime => EndTime - StartTime;

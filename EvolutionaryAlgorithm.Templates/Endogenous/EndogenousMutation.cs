@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.BitImplementation.Algorithm;
+using EvolutionaryAlgorithm.Bit.Algorithm;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
 using EvolutionaryAlgorithm.Template.Basics.Mutation;

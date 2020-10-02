@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EvolutionaryAlgorithm.BitImplementation\EvolutionaryAlgorithm.BitImplementation.csproj" />
+      <ProjectReference Include="..\EvolutionaryAlgorithm.Bit\EvolutionaryAlgorithm.Bit.csproj" />
       <ProjectReference Include="..\EvolutionaryAlgorithm.Core\EvolutionaryAlgorithm.Core.csproj" />
     </ItemGroup>
 

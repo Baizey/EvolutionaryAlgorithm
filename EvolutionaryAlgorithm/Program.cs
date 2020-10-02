@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.Bit.Abstract;
+using EvolutionaryAlgorithm.Bit.Algorithm;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Algorithm.Parameters;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
 using EvolutionaryAlgorithm.Template.Endogenous;
+using EvolutionaryAlgorithm.Template.Stagnation;
 
 namespace EvolutionaryAlgorithm
 {
@@ -16,18 +16,20 @@ namespace EvolutionaryAlgorithm
         private static async Task Main()
         {
             var geneCount = 500;
-            var learningRate = 2;
+
             var mu = 1;
-            var lambda = (int) (Math.Log(geneCount) * 3);
+            var lambda = 15;
+
             var mutationRate = 2;
+            var learningRate = 2;
             var observationPhase = 5;
 
-            var endogenous = new EvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool>()
+            var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
-                    Lambda = lambda,
+                    Lambda = (int) (3 * Math.Log(geneCount)),
                     Mu = 1,
                 })
                 .UsingBasicStatistics()
@@ -35,7 +37,7 @@ namespace EvolutionaryAlgorithm
                 .UsingEndogenousGeneration(learningRate)
                 .UsingFitness(new OneMaxFitness<IEndogenousBitIndividual>());
 
-            var stagnation = new EvolutionaryAlgorithm<IBitIndividual, BitArray, bool>()
+            var stagnation = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -43,13 +45,13 @@ namespace EvolutionaryAlgorithm
                     Lambda = lambda,
                     Mu = 1,
                 })
-                .UsingBasicStatistics()
+                .UsingStagnationStatistics()
                 .UsingRandomPopulation()
-                .UsingStagnationDetectionGeneration(learningRate)
-                .UsingFitness(new OneMaxFitness<IBitIndividual>());
+                .UsingStagnationDetectionGeneration(mutationRate)
+                .UsingFitness(new JumpFitness<IBitIndividual>(5));
 
             // TODO: Missing mutation implementation
-            var asymmetric = new EvolutionaryAlgorithm<IBitIndividual, BitArray, bool>()
+            var asymmetric = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -64,7 +66,7 @@ namespace EvolutionaryAlgorithm
 
             // TODO: Missing generator implementation
             // TODO: Missing mutation implementation
-            var oneLambdaLambda = new EvolutionaryAlgorithm<IBitIndividual, BitArray, bool>()
+            var oneLambdaLambda = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -76,10 +78,12 @@ namespace EvolutionaryAlgorithm
                 .UsingRandomPopulation()
                 .UsingFitness(new OneMaxFitness<IBitIndividual>());
 
-            endogenous.OnGenerationProgress = algo => { Console.WriteLine(endogenous.Statistics); };
+            var algorithm = stagnation;
+            
+            algorithm.OnGenerationProgress = algo => Console.WriteLine(algorithm.Statistics);
 
-            await endogenous.Evolve(a => a.Statistics.Best.Fitness >= geneCount);
-            Console.WriteLine(endogenous.Statistics);
+            await algorithm.Evolve(a => a.Statistics.Best.Fitness >= geneCount);
+            Console.WriteLine(algorithm.Statistics);
         }
     }
 }

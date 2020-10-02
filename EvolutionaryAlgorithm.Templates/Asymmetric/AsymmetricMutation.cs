@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
+using EvolutionaryAlgorithm.Bit.Abstract;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
 
 namespace EvolutionaryAlgorithm.Template.Asymmetric
 {
-    public class AsymmetricMutation : IBitMutation
+    public class AsymmetricMutation : IBitMutation<IBitIndividual>
     {
         private readonly int _observationPhase;
         private readonly double _learningRate, _learningCap;

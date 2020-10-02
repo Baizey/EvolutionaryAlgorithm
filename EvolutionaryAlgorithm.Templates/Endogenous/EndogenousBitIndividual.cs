@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.BitImplementation.Algorithm;
+using EvolutionaryAlgorithm.Bit.Abstract;
+using EvolutionaryAlgorithm.Bit.Algorithm;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
 using EvolutionaryAlgorithm.Core.Algorithm;
 

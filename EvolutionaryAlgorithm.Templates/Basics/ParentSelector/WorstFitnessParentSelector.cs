@@ -15,6 +15,6 @@ namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
 
         public void Update() => _worst = Algorithm.Population.Aggregate((a, b) => a.Fitness < b.Fitness ? a : b);
 
-        public T Select(int index, IPopulation<T, BitArray, bool> population) => _worst;
+        public T Select(int index) => _worst;
     }
 }

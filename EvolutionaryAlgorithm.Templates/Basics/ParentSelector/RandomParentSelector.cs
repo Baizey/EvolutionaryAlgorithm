@@ -21,8 +21,8 @@ namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
         private readonly Random _random;
 
         public RandomParentSelector() => _random = new Random();
-
-        public T Select(int index, IPopulation<T, BitArray, bool> population) =>
-            population[_random.Next(population.Count)];
+        
+        public T Select(int index) =>
+            Algorithm.Population[_random.Next(Algorithm.Population.Count)];
     }
 }

@@ -27,8 +27,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm.Crossover
         public void Update() => ParentsSelector.Update();
 
         public abstract Task Crossover(TIndividual child, List<TIndividual> parents);
-        
+
         public async Task Mutate(int index, TIndividual child) =>
-            Crossover(child, ParentsSelector.Select(Algorithm.Population));
+            await Crossover(child, ParentsSelector.Select(index));
     }
 }

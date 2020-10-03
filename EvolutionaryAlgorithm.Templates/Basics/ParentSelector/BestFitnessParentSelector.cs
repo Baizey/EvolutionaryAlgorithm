@@ -17,7 +17,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
         {
         }
 
-        public T Select(int index, IPopulation<T, BitArray, bool> population) => 
-            population.Best;
+        public T Select(int index) => 
+            Algorithm.Population.Best;
     }
 }

@@ -9,6 +9,6 @@ namespace EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public TIndividual Select(int index, IPopulation<TIndividual, TGeneStructure, TGene> population);
+        public TIndividual Select(int index);
     }
 }

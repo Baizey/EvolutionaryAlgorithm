@@ -22,7 +22,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
         {
         }
 
-        public T Select(int index, IPopulation<T, BitArray, bool> population) =>
-            _selector.Invoke(population);
+        public T Select(int index) =>
+            _selector.Invoke(Algorithm.Population);
     }
 }

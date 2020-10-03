@@ -64,7 +64,6 @@ namespace EvolutionaryAlgorithm
                 .UsingAsymmetricGeneration(learningRate, observationPhase)
                 .UsingFitness(new OneMaxFitness<IBitIndividual>());
 
-            // TODO: Missing generator implementation
             // TODO: Missing mutation implementation
             var oneLambdaLambda = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
@@ -76,10 +75,11 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingBasicStatistics()
                 .UsingRandomPopulation()
+                .UsingOneLambdaLambda()
                 .UsingFitness(new OneMaxFitness<IBitIndividual>());
 
             var algorithm = stagnation;
-            
+
             algorithm.OnGenerationProgress = algo => Console.WriteLine(algorithm.Statistics);
 
             await algorithm.Evolve(a => a.Statistics.Best.Fitness >= geneCount);

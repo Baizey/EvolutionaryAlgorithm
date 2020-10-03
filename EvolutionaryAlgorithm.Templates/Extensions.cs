@@ -7,12 +7,17 @@ using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Algorithm.Statistics;
 using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Endogenous;
+using EvolutionaryAlgorithm.Template.OneLambdaLambda;
 using EvolutionaryAlgorithm.Template.Stagnation;
 
 namespace EvolutionaryAlgorithm.Template
 {
     public static class Extensions
     {
+        public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingOneLambdaLambda(
+            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm) =>
+            algorithm.UsingGenerationGenerator(new OneLambdaLambdaGenerationGenerator());
+        
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingAsymmetricGeneration(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
             int learningRate,

@@ -20,7 +20,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
         {
         }
 
-        public TIndividual Select(int index, IPopulation<TIndividual, TGeneStructure, TGene> population) =>
-            population[0];
+        public TIndividual Select(int index) =>
+            Algorithm.Population[0];
     }
 }

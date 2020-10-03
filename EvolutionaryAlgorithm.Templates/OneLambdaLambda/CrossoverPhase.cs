@@ -1,46 +1,40 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.Bit.Algorithm;
 using EvolutionaryAlgorithm.BitImplementation.Abstract;
 using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
-using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
-using EvolutionaryAlgorithm.Template.Basics.Selection;
 
 namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 {
-    public class OneLambdaLambdaGenerationGenerator : GenerationGenerator<IBitIndividual, BitArray, bool>
-    {
-        public OneLambdaLambdaGenerationGenerator()
-        {
-            Mutator = new BitMutator()
-                .CloneGenesFrom(new FirstParentSelector<IBitIndividual, BitArray, bool>())
-                .ThenApply(new CrossoverPhase());
-            Filter = new ElitismGenerationFilter<IBitIndividual>(true);
-        }
-    }
-
     public class CrossoverPhase : IBitMutation<IBitIndividual>
     {
-        private MutationPhase _mutationPhase;
+        private readonly MutationPhase _mutationPhase;
+        private IBitIndividual _xMark;
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+
+        public CrossoverPhase()
+        {
+            _mutationPhase = new MutationPhase();
+        }
 
         public void Initialize()
         {
-            _mutationPhase = new MutationPhase();
+            _mutationPhase.Algorithm = Algorithm;
             _mutationPhase.Initialize();
+            Update();
         }
 
         public void Update()
         {
             _mutationPhase.Update();
+            _xMark = _mutationPhase.Select(0);
         }
 
-        public async Task Mutate(int index, IBitIndividual child)
+        public async Task Mutate(int index, IBitIndividual y)
         {
-            var x = _mutationPhase.Select(index);
+            // TODO: implement, Flip each bit in y(i) that is different in x′ with probability c;
+            throw new NotImplementedException();
         }
     }
 }

@@ -75,7 +75,7 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingBasicStatistics()
                 .UsingRandomPopulation()
-                .UsingOneLambdaLambda()
+                .UsingOneLambdaLambda(learningRate)
                 .UsingFitness(new OneMaxFitness<IBitIndividual>());
 
             var algorithm = stagnation;

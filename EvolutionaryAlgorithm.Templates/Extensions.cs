@@ -15,8 +15,9 @@ namespace EvolutionaryAlgorithm.Template
     public static class Extensions
     {
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingOneLambdaLambda(
-            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm) =>
-            algorithm.UsingGenerationGenerator(new OneLambdaLambdaGenerationGenerator());
+            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
+            int learningRate) =>
+            algorithm.UsingGenerationGenerator(new OneLambdaLambdaGenerationGenerator(learningRate));
         
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingAsymmetricGeneration(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,

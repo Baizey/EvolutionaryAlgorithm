@@ -1,14 +1,12 @@
 ﻿using System.Collections;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.Bit.Algorithm;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
-using EvolutionaryAlgorithm.Core.Algorithm.Crossover;
+using EvolutionaryAlgorithm.BitImplementation;
+using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.GenerationFilter;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Crossover;
+using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
-using EvolutionaryAlgorithm.Template.Basics.Selection;
 
 namespace EvolutionaryAlgorithm.Template.Stagnation
 {
@@ -16,11 +14,11 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
     {
         public StagnationDetectorGenerationGenerator()
         {
-            Mutator = new BitMutator()
+            Mutator = new BitMutator<IBitIndividual>()
                 .ThenApply(new CloneParent<IBitIndividual, BitArray, bool>(
                     new FirstParentSelector<IBitIndividual, BitArray, bool>()))
                 .ThenApply(new StagnationDetectionMutation());
-            Filter = new ElitismGenerationFilter<IBitIndividual>(false);
+            Filter = new ElitismGenerationFilter<IBitIndividual, BitArray, bool>(false);
         }
     }
 

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.Bit.Algorithm;
-using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
+using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.GenerationFilter;
+using EvolutionaryAlgorithm.Core.Parameters;
+using EvolutionaryAlgorithm.Core.Statistics;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
-using EvolutionaryAlgorithm.Template.Basics.Selection;
 
 namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 {
@@ -21,10 +21,10 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
             _shrinkRate = learningRate;
             _growthRate = Math.Pow(learningRate, 0.25D);
 
-            Mutator = new BitMutator()
+            Mutator = new BitMutator<IBitIndividual>()
                 .CloneGenesFrom(new FirstParentSelector<IBitIndividual, BitArray, bool>())
                 .ThenApply(new CrossoverPhase());
-            Filter = new ElitismGenerationFilter<IBitIndividual>(true);
+            Filter = new ElitismGenerationFilter<IBitIndividual, BitArray, bool>(true);
         }
 
         public override void Initialize()

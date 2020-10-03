@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.Bit.Algorithm;
+using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.Algorithm.Mutator;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
 namespace EvolutionaryAlgorithm.Template.Endogenous

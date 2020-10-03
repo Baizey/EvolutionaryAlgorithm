@@ -1,10 +1,9 @@
 ﻿using System.Collections;
-using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.Bit.Algorithm;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
+using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.GenerationFilter;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
-using EvolutionaryAlgorithm.Template.Basics.Selection;
 
 namespace EvolutionaryAlgorithm.Template.Asymmetric
 {
@@ -12,10 +11,10 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
     {
         public AsymmetricGenerationGenerator(int learningRate, int observationPhase)
         {
-            Mutator = new BitMutator()
+            Mutator = new BitMutator<IBitIndividual>()
                 .CloneGenesFrom(new FirstParentSelector<IBitIndividual, BitArray, bool>())
                 .ThenApply(new AsymmetricMutation(learningRate, observationPhase));
-            Filter = new ElitismGenerationFilter<IBitIndividual>(true);
+            Filter = new ElitismGenerationFilter<IBitIndividual, BitArray, bool>(true);
         }
     }
 }

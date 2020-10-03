@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.Core.Algorithm.Statistics;
+using EvolutionaryAlgorithm.Core.Statistics;
 
 namespace EvolutionaryAlgorithm.Template.Endogenous
 {

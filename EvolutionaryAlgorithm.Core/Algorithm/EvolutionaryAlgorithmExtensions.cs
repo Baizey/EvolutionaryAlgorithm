@@ -1,10 +1,13 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers;
-using EvolutionaryAlgorithm.Core.Algorithm.Crossover;
-using EvolutionaryAlgorithm.Core.Algorithm.Mutator;
+using EvolutionaryAlgorithm.Core.Fitness;
+using EvolutionaryAlgorithm.Core.HyperHeuristic;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Crossover;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Selector;
+using EvolutionaryAlgorithm.Core.Parameters;
+using EvolutionaryAlgorithm.Core.Population;
+using EvolutionaryAlgorithm.Core.Statistics;
 
 namespace EvolutionaryAlgorithm.Core.Algorithm
 {

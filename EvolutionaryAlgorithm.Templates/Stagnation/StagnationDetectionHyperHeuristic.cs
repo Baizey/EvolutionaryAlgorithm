@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
+using EvolutionaryAlgorithm.BitImplementation;
+using EvolutionaryAlgorithm.Core.HyperHeuristic;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
+using EvolutionaryAlgorithm.Core.Parameters;
 
 namespace EvolutionaryAlgorithm.Template.Stagnation
 {

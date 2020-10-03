@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
+using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.Algorithm.Statistics;
+using EvolutionaryAlgorithm.Core.Statistics;
 
 namespace EvolutionaryAlgorithm.Template.Stagnation
 {

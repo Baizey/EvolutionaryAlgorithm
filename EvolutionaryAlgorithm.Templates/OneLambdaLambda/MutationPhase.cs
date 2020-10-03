@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.Bit.Algorithm;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
+using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.Infrastructure;
+using EvolutionaryAlgorithm.Core.Parameters;
 
 namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 {

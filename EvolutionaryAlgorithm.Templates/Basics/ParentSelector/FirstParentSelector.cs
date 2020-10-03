@@ -1,6 +1,7 @@
 ﻿using System;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase.Helpers;
+using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Selector;
+using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
 {

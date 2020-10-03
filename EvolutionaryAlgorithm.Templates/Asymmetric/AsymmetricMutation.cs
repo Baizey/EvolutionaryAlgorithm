@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.BitImplementation.Abstract;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Abstract.Infrastructure;
+using EvolutionaryAlgorithm.BitImplementation;
+using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.Parameters;
+using EvolutionaryAlgorithm.Core.Statistics;
 
 namespace EvolutionaryAlgorithm.Template.Asymmetric
 {
@@ -19,11 +19,14 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
         private readonly Random _random;
         private bool _oddGeneration;
+        private MutationApplier _applier;
+        private IParameters _parameters;
 
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public AsymmetricMutation(double learningRate, int observationPhase)
         {
+            _applier = new MutationApplier();
             _random = new Random();
 
             _observationPhase = observationPhase;
@@ -40,6 +43,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         public void Initialize()
         {
             _statistics = Algorithm.Statistics;
+            _parameters = Algorithm.Parameters;
         }
 
         public async Task Mutate(int index, IBitIndividual child)
@@ -56,8 +60,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
                 oneRate = _r1 + _learningRate;
             }
 
-            // TODO: mutate individual
-            throw new NotImplementedException();
+            _applier.MutateAsymmetric(child, zeroRate, oneRate);
         }
 
         public void Update()
@@ -68,7 +71,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
 
         private void UpdateObservations()
         {
-            if (_statistics.StagnantGeneration > 0) return;
+            if (!_statistics.ImprovedFitness) return;
             _b += _oddGeneration ? 1 : -1;
             _oddGeneration = !_oddGeneration;
         }

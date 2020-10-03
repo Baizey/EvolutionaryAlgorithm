@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.Bit.Algorithm;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.BitImplementation;
+using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.Template.Endogenous
 {

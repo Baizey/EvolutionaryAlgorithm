@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.Bit.Algorithm;
-using EvolutionaryAlgorithm.Core.Abstract.Core;
-using EvolutionaryAlgorithm.Core.Abstract.MutationPhase;
-using EvolutionaryAlgorithm.Template.Basics.Mutation;
+using EvolutionaryAlgorithm.BitImplementation;
+using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation;
 
 namespace EvolutionaryAlgorithm.Template.Endogenous
 {

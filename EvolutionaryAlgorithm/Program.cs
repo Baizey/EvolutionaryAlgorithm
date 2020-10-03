@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using EvolutionaryAlgorithm.Bit.Abstract;
-using EvolutionaryAlgorithm.Bit.Algorithm;
+using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.Algorithm.Parameters;
+using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
 using EvolutionaryAlgorithm.Template.Endogenous;
@@ -15,7 +14,7 @@ namespace EvolutionaryAlgorithm
     {
         private static async Task Main()
         {
-            var geneCount = 500;
+            const int geneCount = 500;
 
             var mu = 1;
             var lambda = 15;
@@ -49,8 +48,7 @@ namespace EvolutionaryAlgorithm
                 .UsingRandomPopulation()
                 .UsingStagnationDetectionGeneration(mutationRate)
                 .UsingFitness(new JumpFitness<IBitIndividual>(5));
-
-            // TODO: Missing mutation implementation
+            
             var asymmetric = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {

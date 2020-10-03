@@ -78,6 +78,9 @@ namespace EvolutionaryAlgorithm
                 .UsingOneLambdaLambda(learningRate)
                 .UsingFitness(new OneMaxFitness<IBitIndividual>());
 
+            // TODO: Figure out 5'th algorithm
+            // TODO: Wide tail
+
             var algorithm = stagnation;
 
             algorithm.OnGenerationProgress = algo => Console.WriteLine(algorithm.Statistics);

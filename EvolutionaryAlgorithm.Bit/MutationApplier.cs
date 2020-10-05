@@ -54,9 +54,10 @@ namespace EvolutionaryAlgorithm.BitImplementation
             return _lookup[n][p];
         }
 
-        public void Mutate(int index, IBitIndividual individual, int p, int n)
+        public void Mutate(IBitIndividual individual, int index, double p, int n)
         {
-            if (_random.Next(n) < p) individual.Flip(index);
+            if (_random.NextDouble() <= p / n) 
+                individual.Flip(index);
         }
 
         public void Mutate(IBitIndividual individual, double p, int n)

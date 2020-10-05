@@ -87,22 +87,21 @@ namespace EvolutionaryAlgorithm.BitImplementation
         public void MutateZeroes(IBitIndividual individual, int p)
         {
             var genes = individual.Genes;
-            var oneLookup = new int[individual.Zeros];
+            var lookup = new int[individual.Zeros];
             for (int i = 0, counter = 0; i < genes.Count; i++)
                 if (!genes[i])
-                    oneLookup[counter++] = i;
-            
-            MutatePart(individual, oneLookup, p);
+                    lookup[counter++] = i;
+            MutatePart(individual, lookup, p);
         }
 
         public void MutateOnes(IBitIndividual individual, int p)
         {
             var genes = individual.Genes;
-            var oneLookup = new int[individual.Ones];
+            var lookup = new int[individual.Ones];
             for (int i = 0, counter = 0; i < genes.Count; i++)
                 if (genes[i])
-                    oneLookup[counter++] = i;
-            MutatePart(individual, oneLookup, p);
+                    lookup[counter++] = i;
+            MutatePart(individual, lookup, p);
         }
 
         public void Mutate(IBitIndividual individual, int p, double zeroPart, double onePart)

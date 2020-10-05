@@ -2,6 +2,7 @@
 using EvolutionaryAlgorithm.Core.Fitness;
 using EvolutionaryAlgorithm.Core.HyperHeuristic;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.GenerationFilter;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Crossover;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Selector;
@@ -58,24 +59,35 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         }
 
         public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
-            UsingHyperHeuristic<TIndividual, TGeneStructure, TGene>(
+            UsingHeuristic<TIndividual, TGeneStructure, TGene>(
+                this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
+                Func<IMutator<TIndividual, TGeneStructure, TGene>, IMutator<TIndividual, TGeneStructure, TGene>>
+                    applyMutations,
+                IGenerationFilter<TIndividual, TGeneStructure, TGene> filter)
+            where TIndividual : IIndividual<TGeneStructure, TGene>
+            where TGeneStructure : ICloneable =>
+            algo.UsingHeuristic(new GenerationGenerator<TIndividual, TGeneStructure, TGene>
+            {
+                Mutator = applyMutations(new Mutator<TIndividual, TGeneStructure, TGene>()),
+                Filter = filter
+            });
+
+        public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
+            UsingHeuristic<TIndividual, TGeneStructure, TGene>(
+                this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
+                IGenerationGenerator<TIndividual, TGeneStructure, TGene> generator)
+            where TIndividual : IIndividual<TGeneStructure, TGene>
+            where TGeneStructure : ICloneable =>
+            algo.UsingHeuristic(new SimpleHeuristic<TIndividual, TGeneStructure, TGene>(generator));
+
+        public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
+            UsingHeuristic<TIndividual, TGeneStructure, TGene>(
                 this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
                 IHyperHeuristic<TIndividual, TGeneStructure, TGene> heuristic)
             where TIndividual : IIndividual<TGeneStructure, TGene>
             where TGeneStructure : ICloneable
         {
             algo.HyperHeuristic = heuristic;
-            return algo;
-        }
-
-        public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
-            UsingGenerationGenerator<TIndividual, TGeneStructure, TGene>(
-                this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
-                IGenerationGenerator<TIndividual, TGeneStructure, TGene> generator)
-            where TIndividual : IIndividual<TGeneStructure, TGene>
-            where TGeneStructure : ICloneable
-        {
-            algo.HyperHeuristic = new SimpleHeuristic<TIndividual, TGeneStructure, TGene>(generator);
             return algo;
         }
 

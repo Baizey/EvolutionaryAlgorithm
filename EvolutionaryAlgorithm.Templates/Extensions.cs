@@ -15,23 +15,23 @@ namespace EvolutionaryAlgorithm.Template
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingOneLambdaLambda(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
             int learningRate) =>
-            algorithm.UsingGenerationGenerator(new OneLambdaLambdaGenerationGenerator(learningRate));
-        
+            algorithm.UsingHeuristic(new OneLambdaLambdaGenerationGenerator(learningRate));
+
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingAsymmetricGeneration(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
             int learningRate,
             int observationPhase) =>
-            algorithm.UsingGenerationGenerator(new AsymmetricGenerationGenerator(learningRate, observationPhase));
+            algorithm.UsingHeuristic(new AsymmetricGenerationGenerator(learningRate, observationPhase));
 
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingStagnationDetectionGeneration(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
             int learningRate) =>
-            algorithm.UsingHyperHeuristic(new StagnationDetectionHyperHeuristic(learningRate));
+            algorithm.UsingHeuristic(new StagnationDetectionHyperHeuristic(learningRate));
 
         public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingEndogenousGeneration(
             this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,
             int learningRate) =>
-            algorithm.UsingGenerationGenerator(new EndogenousGenerationGenerator(learningRate));
+            algorithm.UsingHeuristic(new EndogenousGenerationGenerator(learningRate));
 
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingRandomPopulation(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm)

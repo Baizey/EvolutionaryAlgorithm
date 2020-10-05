@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.GenerationFilter;
 using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Template;
+using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
+using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 using EvolutionaryAlgorithm.Template.Endogenous;
 using EvolutionaryAlgorithm.Template.Stagnation;
 
@@ -48,7 +52,7 @@ namespace EvolutionaryAlgorithm
                 .UsingRandomPopulation()
                 .UsingStagnationDetectionGeneration(mutationRate)
                 .UsingFitness(new JumpFitness<IBitIndividual>(5));
-            
+
             var asymmetric = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {

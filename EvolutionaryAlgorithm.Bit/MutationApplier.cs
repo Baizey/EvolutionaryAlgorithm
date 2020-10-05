@@ -56,7 +56,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
 
         public void Mutate(IBitIndividual individual, int index, double p, int n)
         {
-            if (_random.NextDouble() <= p / n) 
+            if (_random.NextDouble() <= p / n)
                 individual.Flip(index);
         }
 
@@ -85,23 +85,23 @@ namespace EvolutionaryAlgorithm.BitImplementation
             }
         }
 
-        public void MutateZeroes(IBitIndividual individual, int p)
+        public void MutateZeroes(IBitIndividual individual, double p)
         {
             var genes = individual.Genes;
-            var lookup = new int[individual.Zeros];
-            for (int i = 0, counter = 0; i < genes.Count; i++)
+            var lookup = new List<int>();
+            for (var i = 0; i < genes.Count; i++)
                 if (!genes[i])
-                    lookup[counter++] = i;
+                    lookup.Add(i);
             MutatePart(individual, lookup, p);
         }
 
-        public void MutateOnes(IBitIndividual individual, int p)
+        public void MutateOnes(IBitIndividual individual, double p)
         {
             var genes = individual.Genes;
-            var lookup = new int[individual.Ones];
-            for (int i = 0, counter = 0; i < genes.Count; i++)
+            var lookup = new List<int>();
+            for (var i = 0; i < genes.Count; i++)
                 if (genes[i])
-                    lookup[counter++] = i;
+                    lookup.Add(i);
             MutatePart(individual, lookup, p);
         }
 

@@ -59,7 +59,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
             if (_random.Next(n) < p) individual.Flip(index);
         }
 
-        public void Mutate(IBitIndividual individual, int p, int n)
+        public void Mutate(IBitIndividual individual, double p, int n)
         {
             CalculateOdds(p, n);
             var roll = _random.NextDouble();
@@ -71,7 +71,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
             }
         }
 
-        private void Mutate(IBitIndividual individual, IReadOnlyList<int> lookup, double p)
+        private void MutatePart(IBitIndividual individual, IReadOnlyList<int> lookup, double p)
         {
             var n = lookup.Count;
             CalculateOdds(p, n);
@@ -91,9 +91,8 @@ namespace EvolutionaryAlgorithm.BitImplementation
             for (int i = 0, counter = 0; i < genes.Count; i++)
                 if (!genes[i])
                     oneLookup[counter++] = i;
-
-            // Mutate using lookup arrays 
-            Mutate(individual, oneLookup, p);
+            
+            MutatePart(individual, oneLookup, p);
         }
 
         public void MutateOnes(IBitIndividual individual, int p)
@@ -103,7 +102,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
             for (int i = 0, counter = 0; i < genes.Count; i++)
                 if (genes[i])
                     oneLookup[counter++] = i;
-            Mutate(individual, oneLookup, p);
+            MutatePart(individual, oneLookup, p);
         }
 
         public void Mutate(IBitIndividual individual, int p, double zeroPart, double onePart)
@@ -118,8 +117,8 @@ namespace EvolutionaryAlgorithm.BitImplementation
                 if (genes[i]) oneLookup[o++] = i;
                 else zeroLookup[z++] = i;
 
-            Mutate(individual, oneLookup, onePart);
-            Mutate(individual, zeroLookup, zeroPart);
+            MutatePart(individual, oneLookup, onePart);
+            MutatePart(individual, zeroLookup, zeroPart);
         }
     }
 }

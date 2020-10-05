@@ -14,8 +14,8 @@ namespace EvolutionaryAlgorithm.BitImplementation
         private const double Precision = 0.99999D;
         private readonly Random _random = new Random();
 
-        private readonly Dictionary<int, Dictionary<int, double[]>> _lookup =
-            new Dictionary<int, Dictionary<int, double[]>>();
+        private readonly Dictionary<int, Dictionary<double, double[]>> _lookup =
+            new Dictionary<int, Dictionary<double, double[]>>();
 
         // Reasonably efficient way of calculating
         // n! / ((n - k)! * k!)
@@ -28,18 +28,18 @@ namespace EvolutionaryAlgorithm.BitImplementation
             return Math.Pow(10, sum);
         }
 
-        private void CalculateOdds(int p, int n)
+        private void CalculateOdds(double p, int n)
         {
             if (!_lookup.ContainsKey(n))
-                _lookup[n] = new Dictionary<int, double[]>();
+                _lookup[n] = new Dictionary<double, double[]>();
             if (_lookup[n].ContainsKey(p)) return;
 
             var list = new List<double>(16);
             var covered = 0D;
             for (var k = 0; covered < Precision; k++)
             {
-                var value = Math.Pow(1D - (double) p / n, n - k)
-                            * Math.Pow((double) p / n, k)
+                var value = Math.Pow(1D - p / n, n - k)
+                            * Math.Pow(p / n, k)
                             * GetnCk(k, n);
                 list.Add(value);
                 covered += value;
@@ -71,13 +71,55 @@ namespace EvolutionaryAlgorithm.BitImplementation
             }
         }
 
-        public void MutateAsymmetric(IBitIndividual individual, double zeroPart, double onePart)
+        private void Mutate(IBitIndividual individual, IReadOnlyList<int> lookup, double p)
         {
-            var ones = (int) (individual.Ones / onePart);
-            var zeroes = (int) (individual.Zeros / zeroPart);
-            for (var i = 0; i < individual.Count; i++)
-                if (_random.Next(individual[i] ? ones : zeroes) < 1)
-                    individual.Flip(i);
+            var n = lookup.Count;
+            CalculateOdds(p, n);
+            var roll = _random.NextDouble();
+            foreach (var d in _lookup[n][p])
+            {
+                if (roll < d) break;
+                roll -= d;
+                individual.Flip(lookup[_random.Next(n)]);
+            }
+        }
+
+        public void MutateZeroes(IBitIndividual individual, int p)
+        {
+            var genes = individual.Genes;
+            var oneLookup = new int[individual.Zeros];
+            for (int i = 0, counter = 0; i < genes.Count; i++)
+                if (!genes[i])
+                    oneLookup[counter++] = i;
+
+            // Mutate using lookup arrays 
+            Mutate(individual, oneLookup, p);
+        }
+
+        public void MutateOnes(IBitIndividual individual, int p)
+        {
+            var genes = individual.Genes;
+            var oneLookup = new int[individual.Ones];
+            for (int i = 0, counter = 0; i < genes.Count; i++)
+                if (genes[i])
+                    oneLookup[counter++] = i;
+            Mutate(individual, oneLookup, p);
+        }
+
+        public void Mutate(IBitIndividual individual, int p, double zeroPart, double onePart)
+        {
+            onePart *= p;
+            zeroPart *= p;
+            var genes = individual.Genes;
+
+            var oneLookup = new int[individual.Ones];
+            var zeroLookup = new int[individual.Zeros];
+            for (int i = 0, o = 0, z = 0; i < genes.Count; i++)
+                if (genes[i]) oneLookup[o++] = i;
+                else zeroLookup[z++] = i;
+
+            Mutate(individual, oneLookup, onePart);
+            Mutate(individual, zeroLookup, zeroPart);
         }
     }
 }

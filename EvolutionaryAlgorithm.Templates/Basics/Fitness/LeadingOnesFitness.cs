@@ -5,7 +5,7 @@ using EvolutionaryAlgorithm.Core.Fitness;
 
 namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 {
-    public class LeadingOnesFitness<TIndividual> : IFitness<TIndividual, BitArray, bool>
+    public class LeadingOnesFitness<TIndividual> : IBitFitness<TIndividual>
         where TIndividual : IBitIndividual
     {
         public IEvolutionaryAlgorithm<TIndividual, BitArray, bool> Algorithm { get; set; }

@@ -3,14 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
-using EvolutionaryAlgorithm.Core.HyperHeuristic;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
 using EvolutionaryAlgorithm.Core.Parameters;
 
 namespace EvolutionaryAlgorithm.Template.Stagnation
 {
-    public class StagnationDetectionHyperHeuristic : HyperHeuristicBase<IBitIndividual, BitArray, bool>,
-        IBitHyperHeuristic<IBitIndividual>
+    public class StagnationDetectionHyperHeuristic : BitHyperHeuristicBase<IBitIndividual>
     {
         private long _u;
         private readonly int _initialMutationRate;

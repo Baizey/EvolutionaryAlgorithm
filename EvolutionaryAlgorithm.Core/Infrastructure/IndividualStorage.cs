@@ -6,7 +6,6 @@ using EvolutionaryAlgorithm.Core.Population;
 namespace EvolutionaryAlgorithm.Core.Infrastructure
 {
     public class IndividualStorage<TIndividual, TGeneStructure, TGene>
-        : IIndividualStorage<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {

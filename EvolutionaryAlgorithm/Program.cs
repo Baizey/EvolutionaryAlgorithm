@@ -32,7 +32,7 @@ namespace EvolutionaryAlgorithm
                     Mu = 1,
                 })
                 .UsingBasicStatistics()
-                .UsingRandomPopulation(learningRate)
+                .UsingRandomPopulation(mutationRate)
                 .UsingEndogenousGeneration(learningRate)
                 .UsingFitness(new OneMaxFitness<IEndogenousBitIndividual>());
 
@@ -41,7 +41,7 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
-                    Lambda = lambda,
+                    Lambda = (int) (3 * Math.Log(geneCount)),
                     Mu = 1,
                 })
                 .UsingStagnationStatistics()
@@ -68,7 +68,7 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
-                    Lambda = lambda,
+                    Lambda = (int) (3 * Math.Log(geneCount)),
                     Mu = 1,
                 })
                 .UsingBasicStatistics()

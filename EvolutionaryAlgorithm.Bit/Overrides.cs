@@ -3,6 +3,7 @@ using System.Collections;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.HyperHeuristic;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.GenerationFilter;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation;
 using EvolutionaryAlgorithm.Core.Population;
 
@@ -26,11 +27,24 @@ namespace EvolutionaryAlgorithm.BitImplementation
         }
     }
 
+    public abstract class BitHyperHeuristicBase<T> : HyperHeuristicBase<T, BitArray, bool>
+        where T : IBitIndividual
+    {
+    }
+
     public class BitSimpleHeuristic<T> : SimpleHeuristic<T, BitArray, bool>, IBitHyperHeuristic<T>
         where T : IBitIndividual
     {
         public BitSimpleHeuristic(IGenerationGenerator<T, BitArray, bool> generationGenerator)
             : base(generationGenerator)
+        {
+        }
+    }
+
+    public class BitElitismGenerationFilter<T> : ElitismGenerationFilter<T, BitArray, bool>, IBitGenerationFilter<T>
+        where T : IBitIndividual
+    {
+        public BitElitismGenerationFilter(bool preferNew) : base(preferNew)
         {
         }
     }

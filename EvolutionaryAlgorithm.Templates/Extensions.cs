@@ -43,8 +43,8 @@ namespace EvolutionaryAlgorithm.Template
 
         public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingRandomPopulation(
             this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,
-            int learningRate) =>
-            algorithm.UsingPopulation(EndogenousBitIndividual.FromRandom(learningRate));
+            int mutationRate) =>
+            algorithm.UsingPopulation(EndogenousBitIndividual.FromRandom(mutationRate));
 
         public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingBasicStatistics(
             this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm) =>

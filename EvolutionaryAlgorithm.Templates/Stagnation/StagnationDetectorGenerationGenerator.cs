@@ -2,15 +2,13 @@
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
-using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.GenerationFilter;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Crossover;
 using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
 namespace EvolutionaryAlgorithm.Template.Stagnation
 {
-    public class StagnationDetectorGenerationGenerator : GenerationGenerator<IBitIndividual, BitArray, bool>
+    public class StagnationDetectorGenerationGenerator : BitGenerationGenerator<IBitIndividual>
     {
         public StagnationDetectorGenerationGenerator()
         {
@@ -18,7 +16,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
                 .ThenApply(new CloneParent<IBitIndividual, BitArray, bool>(
                     new FirstParentSelector<IBitIndividual, BitArray, bool>()))
                 .ThenApply(new StagnationDetectionMutation());
-            Filter = new ElitismGenerationFilter<IBitIndividual, BitArray, bool>(false);
+            Filter = new BitElitismGenerationFilter<IBitIndividual>(false);
         }
     }
 

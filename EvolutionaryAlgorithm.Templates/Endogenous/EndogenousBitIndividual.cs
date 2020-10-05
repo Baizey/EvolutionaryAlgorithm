@@ -13,13 +13,13 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
 
     public class EndogenousBitIndividual : BitIndividual, IEndogenousBitIndividual
     {
-        public static Population<IEndogenousBitIndividual, BitArray, bool> FromRandom(int learningRate) =>
-            new Population<IEndogenousBitIndividual, BitArray, bool>(Generate(learningRate));
+        public static Population<IEndogenousBitIndividual, BitArray, bool> FromRandom(int mutationRate) =>
+            new Population<IEndogenousBitIndividual, BitArray, bool>(Generate(mutationRate));
 
-        public static Func<int, EndogenousBitIndividual> Generate(int learningRate)
+        public static Func<int, EndogenousBitIndividual> Generate(int mutationRate)
         {
             var random = new Random();
-            return g => new EndogenousBitIndividual(g, () => random.NextDouble() >= 0.5) {MutationRate = learningRate};
+            return g => new EndogenousBitIndividual(g, () => random.NextDouble() >= 0.5) {MutationRate = mutationRate};
         }
 
         public int MutationRate { get; set; }

@@ -14,7 +14,7 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        private IIndividualStorage<TIndividual, TGeneStructure, TGene> _storage;
+        private IndividualStorage<TIndividual, TGeneStructure, TGene> _storage;
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
         public IMutator<TIndividual, TGeneStructure, TGene> Mutator { get; set; }
         public IGenerationFilter<TIndividual, TGeneStructure, TGene> Filter { get; set; }

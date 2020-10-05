@@ -60,7 +60,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
                 oneRate = _r1 + _learningRate;
             }
 
-            _applier.MutateAsymmetric(child, zeroRate, oneRate);
+            _applier.Mutate(child, _parameters.MutationRate, zeroRate, oneRate);
         }
 
         public void Update()

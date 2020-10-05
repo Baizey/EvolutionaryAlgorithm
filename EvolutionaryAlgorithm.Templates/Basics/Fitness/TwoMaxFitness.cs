@@ -6,7 +6,7 @@ using EvolutionaryAlgorithm.Core.Fitness;
 
 namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 {
-    public class TwoMaxFitness<TIndividual> : IFitness<TIndividual, BitArray, bool>
+    public class TwoMaxFitness<TIndividual> : IBitFitness<TIndividual>
         where TIndividual : IBitIndividual
     {
         public IEvolutionaryAlgorithm<TIndividual, BitArray, bool> Algorithm { get; set; }

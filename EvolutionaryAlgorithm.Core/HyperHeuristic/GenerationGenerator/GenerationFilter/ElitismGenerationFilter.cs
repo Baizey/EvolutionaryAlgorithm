@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Core.Algorithm;
@@ -11,6 +12,7 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Generati
         where TIndividual : IIndividual<TGeneStructure, TGene>
         where TGeneStructure : ICloneable
     {
+        private readonly Random _random = new Random();
         private readonly bool _preferNew;
 
         public ElitismGenerationFilter(bool preferNew) => _preferNew = preferNew;
@@ -25,10 +27,50 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Generati
         {
         }
 
+        private GenerationFilterResult<TIndividual, TGeneStructure, TGene> FilterSingle(List<TIndividual> bodies)
+        {
+            if (Algorithm.Population.Count > 1)
+                Algorithm.Population.Individuals = new List<TIndividual> {Algorithm.Population.Best};
+
+            var index = 0;
+            for (var i = 1; i < bodies.Count; i++)
+                if (bodies[i].Fitness > bodies[index].Fitness)
+                    index = i;
+            var best = bodies[index];
+
+            // If no-one beats current best
+            if (best.Fitness < Algorithm.Population[0].Fitness)
+                return new GenerationFilterResult<TIndividual, TGeneStructure, TGene>
+                {
+                    NextGeneration = Algorithm.Population.Individuals,
+                    Discarded = bodies
+                };
+
+            // If tie, but we dont prefer new
+            if (!_preferNew && best.CompareTo(Algorithm.Population[0]) == 0)
+                return new GenerationFilterResult<TIndividual, TGeneStructure, TGene>
+                {
+                    NextGeneration = Algorithm.Population.Individuals,
+                    Discarded = bodies
+                };
+
+            // Replace old best with new best
+            bodies[index] = Algorithm.Population[0];
+            Algorithm.Population.Individuals[0] = best;
+            return new GenerationFilterResult<TIndividual, TGeneStructure, TGene>
+            {
+                NextGeneration = Algorithm.Population.Individuals,
+                Discarded = bodies
+            };
+        }
+
         public async Task<GenerationFilterResult<TIndividual, TGeneStructure, TGene>> Filter(
             List<TIndividual> bodies)
         {
             var keep = Algorithm.Parameters.Mu;
+            // Handle optimized if [Mu == 1]
+            if (keep == 1) return FilterSingle(bodies);
+
             var oldIndividuals = Algorithm.Population.Individuals;
 
             oldIndividuals.Sort((a, b) => b.CompareTo(a));

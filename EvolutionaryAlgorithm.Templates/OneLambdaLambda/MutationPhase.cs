@@ -11,7 +11,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
     public class MutationPhase : IBitSingleParentSelector<IBitIndividual>
     {
         private readonly Random _random = new Random();
-        private IIndividualStorage<IBitIndividual, BitArray, bool> _storage;
+        private IndividualStorage<IBitIndividual, BitArray, bool> _storage;
         private IParameters _parameters;
         private IBitIndividual _original;
         private double[] _odds;

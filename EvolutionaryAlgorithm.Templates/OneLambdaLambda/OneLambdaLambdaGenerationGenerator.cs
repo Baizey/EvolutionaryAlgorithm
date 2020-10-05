@@ -2,15 +2,13 @@
 using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
-using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.GenerationFilter;
 using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Core.Statistics;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
 namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 {
-    public class OneLambdaLambdaGenerationGenerator : GenerationGenerator<IBitIndividual, BitArray, bool>
+    public class OneLambdaLambdaGenerationGenerator : BitGenerationGenerator<IBitIndividual>
     {
         private IParameters _parameters;
         private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
@@ -24,7 +22,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
             Mutator = new BitMutator<IBitIndividual>()
                 .CloneGenesFrom(new FirstParentSelector<IBitIndividual, BitArray, bool>())
                 .ThenApply(new CrossoverPhase());
-            Filter = new ElitismGenerationFilter<IBitIndividual, BitArray, bool>(true);
+            Filter = new BitElitismGenerationFilter<IBitIndividual>(true);
         }
 
         public override void Initialize()

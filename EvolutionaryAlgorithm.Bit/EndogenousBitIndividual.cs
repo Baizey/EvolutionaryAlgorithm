@@ -1,47 +1,36 @@
 ﻿using System;
 using System.Collections;
-using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Population;
 
-namespace EvolutionaryAlgorithm.Template.Endogenous
+namespace EvolutionaryAlgorithm.BitImplementation
 {
     public interface IEndogenousBitIndividual : IBitIndividual
     {
-        public int MutationRate { get; set; }
+        public double MutationRate { get; set; }
     }
 
 
     public class EndogenousBitIndividual : BitIndividual, IEndogenousBitIndividual
     {
+        public double MutationRate { get; set; }
+
         public static Population<IEndogenousBitIndividual, BitArray, bool> FromRandom(int mutationRate) =>
             new Population<IEndogenousBitIndividual, BitArray, bool>(Generate(mutationRate));
 
-        public static Func<int, EndogenousBitIndividual> Generate(int mutationRate)
+        public static Func<int, EndogenousBitIndividual> Generate(double mutationRate)
         {
             var random = new Random();
             return g => new EndogenousBitIndividual(g, () => random.NextDouble() >= 0.5) {MutationRate = mutationRate};
         }
 
-        public int MutationRate { get; set; }
-
-        public override void CloneGenesTo(IIndividual<BitArray, bool> other)
-        {
-            base.CloneGenesTo(other);
-            ((IEndogenousBitIndividual) other).MutationRate = MutationRate;
-        }
-
-        public override object Clone()
-        {
-            return new EndogenousBitIndividual(this);
-        }
+        public override object Clone() => new EndogenousBitIndividual(this);
 
         public EndogenousBitIndividual(int size, bool defaultValue) : base(size, defaultValue)
         {
         }
 
-        public EndogenousBitIndividual(IBitIndividual individual) : base(individual)
-        {
-        }
+        public EndogenousBitIndividual(IEndogenousBitIndividual individual) : base(individual) =>
+            MutationRate = individual.MutationRate;
 
         public EndogenousBitIndividual(BitArray bitArray) : base(bitArray)
         {

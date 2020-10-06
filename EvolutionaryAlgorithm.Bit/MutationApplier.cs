@@ -69,9 +69,9 @@ namespace EvolutionaryAlgorithm.BitImplementation
                 // Fill out odds according to p
                 odds = new double[n / 2];
                 for (var i = p; i < odds.Length; i++)
-                    odds[i] = allOdds[i - p];
-                for (var i = p; i > 0; i--)
-                    odds[i] = allOdds[i];
+                    odds[i] = allOdds[i - p + 1];
+                for (var i = 1; i < p; i++)
+                    odds[i] = allOdds[p - i + 1];
 
                 // Normalize
                 var sum = odds.Sum();

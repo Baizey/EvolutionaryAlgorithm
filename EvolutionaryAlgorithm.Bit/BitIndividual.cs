@@ -15,10 +15,8 @@ namespace EvolutionaryAlgorithm.BitImplementation
         }
 
         bool Flip(int i);
-
         int Ones { get; set; }
         int Zeros { get; }
-        int Count => Genes.Count;
     }
 
     public class BitIndividual : IBitIndividual
@@ -26,8 +24,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
         private int _ones = -1;
         public double Fitness { get; set; }
         public BitArray Genes { get; set; }
-
-        public int Size => Genes.Count;
+        public int Count => Genes.Count;
 
         public int Ones
         {
@@ -35,7 +32,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
             {
                 if (_ones != -1) return _ones;
                 _ones = 0;
-                for (var i = 0; i < Size; i++)
+                for (var i = 0; i < Count; i++)
                     if (Genes[i])
                         _ones++;
                 return _ones;
@@ -43,7 +40,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
             set => _ones = value;
         }
 
-        public int Zeros => Size - Ones;
+        public int Zeros => Count - Ones;
 
         public BitIndividual(int size, bool defaultValue) => Genes = new BitArray(size, defaultValue);
 
@@ -65,10 +62,11 @@ namespace EvolutionaryAlgorithm.BitImplementation
         {
         }
 
-        public virtual void CloneGenesTo(IIndividual<BitArray, bool> other)
+        public virtual void CopyTo(IIndividual<BitArray, bool> other)
         {
-            other.Genes = new BitArray(Genes);
+            Genes.CopyTo(other.Genes);
             other.Fitness = Fitness;
+            other.Reset();
         }
 
         public void Reset()
@@ -77,7 +75,6 @@ namespace EvolutionaryAlgorithm.BitImplementation
         }
 
         public bool Flip(int i) => Genes[i] = !Genes[i];
-
         public virtual object Clone() => new BitIndividual(this);
 
         public int CompareTo(IIndividual<BitArray, bool> other) => Math.Sign(Fitness - other.Fitness);

@@ -21,6 +21,11 @@ namespace EvolutionaryAlgorithm.Core.Infrastructure
         public void Update();
     }
 
+    public interface ICopyTo<in T>
+    {
+        public void CopyTo(T other);
+    }
+
     public interface IEvolutionary<TIndividual, TGeneStructure, TGene>
         : IKeepsReference<TIndividual, TGeneStructure, TGene>, IInitializes, IUpdates
         where TIndividual : IIndividual<TGeneStructure, TGene>

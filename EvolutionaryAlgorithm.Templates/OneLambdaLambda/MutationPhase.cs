@@ -36,7 +36,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
             var mutations = Mutations();
             foreach (var body in bodies)
             {
-                _original.CloneGenesTo(body);
+                _original.CopyTo(body);
                 for (var i = 0; i < mutations; i++)
                     body.Flip(_random.Next(_parameters.GeneCount));
             }

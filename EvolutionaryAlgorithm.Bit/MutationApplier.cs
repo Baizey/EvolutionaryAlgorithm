@@ -104,7 +104,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
             {
                 if (roll < d) break;
                 roll -= d;
-                individual.Flip(_random.Next(individual.Size));
+                individual.Flip(_random.Next(individual.Count));
             }
         }
 
@@ -140,7 +140,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
             MutatePart(individual, lookup, p);
         }
 
-        public void MutateAsymmetric(IBitIndividual individual, int p, double zeroPart, double onePart)
+        public void MutateAsymmetric(IBitIndividual individual, double p, double zeroPart, double onePart)
         {
             onePart *= p;
             zeroPart *= p;

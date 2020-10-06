@@ -15,6 +15,6 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
         {
         }
 
-        public override async Task Crossover(int index, TIndividual child, TIndividual parent) => parent.CloneGenesTo(child);
+        public override async Task Crossover(int index, TIndividual child, TIndividual parent) => parent.CopyTo(child);
     }
 }

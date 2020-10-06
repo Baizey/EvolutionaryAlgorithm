@@ -12,7 +12,7 @@ namespace EvolutionaryAlgorithm.Core.Statistics
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
 
         public DateTime StartTime { get; private set; }
-        public DateTime EndTime { get; private set; }
+        public DateTime? EndTime { get; private set; }
         public TIndividual Best { get; private set; }
         public TIndividual Previous { get; private set; }
         public TIndividual Current { get; private set; }
@@ -23,14 +23,16 @@ namespace EvolutionaryAlgorithm.Core.Statistics
         {
             StartTime = DateTime.Now;
             Current = (TIndividual) Algorithm.Best.Clone();
-            Best = Current;
-            Previous = Current;
+            Best = (TIndividual) Current.Clone();
+            Previous = (TIndividual) Current.Clone();
         }
 
         public virtual void Update()
         {
+            var temp = Previous;
             Previous = Current;
-            Current = (TIndividual) Algorithm.Best.Clone();
+            Current = temp;
+            Algorithm.Best.CopyTo(Current);
 
             Generations++;
 
@@ -40,7 +42,7 @@ namespace EvolutionaryAlgorithm.Core.Statistics
                 StagnantGeneration = 0;
 
             if (Current.Fitness > Best.Fitness)
-                Best = Current;
+                Current.CopyTo(Best);
         }
 
         public virtual void Finish() => EndTime = DateTime.Now;

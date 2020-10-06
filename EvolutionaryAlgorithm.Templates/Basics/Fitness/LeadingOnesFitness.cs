@@ -17,7 +17,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
         public double Evaluate(TIndividual individual)
         {
             var i = 0;
-            for (; i < individual.Size; i++)
+            for (; i < individual.Count; i++)
                 if (!individual[i])
                     break;
             return i;

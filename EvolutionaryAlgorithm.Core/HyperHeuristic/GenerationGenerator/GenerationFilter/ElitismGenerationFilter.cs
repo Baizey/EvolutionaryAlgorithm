@@ -12,7 +12,6 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Generati
         where TIndividual : IIndividual<TGeneStructure, TGene>
         where TGeneStructure : ICloneable
     {
-        private readonly Random _random = new Random();
         private readonly bool _preferNew;
 
         public ElitismGenerationFilter(bool preferNew) => _preferNew = preferNew;
@@ -47,7 +46,7 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Generati
                 };
 
             // If tie, but we dont prefer new
-            if (!_preferNew && best.CompareTo(Algorithm.Population[0]) == 0)
+            if (!_preferNew && best.Fitness == Algorithm.Population[0].Fitness)
                 return new GenerationFilterResult<TIndividual, TGeneStructure, TGene>
                 {
                     NextGeneration = Algorithm.Population.Individuals,

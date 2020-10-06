@@ -63,14 +63,14 @@ namespace EvolutionaryAlgorithm.BitImplementation
                 var allOdds = new double[n / 2];
                 for (var i = 1; i <= allOdds.Length; i++)
                     c += Math.Pow(i, -beta);
-                for (var alpha = 0; alpha < allOdds.Length; alpha++)
-                    allOdds[alpha] = 1 / c * Math.Pow(alpha + 1, -beta);
+                for (var alpha = 1; alpha <= allOdds.Length; alpha++)
+                    allOdds[alpha - 1] = 1 / c * Math.Pow(alpha, -beta);
 
                 // Fill out odds according to p
                 odds = new double[n / 2];
                 var index = p - 1;
                 Array.Copy(allOdds, 0, odds, index, odds.Length - index);
-                if (p > 1)
+                if (index != 1)
                 {
                     Array.Reverse(allOdds);
                     Array.Copy(allOdds, allOdds.Length - p, odds, 0, index);

@@ -30,6 +30,7 @@ namespace EvolutionaryAlgorithm
 
             new MutationApplier().HeavyTail(1, 20, 1.5);
             new MutationApplier().HeavyTail(5, 20, 1.5);
+            new MutationApplier().HeavyTail(10, 20, 1.5);
             
             var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters

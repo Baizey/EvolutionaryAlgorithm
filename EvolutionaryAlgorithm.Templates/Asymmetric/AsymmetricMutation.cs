@@ -17,18 +17,15 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         private double _r0, _r1;
 
         private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
-        private readonly Random _random;
+        private readonly Random _random = new Random();
         private bool _oddGeneration;
-        private MutationApplier _applier;
+        private readonly MutationApplier _applier = new MutationApplier();
         private IParameters _parameters;
 
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public AsymmetricMutation(double learningRate, int observationPhase)
         {
-            _applier = new MutationApplier();
-            _random = new Random();
-
             _observationPhase = observationPhase;
             _observationCounter = _observationPhase;
 
@@ -60,7 +57,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
                 oneRate = _r1 + _learningRate;
             }
 
-            _applier.Mutate(child, _parameters.MutationRate, zeroRate, oneRate);
+            _applier.MutateAsymmetric(child, _parameters.MutationRate, zeroRate, oneRate);
         }
 
         public void Update()

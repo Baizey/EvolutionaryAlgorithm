@@ -48,7 +48,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         }
 
         public static IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>
-            UsingFitness<TIndividual, TGeneStructure, TGene>(
+            UsingEvaluation<TIndividual, TGeneStructure, TGene>(
                 this IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> algo,
                 IFitness<TIndividual, TGeneStructure, TGene> fitness)
             where TIndividual : IIndividual<TGeneStructure, TGene>

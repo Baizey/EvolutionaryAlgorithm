@@ -12,27 +12,6 @@ namespace EvolutionaryAlgorithm.Template
 {
     public static class Extensions
     {
-        public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingOneLambdaLambda(
-            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
-            int learningRate) =>
-            algorithm.UsingHeuristic(new OneLambdaLambdaGenerationGenerator(learningRate));
-
-        public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingAsymmetricGeneration(
-            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
-            int learningRate,
-            int observationPhase) =>
-            algorithm.UsingHeuristic(new AsymmetricGenerationGenerator(learningRate, observationPhase));
-
-        public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingStagnationDetectionGeneration(
-            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
-            int learningRate) =>
-            algorithm.UsingHeuristic(new StagnationDetectionHyperHeuristic(learningRate));
-
-        public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingEndogenousGeneration(
-            this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,
-            int learningRate) =>
-            algorithm.UsingHeuristic(new EndogenousGenerationGenerator(learningRate));
-
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingRandomPopulation(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm)
         {

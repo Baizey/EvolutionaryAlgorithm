@@ -23,7 +23,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         {
             _parameters = Algorithm.Parameters;
             _storage = new IndividualStorage<IBitIndividual, BitArray, bool>(Algorithm);
-            _odds = new MutationApplier().GetOdds(_parameters.MutationRate, _parameters.GeneCount);
+            _odds = new MutationApplier().CalculateOdds(_parameters.MutationRate, _parameters.GeneCount);
             Update();
         }
 

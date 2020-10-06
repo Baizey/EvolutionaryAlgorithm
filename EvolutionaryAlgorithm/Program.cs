@@ -10,6 +10,7 @@ using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 using EvolutionaryAlgorithm.Template.Endogenous;
+using EvolutionaryAlgorithm.Template.OneLambdaLambda;
 using EvolutionaryAlgorithm.Template.Stagnation;
 
 namespace EvolutionaryAlgorithm
@@ -27,6 +28,8 @@ namespace EvolutionaryAlgorithm
             var learningRate = 2;
             var observationPhase = 5;
 
+            new MutationApplier().HeavyTail(1, 10000, 1.5);
+            
             var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {
@@ -37,8 +40,8 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingBasicStatistics()
                 .UsingRandomPopulation(mutationRate)
-                .UsingEndogenousGeneration(learningRate)
-                .UsingFitness(new OneMaxFitness<IEndogenousBitIndividual>());
+                .UsingHeuristic(new EndogenousGenerationGenerator(learningRate))
+                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
 
             var stagnation = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
@@ -50,8 +53,8 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingStagnationStatistics()
                 .UsingRandomPopulation()
-                .UsingStagnationDetectionGeneration(mutationRate)
-                .UsingFitness(new JumpFitness<IBitIndividual>(5));
+                .UsingHeuristic(new StagnationDetectionHyperHeuristic(mutationRate))
+                .UsingEvaluation(new JumpFitness<IBitIndividual>(5));
 
             var asymmetric = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
@@ -63,8 +66,8 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingBasicStatistics()
                 .UsingRandomPopulation()
-                .UsingAsymmetricGeneration(learningRate, observationPhase)
-                .UsingFitness(new OneMaxFitness<IBitIndividual>());
+                .UsingHeuristic(new AsymmetricGenerationGenerator(learningRate, observationPhase))
+                .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
 
             // TODO: Missing mutation implementation
             var oneLambdaLambda = new BitEvolutionaryAlgorithm<IBitIndividual>()
@@ -77,11 +80,10 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingBasicStatistics()
                 .UsingRandomPopulation()
-                .UsingOneLambdaLambda(learningRate)
-                .UsingFitness(new OneMaxFitness<IBitIndividual>());
+                .UsingHeuristic(new OneLambdaLambdaGenerationGenerator(learningRate))
+                .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
 
-            // TODO: Figure out 5'th algorithm
-            // TODO: Wide tail
+            // TODO: 5'th algorithm
 
             var algorithm = stagnation;
 

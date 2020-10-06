@@ -12,10 +12,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.Mutation
         private readonly MutationApplier _applier = new MutationApplier();
         private int _geneCount;
 
-        public void Initialize()
-        {
-            _geneCount = Algorithm.Parameters.GeneCount;
-        }
+        public void Initialize() => _geneCount = Algorithm.Parameters.GeneCount;
 
         public void Update()
         {

@@ -45,7 +45,7 @@ namespace EvolutionaryAlgorithm.Template.HeavyTail
 
         public async Task Mutate(int index, IEndogenousBitIndividual child)
         {
-            if (index < _parameters.GeneCount / 2)
+            if (index < _parameters.Lambda / 2)
             {
                 child.MutationRate = _lowerTail;
                 _applier.Mutate(child, _lowerP, _n);

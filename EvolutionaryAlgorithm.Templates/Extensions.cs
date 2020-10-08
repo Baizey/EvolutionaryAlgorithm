@@ -20,7 +20,7 @@ namespace EvolutionaryAlgorithm.Template
                 new BitPopulation<IBitIndividual>(g => new BitIndividual(g, () => random.NextDouble() >= 0.5)));
         }
 
-        public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingRandomPopulation(
+        public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingEndogenousRandomPopulation(
             this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,
             int mutationRate) =>
             algorithm.UsingPopulation(EndogenousBitIndividual.FromRandom(mutationRate));

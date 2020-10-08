@@ -35,11 +35,11 @@ namespace EvolutionaryAlgorithm
                     Mu = 1,
                 })
                 .UsingBasicStatistics()
-                .UsingRandomPopulation(mutationRate)
+                .UsingEndogenousRandomPopulation(mutationRate)
                 .UsingHeuristic(new EndogenousGenerationGenerator(learningRate))
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
 
-            var stagnation = new BitEvolutionaryAlgorithm<IBitIndividual>()
+            var stagnation = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -49,9 +49,9 @@ namespace EvolutionaryAlgorithm
                     Mu = 1,
                 })
                 .UsingStagnationStatistics()
-                .UsingRandomPopulation()
+                .UsingEndogenousRandomPopulation(learningRate)
                 .UsingHeuristic(new StagnationDetectionHyperHeuristic(mutationRate))
-                .UsingEvaluation(new JumpFitness<IBitIndividual>(5));
+                .UsingEvaluation(new JumpFitness<IEndogenousBitIndividual>(5));
 
             var asymmetric = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters

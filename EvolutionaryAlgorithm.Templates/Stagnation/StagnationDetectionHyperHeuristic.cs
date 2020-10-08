@@ -8,13 +8,13 @@ using EvolutionaryAlgorithm.Core.Parameters;
 
 namespace EvolutionaryAlgorithm.Template.Stagnation
 {
-    public class StagnationDetectionHyperHeuristic : BitHyperHeuristicBase<IBitIndividual>
+    public class StagnationDetectionHyperHeuristic : BitHyperHeuristicBase<IEndogenousBitIndividual>
     {
         private long _u;
         private readonly int _initialMutationRate;
         public bool InStagnationDetection { get; private set; }
 
-        private readonly IGenerationGenerator<IBitIndividual, BitArray, bool> _mutationModule;
+        private readonly IGenerationGenerator<IEndogenousBitIndividual, BitArray, bool> _mutationModule;
         private readonly StagnationDetectorGenerationGenerator _sdModule;
         private IParameters _parameters;
         private int _n;
@@ -101,7 +101,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
             }
         }
 
-        public override Task<List<IBitIndividual>> Generate()
+        public override Task<List<IEndogenousBitIndividual>> Generate()
         {
             _u++;
             return InStagnationDetection

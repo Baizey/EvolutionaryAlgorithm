@@ -8,12 +8,12 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
 {
     public static class StagnationExtensions
     {
-        public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingStagnationStatistics(
-            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm) =>
+        public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingStagnationStatistics(
+            this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm) =>
             algorithm.UsingStatistics(new StagnationStatistics());
     }
 
-    public class StagnationStatistics : BasicEvolutionaryStatistics<IBitIndividual, BitArray, bool>
+    public class StagnationStatistics : BasicEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool>
     {
         public override string ToString()
         {

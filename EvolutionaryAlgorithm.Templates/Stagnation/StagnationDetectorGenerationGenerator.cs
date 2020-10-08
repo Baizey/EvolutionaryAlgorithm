@@ -8,23 +8,23 @@ using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
 namespace EvolutionaryAlgorithm.Template.Stagnation
 {
-    public class StagnationDetectorGenerationGenerator : BitGenerationGenerator<IBitIndividual>
+    public class StagnationDetectorGenerationGenerator : BitGenerationGenerator<IEndogenousBitIndividual>
     {
         public StagnationDetectorGenerationGenerator()
         {
-            Mutator = new BitMutator<IBitIndividual>()
-                .ThenApply(new CloneParent<IBitIndividual, BitArray, bool>(
-                    new FirstParentSelector<IBitIndividual, BitArray, bool>()))
+            Mutator = new BitMutator<IEndogenousBitIndividual>()
+                .ThenApply(new CloneParent<IEndogenousBitIndividual, BitArray, bool>(
+                    new FirstParentSelector<IEndogenousBitIndividual, BitArray, bool>()))
                 .ThenApply(new StagnationDetectionMutation());
-            Filter = new BitElitismGenerationFilter<IBitIndividual>(false);
+            Filter = new BitElitismGenerationFilter<IEndogenousBitIndividual>(false);
         }
     }
 
-    public class StagnationDetectionMutation : IBitMutation<IBitIndividual>
+    public class StagnationDetectionMutation : IBitMutation<IEndogenousBitIndividual>
     {
         private readonly MutationApplier _applier = new MutationApplier();
         private IParameters _parameters;
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public void Initialize() => _parameters = Algorithm.Parameters;
 
@@ -32,7 +32,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
         {
         }
 
-        public async Task Mutate(int index, IBitIndividual child) =>
+        public async Task Mutate(int index, IEndogenousBitIndividual child) =>
             _applier.Mutate(child, _parameters.MutationRate, Algorithm.Parameters.GeneCount);
     }
 }

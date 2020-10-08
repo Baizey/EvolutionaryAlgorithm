@@ -28,6 +28,7 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
+                    // Constant, based on gene count
                     Lambda = (int) (3 * Math.Log(geneCount)),
                     // Always 1
                     Mu = 1,
@@ -42,6 +43,7 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
+                    // Constant, based on gene count
                     Lambda = (int) (3 * Math.Log(geneCount)),
                     // Always 1
                     Mu = 1,

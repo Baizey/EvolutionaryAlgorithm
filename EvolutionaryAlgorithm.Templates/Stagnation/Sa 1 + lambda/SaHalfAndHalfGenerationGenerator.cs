@@ -3,16 +3,16 @@ using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
-namespace EvolutionaryAlgorithm.Template.HeavyTail
+namespace EvolutionaryAlgorithm.Template.Stagnation
 {
-    public class GenerationGenerator : BitGenerationGenerator<IEndogenousBitIndividual>
+    public class SaHalfAndHalfGenerationGenerator : BitGenerationGenerator<IEndogenousBitIndividual>
     {
-        public GenerationGenerator(double beta)
+        public SaHalfAndHalfGenerationGenerator()
         {
             Mutator = new BitMutator<IEndogenousBitIndividual>()
                 .CloneGenesFrom(new FirstParentSelector<IEndogenousBitIndividual, BitArray, bool>())
-                .ThenApply(new HeavyTailHalfAndHalfMutation(beta));
-            Filter = new BitElitismGenerationFilter<IEndogenousBitIndividual>(true);
+                .ThenApply(new SaHalfAndHalfMutation());
+            Filter = new SaHalfAndHalfGenerationFilter();
         }
     }
 }

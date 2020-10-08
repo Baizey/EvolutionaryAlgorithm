@@ -7,6 +7,7 @@ using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
 using EvolutionaryAlgorithm.Template.Endogenous;
+using EvolutionaryAlgorithm.Template.HeavyTail;
 using EvolutionaryAlgorithm.Template.OneLambdaLambda;
 using EvolutionaryAlgorithm.Template.Stagnation;
 
@@ -17,14 +18,11 @@ namespace EvolutionaryAlgorithm
         private static async Task Main()
         {
             const int geneCount = 500;
-
-            var mu = 1;
-            var lambda = 15;
-
-            var mutationRate = 2;
-            var learningRate = 2;
-            var observationPhase = 5;
-
+            const int mutationRate = 2;
+            const int learningRate = 2;
+            const int observationPhase = 5;
+            const double beta = 1.5;
+            
             var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {
@@ -83,6 +81,22 @@ namespace EvolutionaryAlgorithm
                 .UsingRandomPopulation()
                 .UsingHeuristic(new OneLambdaLambdaGenerationGenerator(learningRate))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
+
+            var heavyTail = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
+                .UsingParameters(new Parameters
+                {
+                    GeneCount = geneCount,
+                    MutationRate = mutationRate,
+                    // Self-adapting, initial 1
+                    Lambda = 1,
+                    // Always 1
+                    Mu = 1,
+                })
+                .UsingBasicStatistics()
+                .UsingEndogenousRandomPopulation(mutationRate)
+                .UsingHeuristic(new HeavyTailGenerationGenerator(beta))
+                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+
 
             // TODO: 5'th algorithm
 

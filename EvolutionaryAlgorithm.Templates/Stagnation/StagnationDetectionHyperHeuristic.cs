@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator;
 using EvolutionaryAlgorithm.Core.Parameters;
+using EvolutionaryAlgorithm.Template.Stagnation.sd;
 
 namespace EvolutionaryAlgorithm.Template.Stagnation
 {
@@ -25,7 +26,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
             _sdModule = new StagnationDetectorGenerationGenerator();
             States.Add(_sdModule);
 
-            _mutationModule = new SelfAdjustingOneLambda.SelfAdjustingOneLambdaGenerationGenerator();
+            _mutationModule = new SaHalfAndHalfGenerationGenerator();
             States.Add(_mutationModule);
 
             _initialMutationRate = initialMutationRate;
@@ -62,7 +63,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
             }
             else if (IsOverLimit())
             {
-                _parameters.MutationRate = Math.Min(_parameters.MutationRate + 1, _parameters.GeneCount / 2);
+                _parameters.MutationRate = Math.Min(_parameters.MutationRate + 1, _n / 2);
                 _u = 0;
             }
         }
@@ -72,12 +73,12 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
             if (Algorithm.Statistics.ImprovedFitness)
             {
                 _u = 0;
-                _parameters.MutationRate = Math.Min(_n / 4, Math.Max(2, _parameters.MutationRate));
+                _parameters.MutationRate = Math.Min(_n / 4, Math.Max(1, _parameters.MutationRate));
             }
             else
             {
                 var isOverLimit = IsOverLimit();
-                _parameters.MutationRate = Math.Min(_n / 4, Math.Max(2, _parameters.MutationRate));
+                _parameters.MutationRate = Math.Min(_n / 4, Math.Max(1, _parameters.MutationRate));
 
                 if (!isOverLimit) return;
 

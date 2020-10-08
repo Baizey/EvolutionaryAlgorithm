@@ -17,7 +17,7 @@
         public int GeneCount { get; set; }
         public int Mu { get; set; }
         public int Lambda { get; set; }
-        public int MutationRate { get; set; }
+        public double MutationRate { get; set; }
 
         public object Clone() => new Parameters(this);
 

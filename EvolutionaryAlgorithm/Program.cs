@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.GenerationFilter;
 using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
-using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 using EvolutionaryAlgorithm.Template.Endogenous;
 using EvolutionaryAlgorithm.Template.OneLambdaLambda;
 using EvolutionaryAlgorithm.Template.Stagnation;
@@ -28,16 +25,13 @@ namespace EvolutionaryAlgorithm
             var learningRate = 2;
             var observationPhase = 5;
 
-            new MutationApplier().HeavyTail(1, 20, 1.5);
-            new MutationApplier().HeavyTail(5, 20, 1.5);
-            new MutationApplier().HeavyTail(10, 20, 1.5);
-            
             var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
                     Lambda = (int) (3 * Math.Log(geneCount)),
+                    // Always 1
                     Mu = 1,
                 })
                 .UsingBasicStatistics()
@@ -51,6 +45,7 @@ namespace EvolutionaryAlgorithm
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
                     Lambda = (int) (3 * Math.Log(geneCount)),
+                    // Always 1
                     Mu = 1,
                 })
                 .UsingStagnationStatistics()
@@ -63,7 +58,9 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
+                    // Always 1
                     Lambda = 1,
+                    // Always 1
                     Mu = 1,
                 })
                 .UsingBasicStatistics()
@@ -77,7 +74,9 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     MutationRate = mutationRate,
-                    Lambda = (int) (3 * Math.Log(geneCount)),
+                    // Self-adapting, initial 1
+                    Lambda = 1,
+                    // Always 1
                     Mu = 1,
                 })
                 .UsingBasicStatistics()

@@ -27,12 +27,6 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 
         public override void Initialize()
         {
-            // Mu is always 1 for this implementation
-            _parameters.Mu = 1;
-
-            // Self adapting parameter, initializes to 1
-            _parameters.Lambda = 1;
-
             _parameters = Algorithm.Parameters;
             _statistics = Algorithm.Statistics;
 

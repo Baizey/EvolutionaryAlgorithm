@@ -11,7 +11,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation.sd
         {
             Mutator = new BitMutator<IEndogenousBitIndividual>()
                 .ThenApply(new CloneParent<IEndogenousBitIndividual, BitArray, bool>(
-                    new FirstParentSelector<IEndogenousBitIndividual, BitArray, bool>()))
+                    new FirstParentSelector<IEndogenousBitIndividual>()))
                 .ThenApply(new StagnationDetectionMutation());
             Filter = new BitElitismGenerationFilter<IEndogenousBitIndividual>(false);
         }

@@ -3,10 +3,7 @@ using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Statistics;
-using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Endogenous;
-using EvolutionaryAlgorithm.Template.OneLambdaLambda;
-using EvolutionaryAlgorithm.Template.Stagnation;
 
 namespace EvolutionaryAlgorithm.Template
 {

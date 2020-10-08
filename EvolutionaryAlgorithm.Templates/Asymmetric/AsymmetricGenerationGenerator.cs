@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using EvolutionaryAlgorithm.BitImplementation;
+﻿using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
@@ -10,7 +9,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         public AsymmetricGenerationGenerator(int learningRate, int observationPhase)
         {
             Mutator = new BitMutator<IBitIndividual>()
-                .CloneGenesFrom(new FirstParentSelector<IBitIndividual, BitArray, bool>())
+                .CloneGenesFrom(new FirstParentSelector<IBitIndividual>())
                 .ThenApply(new AsymmetricMutation(learningRate, observationPhase));
             Filter = new BitElitismGenerationFilter<IBitIndividual>(true);
         }

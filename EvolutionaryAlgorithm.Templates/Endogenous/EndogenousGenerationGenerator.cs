@@ -15,7 +15,7 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
         public EndogenousGenerationGenerator(int learningRate)
         {
             Mutator = new Mutator<IEndogenousBitIndividual, BitArray, bool>()
-                .CloneGenesFrom(new FirstParentSelector<IEndogenousBitIndividual, BitArray, bool>())
+                .CloneGenesFrom(new FirstParentSelector<IEndogenousBitIndividual>())
                 .ThenApply(new EndogenousMutation(learningRate));
             Filter = new EndogenousGenerationFilter();
             _learningRate = learningRate;

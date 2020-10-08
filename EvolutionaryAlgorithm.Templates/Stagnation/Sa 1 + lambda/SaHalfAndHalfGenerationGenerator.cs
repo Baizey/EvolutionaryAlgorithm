@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using EvolutionaryAlgorithm.BitImplementation;
+﻿using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
@@ -10,7 +9,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
         public SaHalfAndHalfGenerationGenerator()
         {
             Mutator = new BitMutator<IEndogenousBitIndividual>()
-                .CloneGenesFrom(new FirstParentSelector<IEndogenousBitIndividual, BitArray, bool>())
+                .CloneGenesFrom(new FirstParentSelector<IEndogenousBitIndividual>())
                 .ThenApply(new SaHalfAndHalfMutation());
             Filter = new SaHalfAndHalfGenerationFilter();
         }

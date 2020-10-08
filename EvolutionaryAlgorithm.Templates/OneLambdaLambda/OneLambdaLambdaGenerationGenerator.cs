@@ -20,7 +20,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
             _growthRate = Math.Pow(learningRate, 0.25D);
 
             Mutator = new BitMutator<IBitIndividual>()
-                .CloneGenesFrom(new FirstParentSelector<IBitIndividual, BitArray, bool>())
+                .CloneGenesFrom(new FirstParentSelector<IBitIndividual>())
                 .ThenApply(new CrossoverPhase());
             Filter = new BitElitismGenerationFilter<IBitIndividual>(true);
         }

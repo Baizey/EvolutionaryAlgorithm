@@ -1,17 +1,13 @@
-﻿using System;
+﻿using System.Collections;
+using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Selector;
-using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
 {
     public class
-        FirstParentSelector<TIndividual, TGeneStructure, TGene> : ISingleParentSelector<TIndividual, TGeneStructure,
-            TGene>
-        where TIndividual : IIndividual<TGeneStructure, TGene>
-        where TGeneStructure : ICloneable
+        FirstParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
     {
-        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<T, BitArray, bool> Algorithm { get; set; }
 
         public void Initialize()
         {
@@ -21,7 +17,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
         {
         }
 
-        public TIndividual Select(int index) =>
+        public T Select(int index) =>
             Algorithm.Population[0];
     }
 }

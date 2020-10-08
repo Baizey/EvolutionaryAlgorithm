@@ -2,7 +2,6 @@
 using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
-using EvolutionaryAlgorithm.Core.Fitness;
 
 namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 {

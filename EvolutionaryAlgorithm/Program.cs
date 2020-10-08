@@ -22,7 +22,7 @@ namespace EvolutionaryAlgorithm
             const int learningRate = 2;
             const int observationPhase = 5;
             const double beta = 1.5;
-            
+
             var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {
@@ -97,8 +97,7 @@ namespace EvolutionaryAlgorithm
                 .UsingHeuristic(new HeavyTailGenerationGenerator(beta))
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
 
-
-            // TODO: 5'th algorithm
+            // TODO: 6'th algorithm (lambda + lambda) Endogenous
 
             var algorithm = stagnation;
 

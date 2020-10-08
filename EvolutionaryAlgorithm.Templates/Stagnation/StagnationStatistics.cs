@@ -19,7 +19,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
         {
             var a = (StagnationDetectionHyperHeuristic) Algorithm.HyperHeuristic;
             return
-                $"Runtime: {(DateTime.Now - StartTime).TotalSeconds} seconds, Generations: {Generations}, Fitness: {Algorithm.Best.Fitness}, MutationRate: {Algorithm.Parameters.MutationRate}, Stagnation: {a.InStagnationDetection}, Progress: {100 * a.At / a.Limit:N2}% ({a.At} of {a.Limit})";
+                $"Runtime: {(DateTime.Now - StartTime).TotalSeconds} seconds, Generations: {Generations}, Fitness: {Algorithm.Best.Fitness}, MutationRate: {Algorithm.Parameters.MutationRate}, In stagnation: {a.InStagnationDetection}, Progress: {100 * a.At / a.Limit:N2}% ({a.At} of {a.Limit})";
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
@@ -27,6 +28,7 @@ namespace EvolutionaryAlgorithm
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
+                    // Self adapting
                     MutationRate = mutationRate,
                     // Constant, based on gene count
                     Lambda = (int) (3 * Math.Log(geneCount)),
@@ -37,11 +39,13 @@ namespace EvolutionaryAlgorithm
                 .UsingEndogenousRandomPopulation(mutationRate)
                 .UsingHeuristic(new EndogenousGenerationGenerator(learningRate))
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+            endogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
             var stagnation = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
+                    // Self adapting
                     MutationRate = mutationRate,
                     // Constant, based on gene count
                     Lambda = (int) (3 * Math.Log(geneCount)),
@@ -52,11 +56,13 @@ namespace EvolutionaryAlgorithm
                 .UsingEndogenousRandomPopulation(learningRate)
                 .UsingHeuristic(new StagnationDetectionHyperHeuristic(mutationRate))
                 .UsingEvaluation(new JumpFitness<IEndogenousBitIndividual>(5));
+            stagnation.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
             var asymmetric = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
+                    // Self adapting, based on learning rate
                     MutationRate = mutationRate,
                     // Always 1
                     Lambda = 1,
@@ -67,12 +73,14 @@ namespace EvolutionaryAlgorithm
                 .UsingRandomPopulation()
                 .UsingHeuristic(new AsymmetricGenerationGenerator(learningRate, observationPhase))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
+            asymmetric.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
             // TODO: Missing mutation implementation
             var oneLambdaLambda = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
+                    // Constant
                     MutationRate = mutationRate,
                     // Self-adapting, initial 1
                     Lambda = 1,
@@ -83,14 +91,16 @@ namespace EvolutionaryAlgorithm
                 .UsingRandomPopulation()
                 .UsingHeuristic(new OneLambdaLambdaGenerationGenerator(learningRate))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
+            oneLambdaLambda.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
             var heavyTail = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
+                    // Self adapting
                     MutationRate = mutationRate,
-                    // Self-adapting, initial 1
-                    Lambda = 1,
+                    // Constant
+                    Lambda = (int) (3 * Math.Log(geneCount)),
                     // Always 1
                     Mu = 1,
                 })
@@ -98,14 +108,18 @@ namespace EvolutionaryAlgorithm
                 .UsingEndogenousRandomPopulation(mutationRate)
                 .UsingHeuristic(new HeavyTailGenerationGenerator(beta))
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+            heavyTail.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
             // TODO: 6'th algorithm (lambda + lambda) Endogenous
 
-            var algorithm = stagnation;
+            await Run(stagnation);
+        }
 
-            algorithm.OnGenerationProgress = algo => Console.WriteLine(algorithm.Statistics);
-
-            await algorithm.Evolve(a => a.Statistics.Best.Fitness >= geneCount);
+        private static async Task Run<T>(IEvolutionaryAlgorithm<T, BitArray, bool> algorithm)
+            where T : IBitIndividual
+        {
+            var n = algorithm.Parameters.GeneCount;
+            await algorithm.Evolve(() => algorithm.Statistics.Best.Fitness >= n);
             Console.WriteLine(algorithm.Statistics);
         }
     }

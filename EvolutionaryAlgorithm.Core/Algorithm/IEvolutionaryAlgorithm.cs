@@ -30,5 +30,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
         public Task Evolve(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, bool> termination) =>
             Evolve(new LambdaTermination<TIndividual, TGeneStructure, TGene>(termination));
+
+        public Task Evolve(Func<bool> termination) =>
+            Evolve(new LambdaTermination<TIndividual, TGeneStructure, TGene>(_ => termination.Invoke()));
     }
 }

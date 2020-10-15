@@ -121,7 +121,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
             }
         }
 
-        private void MutatePart(IBitIndividual individual, IReadOnlyList<int> lookup, double p)
+        public void MutatePart(IBitIndividual individual, IReadOnlyList<int> lookup, double p)
         {
             var n = lookup.Count;
             var roll = _random.NextDouble();

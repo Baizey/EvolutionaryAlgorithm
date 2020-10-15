@@ -14,14 +14,14 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
         private readonly double _shrinkRate, _growthRate;
 
-        public OneLambdaLambdaGenerationGenerator(int learningRate)
+        public OneLambdaLambdaGenerationGenerator(int learningRate, double c)
         {
             _shrinkRate = learningRate;
             _growthRate = Math.Pow(learningRate, 0.25D);
 
             Mutator = new BitMutator<IBitIndividual>()
                 .CloneGenesFrom(new FirstParentSelector<IBitIndividual>())
-                .ThenApply(new CrossoverPhase());
+                .ThenApply(new CrossoverPhase(c));
             Filter = new BitElitismGenerationFilter<IBitIndividual>(true);
         }
 

@@ -20,9 +20,13 @@ namespace EvolutionaryAlgorithm
         {
             const int geneCount = 500;
             const int mutationRate = 2;
+            const int repairRate = 2;
             const int learningRate = 2;
             const int observationPhase = 5;
             const double beta = 1.5;
+
+            var odds = new MutationApplier().CalculateOdds(2, 2);
+            
 
             var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
@@ -89,7 +93,7 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingBasicStatistics()
                 .UsingRandomPopulation()
-                .UsingHeuristic(new OneLambdaLambdaGenerationGenerator(learningRate))
+                .UsingHeuristic(new OneLambdaLambdaGenerationGenerator(learningRate, repairRate))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             oneLambdaLambda.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 

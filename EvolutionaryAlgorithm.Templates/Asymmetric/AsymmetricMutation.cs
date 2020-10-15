@@ -43,7 +43,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
             _parameters = Algorithm.Parameters;
         }
 
-        public async Task Mutate(int index, IBitIndividual child)
+        public void Mutate(int index, IBitIndividual child)
         {
             double zeroRate, oneRate;
             if (_oddGeneration)

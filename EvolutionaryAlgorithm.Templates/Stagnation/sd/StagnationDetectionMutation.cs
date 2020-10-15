@@ -18,7 +18,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation.sd
         {
         }
 
-        public async Task Mutate(int index, IEndogenousBitIndividual child) =>
+        public void Mutate(int index, IEndogenousBitIndividual child) =>
             _applier.Mutate(child, _parameters.MutationRate, Algorithm.Parameters.GeneCount);
     }
 }

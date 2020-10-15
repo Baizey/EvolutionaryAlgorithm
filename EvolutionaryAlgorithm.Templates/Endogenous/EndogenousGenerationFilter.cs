@@ -19,7 +19,7 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
         {
         }
 
-        public async Task<GenerationFilterResult<IEndogenousBitIndividual, BitArray, bool>> Filter(
+        public GenerationFilterResult<IEndogenousBitIndividual, BitArray, bool> Filter(
             List<IEndogenousBitIndividual> bodies)
         {
             var oldRate = Algorithm.Population[0].MutationRate;

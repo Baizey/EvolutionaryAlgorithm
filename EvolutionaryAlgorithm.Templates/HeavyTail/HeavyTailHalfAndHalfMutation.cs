@@ -43,7 +43,7 @@ namespace EvolutionaryAlgorithm.Template.HeavyTail
             _upperP = _applier.HeavyTail(_upperTail, _n, _beta);
         }
 
-        public async Task Mutate(int index, IEndogenousBitIndividual child)
+        public void Mutate(int index, IEndogenousBitIndividual child)
         {
             if (index < _parameters.Lambda / 2)
             {

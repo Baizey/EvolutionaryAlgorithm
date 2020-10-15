@@ -62,7 +62,7 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Generati
             };
         }
 
-        public async Task<GenerationFilterResult<TIndividual, TGeneStructure, TGene>> Filter(
+        public GenerationFilterResult<TIndividual, TGeneStructure, TGene> Filter(
             List<TIndividual> bodies)
         {
             var keep = Algorithm.Parameters.Mu;

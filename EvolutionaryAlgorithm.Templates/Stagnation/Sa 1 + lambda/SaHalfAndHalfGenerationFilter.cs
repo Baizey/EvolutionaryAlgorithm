@@ -36,7 +36,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
                 _parameters.MutationRate = _y.MutationRate;
         }
 
-        public async Task<GenerationFilterResult<IEndogenousBitIndividual, BitArray, bool>> Filter(
+        public GenerationFilterResult<IEndogenousBitIndividual, BitArray, bool> Filter(
             List<IEndogenousBitIndividual> bodies)
         {
             var index = 0;

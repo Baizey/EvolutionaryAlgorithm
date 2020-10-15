@@ -10,6 +10,6 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        Task Mutate(int index, TIndividual child);
+        void Mutate(int index, TIndividual child);
     }
 }

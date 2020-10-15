@@ -11,6 +11,6 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Generati
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        Task<GenerationFilterResult<TIndividual, TGeneStructure, TGene>> Filter(List<TIndividual> bodies);
+        GenerationFilterResult<TIndividual, TGeneStructure, TGene> Filter(List<TIndividual> bodies);
     }
 }

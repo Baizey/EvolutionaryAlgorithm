@@ -41,7 +41,7 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator
 
             bodies.ForEach(b => b.Fitness = Algorithm.Fitness.Evaluate(b));
 
-            var result = await Filter.Filter(bodies);
+            var result = Filter.Filter(bodies);
             _storage.Dump(0, result.Discarded);
             return result.NextGeneration;
         }

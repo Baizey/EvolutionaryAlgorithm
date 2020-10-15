@@ -18,6 +18,6 @@ namespace EvolutionaryAlgorithm.Template.Basics.Mutation
         {
         }
 
-        public async Task Mutate(int index, T child) => _applier.Mutate(child, 1, _geneCount);
+        public void Mutate(int index, T child) => _applier.Mutate(child, 1, _geneCount);
     }
 }

@@ -24,7 +24,7 @@ namespace EvolutionaryAlgorithm.Template.Stagnation
         {
         }
 
-        public async Task Mutate(int index, IEndogenousBitIndividual child)
+        public void Mutate(int index, IEndogenousBitIndividual child)
         {
             // Create x_i by flipping each bit in a copy of x independently with probability [r / 2n] if [i ≤ λ/2] and with probability [2r / n] otherwise.
             if (index < _parameters.Lambda / 2)

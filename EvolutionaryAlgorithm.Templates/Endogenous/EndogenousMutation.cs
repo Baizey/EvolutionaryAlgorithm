@@ -24,14 +24,13 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
         {
         }
 
-        public Task Mutate(int index, IEndogenousBitIndividual child)
+        public void Mutate(int index, IEndogenousBitIndividual child)
         {
             if (_random.NextDouble() >= 0.5)
                 child.MutationRate /= _learningRate;
             else
                 child.MutationRate *= _learningRate;
             _applier.Mutate(child, child.MutationRate, _geneCount);
-            return Task.CompletedTask;
         }
     }
 }

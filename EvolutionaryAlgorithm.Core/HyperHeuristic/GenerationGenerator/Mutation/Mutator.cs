@@ -39,7 +39,7 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
             {
                 newIndividuals[i].Reset();
                 foreach (var t in Mutations)
-                    await t.Mutate(i, newIndividuals[i]);
+                     t.Mutate(i, newIndividuals[i]);
             });
         }
     }

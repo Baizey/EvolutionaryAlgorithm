@@ -25,9 +25,9 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
 
         public virtual void Update() => ParentSelector.Update();
 
-        public abstract Task Crossover(int index, TIndividual child, TIndividual parent);
-
-        public async Task Mutate(int index, TIndividual child) =>
-            await Crossover(index, child, ParentSelector.Select(index));
+        public abstract void Crossover(int index, TIndividual child, TIndividual parent);
+        
+        public void Mutate(int index, TIndividual child) => 
+            Crossover(index, child, ParentSelector.Select(index));
     }
 }

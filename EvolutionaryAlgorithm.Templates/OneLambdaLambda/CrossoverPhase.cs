@@ -34,7 +34,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
             _xMark = _mutationPhase.Select(0);
         }
 
-        public async Task Mutate(int index, IBitIndividual y)
+        public void Mutate(int index, IBitIndividual y)
         {
             var lookup = new List<int>();
             for (var i = 0; i < _geneCount; i++)

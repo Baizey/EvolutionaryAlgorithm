@@ -24,10 +24,7 @@ namespace EvolutionaryAlgorithm
             const int learningRate = 2;
             const int observationPhase = 5;
             const double beta = 1.5;
-
-            var odds = new MutationApplier().CalculateOdds(2, 2);
             
-
             var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {

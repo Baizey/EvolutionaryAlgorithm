@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Dasync.Collections;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Population;
 
@@ -33,14 +31,16 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
             return this;
         }
 
-        public virtual async Task Mutate(List<TIndividual> newIndividuals)
+        public virtual Task Mutate(List<TIndividual> newIndividuals)
         {
-            await Enumerable.Range(0, newIndividuals.Count).ParallelForEachAsync(async i =>
+            for (var i = 0; i < newIndividuals.Count; i++)
             {
                 newIndividuals[i].Reset();
                 foreach (var t in Mutations)
-                     t.Mutate(i, newIndividuals[i]);
-            });
+                    t.Mutate(i, newIndividuals[i]);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

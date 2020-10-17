@@ -34,14 +34,13 @@ namespace EvolutionaryAlgorithm.BitImplementation.Templates
         public override void Crossover(TIndividual child, List<TIndividual> parents)
         {
             child.Genes.SetAll(false);
-
+            
             child.Genes.And(_left);
             child.Genes.And(parents[0].Genes);
 
-            _right.And(parents[1].Genes);
-            child.Genes.And(_right);
-
-            _right.And(_left).Not();
+            var clone = (BitArray) _right.Clone();
+            clone.And(parents[1].Genes);
+            child.Genes.And(clone);
         }
     }
 }

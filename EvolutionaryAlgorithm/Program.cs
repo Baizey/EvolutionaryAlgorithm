@@ -77,7 +77,6 @@ namespace EvolutionaryAlgorithm
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             asymmetric.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            // TODO: Missing mutation implementation
             var oneLambdaLambda = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {

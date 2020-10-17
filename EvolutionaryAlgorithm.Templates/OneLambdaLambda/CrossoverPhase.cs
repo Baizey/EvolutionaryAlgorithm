@@ -15,7 +15,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         private IBitIndividual _xMark;
         private IParameters _parameters;
         private int[] _flips;
-        private double _c;
+        private readonly double _c;
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public CrossoverPhase(double repairChance)
@@ -36,8 +36,8 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         private void MutationPhase()
         {
             var x = Algorithm.Population[0];
-            var bodies = _storage.Get(0, _parameters.Lambda);
-            _storage.Dump(0, bodies);
+            var bodies = _storage.Get(-1, _parameters.Lambda);
+            _storage.Dump(-1, bodies);
 
             var mutations = Mutations();
             _flips = new int[mutations];

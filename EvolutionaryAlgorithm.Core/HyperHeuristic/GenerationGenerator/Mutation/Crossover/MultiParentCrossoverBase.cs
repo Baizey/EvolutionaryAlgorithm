@@ -18,13 +18,13 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
         public MultiParentCrossoverBase(IMultiParentSelector<TIndividual, TGeneStructure, TGene> parentsSelector) =>
             ParentsSelector = parentsSelector;
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             ParentsSelector.Initialize();
             ParentsSelector.Algorithm = Algorithm;
         }
 
-        public void Update() => ParentsSelector.Update();
+        public virtual void Update() => ParentsSelector.Update();
 
         public abstract void Crossover(TIndividual child, List<TIndividual> parents);
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Selector;
 using EvolutionaryAlgorithm.Core.Population;
 

@@ -9,6 +9,7 @@ using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
 using EvolutionaryAlgorithm.Template.Endogenous;
 using EvolutionaryAlgorithm.Template.HeavyTail;
+using EvolutionaryAlgorithm.Template.LambdaLambdaEndogenous;
 using EvolutionaryAlgorithm.Template.OneLambdaLambda;
 using EvolutionaryAlgorithm.Template.Stagnation;
 
@@ -24,7 +25,7 @@ namespace EvolutionaryAlgorithm
             const int learningRate = 2;
             const int observationPhase = 5;
             const double beta = 1.5;
-            
+
             var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
                 .UsingParameters(new Parameters
                 {
@@ -111,7 +112,22 @@ namespace EvolutionaryAlgorithm
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
             heavyTail.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            // TODO: 6'th algorithm (lambda + lambda) Endogenous
+            var lambdaEndogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
+                .UsingParameters(new Parameters
+                {
+                    GeneCount = geneCount,
+                    // Self adapting
+                    MutationRate = mutationRate,
+                    // Constant, based on gene count
+                    Lambda = (int) (3 * Math.Log(geneCount)),
+                    // Constant, based on gene count
+                    Mu = (int) (3 * Math.Log(geneCount)),
+                })
+                .UsingBasicStatistics()
+                .UsingEndogenousRandomPopulation(mutationRate)
+                .UsingHeuristic(new LambdaLambdaEndogenousGenerationGenerator(learningRate))
+                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+            lambdaEndogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
             await Run(stagnation);
         }

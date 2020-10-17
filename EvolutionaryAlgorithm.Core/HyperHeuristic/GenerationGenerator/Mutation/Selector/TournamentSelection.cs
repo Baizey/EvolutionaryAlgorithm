@@ -16,13 +16,13 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
 
         public TIndividual Select(int index)
         {
+            var population = Algorithm.Population;
+            var popCount = population.Count;
             TIndividual best = default;
             for (var i = 0; i < _size; i++)
             {
-                var selected = Algorithm.Population[_random.Next(Algorithm.Population.Count)];
-                if (best == null)
-                    best = selected;
-                else if (selected.Fitness > best.Fitness)
+                var selected = population[_random.Next(popCount)];
+                if (best == null || selected.Fitness > best.Fitness)
                     best = selected;
             }
 

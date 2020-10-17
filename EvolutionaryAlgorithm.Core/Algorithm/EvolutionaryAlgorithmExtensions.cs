@@ -92,6 +92,22 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         }
 
         public static IMutator<TIndividual, TGeneStructure, TGene>
+            Crossover<TIndividual, TGeneStructure, TGene>(
+                this IMutator<TIndividual, TGeneStructure, TGene> mutator,
+                MultiParentCrossoverBase<TIndividual, TGeneStructure, TGene> crossover)
+            where TIndividual : IIndividual<TGeneStructure, TGene>
+            where TGeneStructure : ICloneable =>
+            mutator.ThenApply(crossover);
+
+        public static IMutator<TIndividual, TGeneStructure, TGene>
+            Crossover<TIndividual, TGeneStructure, TGene>(
+                this IMutator<TIndividual, TGeneStructure, TGene> mutator,
+                SingleParentCrossoverBase<TIndividual, TGeneStructure, TGene> crossover)
+            where TIndividual : IIndividual<TGeneStructure, TGene>
+            where TGeneStructure : ICloneable =>
+            mutator.ThenApply(crossover);
+
+        public static IMutator<TIndividual, TGeneStructure, TGene>
             CloneGenesFrom<TIndividual, TGeneStructure, TGene>(
                 this IMutator<TIndividual, TGeneStructure, TGene> mutator,
                 ISingleParentSelector<TIndividual, TGeneStructure, TGene> parentSelector)

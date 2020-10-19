@@ -34,7 +34,7 @@ namespace EvolutionaryAlgorithm
                     // Self adapting
                     MutationRate = mutationRate,
                     // Constant, based on gene count
-                    Lambda = (int) (3 * Math.Log(geneCount)),
+                    Lambda = (int) (5 * Math.Log(geneCount)),
                     // Always 1
                     Mu = 1,
                 })
@@ -66,7 +66,7 @@ namespace EvolutionaryAlgorithm
                 {
                     GeneCount = geneCount,
                     // Self adapting, based on learning rate
-                    MutationRate = mutationRate,
+                    MutationRate = 1,
                     // Always 1
                     Lambda = 1,
                     // Always 1
@@ -123,14 +123,14 @@ namespace EvolutionaryAlgorithm
                     // Constant, based on gene count
                     Mu = (int) (3 * Math.Log(geneCount)),
                 })
-                .UsingBasicStatistics()
+                .UsingStatistics(new EndogenousBasicEvolutionaryStatistics())
                 .UsingEndogenousRandomPopulation(mutationRate)
                 .UsingHeuristic(new LambdaLambdaEndogenousGenerationGenerator(learningRate))
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
             lambdaEndogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
             // Tested:
-            //  - Endogenous
+            //  1 Endogenous
             //  1 Stagnation
             //  ? Asymmetric
             //  1 OneLambdaLambda

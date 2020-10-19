@@ -64,28 +64,21 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
 
         public void Update()
         {
-            UpdateObservations();
-            UpdateRates();
-        }
+            if (_statistics.ImprovedFitness)
+                B += _oddGeneration ? 1 : -1;
 
-        private void UpdateObservations()
-        {
-            if (!_statistics.ImprovedFitness) return;
-            B += _oddGeneration ? 1 : -1;
-            _oddGeneration = !_oddGeneration;
-        }
+            if (--ObservationCounter <= 0)
+            {
+                if (B < 0) LowerR0();
+                else if (B > 0) RaiseR0();
+                else if (_random.NextDouble() >= 0.5) LowerR0();
+                else RaiseR0();
 
-        private void UpdateRates()
-        {
-            if (--ObservationCounter != 0) return;
+                ObservationCounter = _observationPhase;
+                B = 0;
+            }
 
-            if (B < 0) LowerR0();
-            else if (B > 0) RaiseR0();
-            else if (_random.NextDouble() >= 0.5) LowerR0();
-            else RaiseR0();
-
-            ObservationCounter = _observationPhase;
-            B = 0;
+            _oddGeneration = (Algorithm.Statistics.Generations & 1L) == 1L;
         }
 
         private void LowerR0()

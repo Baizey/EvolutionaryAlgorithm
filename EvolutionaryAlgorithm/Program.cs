@@ -135,9 +135,9 @@ namespace EvolutionaryAlgorithm
             //  ? Asymmetric
             //  1 OneLambdaLambda
             //  1 HeavyTail
-            //  - lambdaEndogenous
+            //  1 lambdaEndogenous
 
-            await Run(lambdaEndogenous);
+            await Run(asymmetric);
         }
 
         private static async Task Run<T>(IEvolutionaryAlgorithm<T, BitArray, bool> algorithm)

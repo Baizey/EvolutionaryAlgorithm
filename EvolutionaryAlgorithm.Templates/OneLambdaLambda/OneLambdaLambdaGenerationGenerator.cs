@@ -13,6 +13,8 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         private IParameters _parameters;
         private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
         private readonly double _shrinkRate, _growthRate;
+        
+        // Keep a double-lambda so we can keep track of small changes between eventual increases
         private double _actualLambda;
 
         public OneLambdaLambdaGenerationGenerator(int learningRate, double c)

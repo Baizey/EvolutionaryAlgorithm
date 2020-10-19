@@ -13,8 +13,10 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         private readonly int _observationPhase;
         private readonly double _learningRate, _learningCap;
 
-        private int _b, _observationCounter;
-        private double _r0, _r1;
+        public int B { get; private set; }
+        public int ObservationCounter { get; private set; }
+        public double R0 { get; private set; }
+        public double R1 { get; private set; }
 
         private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
         private readonly Random _random = new Random();
@@ -27,14 +29,14 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         public AsymmetricMutation(double learningRate, int observationPhase)
         {
             _observationPhase = observationPhase;
-            _observationCounter = _observationPhase;
+            ObservationCounter = _observationPhase;
 
             _oddGeneration = true;
             _learningRate = learningRate;
             _learningCap = 2 * _learningRate;
-            _r0 = 0.5;
-            _r1 = 1D - _r0;
-            _b = 0;
+            R0 = 0.5;
+            R1 = 1D - R0;
+            B = 0;
         }
 
         public void Initialize()
@@ -48,13 +50,13 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
             double zeroRate, oneRate;
             if (_oddGeneration)
             {
-                zeroRate = _r0 + _learningRate;
-                oneRate = _r1 - _learningRate;
+                zeroRate = R0 + _learningRate;
+                oneRate = R1 - _learningRate;
             }
             else
             {
-                zeroRate = _r0 - _learningRate;
-                oneRate = _r1 + _learningRate;
+                zeroRate = R0 - _learningRate;
+                oneRate = R1 + _learningRate;
             }
 
             _applier.MutateAsymmetric(child, _parameters.MutationRate, zeroRate, oneRate);
@@ -69,33 +71,33 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         private void UpdateObservations()
         {
             if (!_statistics.ImprovedFitness) return;
-            _b += _oddGeneration ? 1 : -1;
+            B += _oddGeneration ? 1 : -1;
             _oddGeneration = !_oddGeneration;
         }
 
         private void UpdateRates()
         {
-            if (--_observationCounter != 0) return;
+            if (--ObservationCounter != 0) return;
 
-            if (_b < 0) LowerR0();
-            else if (_b > 0) RaiseR0();
+            if (B < 0) LowerR0();
+            else if (B > 0) RaiseR0();
             else if (_random.NextDouble() >= 0.5) LowerR0();
             else RaiseR0();
 
-            _observationCounter = _observationPhase;
-            _b = 0;
+            ObservationCounter = _observationPhase;
+            B = 0;
         }
 
         private void LowerR0()
         {
-            _r0 = Math.Max(_r0 - _learningRate, _learningCap);
-            _r1 = 1D - _r0;
+            R0 = Math.Max(R0 - _learningRate, _learningCap);
+            R1 = 1D - R0;
         }
 
         private void RaiseR0()
         {
-            _r1 = Math.Max(_r1 - _learningRate, _learningCap);
-            _r0 = 1D - _r1;
+            R1 = Math.Max(R1 - _learningRate, _learningCap);
+            R0 = 1D - R1;
         }
     }
 }

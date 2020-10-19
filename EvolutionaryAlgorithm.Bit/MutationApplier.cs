@@ -125,7 +125,8 @@ namespace EvolutionaryAlgorithm.BitImplementation
         {
             var n = lookup.Count;
             var roll = _random.NextDouble();
-            foreach (var d in CalculateOdds(p, n))
+            var odds = CalculateOdds(p, n);
+            foreach (var d in odds)
             {
                 if (roll < d) break;
                 roll -= d;

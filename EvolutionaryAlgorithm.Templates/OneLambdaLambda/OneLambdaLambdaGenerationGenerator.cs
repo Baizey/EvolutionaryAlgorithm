@@ -13,6 +13,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         private IParameters _parameters;
         private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
         private readonly double _shrinkRate, _growthRate;
+        private double _actualLambda;
 
         public OneLambdaLambdaGenerationGenerator(int learningRate, double c)
         {
@@ -29,16 +30,16 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         {
             _parameters = Algorithm.Parameters;
             _statistics = Algorithm.Statistics;
-
+            _actualLambda = _parameters.Lambda;
             base.Initialize();
         }
 
         public override void Update()
         {
-            if (_statistics.ImprovedFitness)
-                _parameters.Lambda = (int) Math.Max(_parameters.Lambda / _shrinkRate, 1);
-            else
-                _parameters.Lambda = (int) Math.Min(_parameters.Lambda * _growthRate, _parameters.GeneCount);
+            _actualLambda = _statistics.ImprovedFitness
+                ? Math.Max(_actualLambda / _shrinkRate, 1)
+                : Math.Min(_actualLambda * _growthRate, _parameters.GeneCount);
+            _parameters.Lambda = (int) _actualLambda;
             base.Update();
         }
     }

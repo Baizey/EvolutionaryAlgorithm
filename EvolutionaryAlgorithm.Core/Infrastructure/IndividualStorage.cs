@@ -38,19 +38,22 @@ namespace EvolutionaryAlgorithm.Core.Infrastructure
 
         public List<TIndividual> Get(int key, int amount)
         {
+            if (amount < 1)
+            {
+                Console.WriteLine(1);
+            }
+
             Refill(key, amount);
-            if (_reserves[key].Count == amount)
+            var reserves = _reserves[key];
+            if (reserves.Count == amount)
             {
-                var used = _reserves[key];
                 _reserves.Remove(key);
-                return used;
+                return reserves;
             }
-            else
-            {
-                var used = _reserves[key].GetRange(0, amount);
-                _reserves[key] = _reserves[key].GetRange(amount, _reserves.Count - amount);
-                return used;
-            }
+
+            var used = reserves.GetRange(0, amount);
+            _reserves[key] = reserves.GetRange(amount, reserves.Count - amount);
+            return used;
         }
 
         public void Dump(int key, List<TIndividual> bodies)

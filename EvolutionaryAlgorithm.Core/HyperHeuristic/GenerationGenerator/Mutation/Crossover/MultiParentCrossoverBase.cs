@@ -20,8 +20,8 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
 
         public virtual void Initialize()
         {
-            ParentsSelector.Initialize();
             ParentsSelector.Algorithm = Algorithm;
+            ParentsSelector.Initialize();
         }
 
         public virtual void Update() => ParentsSelector.Update();

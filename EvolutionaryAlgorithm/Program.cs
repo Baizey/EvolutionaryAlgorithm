@@ -72,9 +72,9 @@ namespace EvolutionaryAlgorithm
                     // Always 1
                     Mu = 1,
                 })
-                .UsingBasicStatistics()
                 .UsingRandomPopulation()
-                .UsingHeuristic(new AsymmetricGenerationGenerator(learningRate, observationPhase))
+                .UsingStatistics(new AsymmetricBasicEvolutionaryStatistics<IBitIndividual>())
+                .UsingHeuristic(new AsymmetricGenerationGenerator(0.05, observationPhase))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             asymmetric.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
@@ -129,7 +129,15 @@ namespace EvolutionaryAlgorithm
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
             lambdaEndogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            await Run(oneLambdaLambda);
+            // Tested:
+            //  - Endogenous
+            //  1 Stagnation
+            //  ? Asymmetric
+            //  1 OneLambdaLambda
+            //  1 HeavyTail
+            //    lambdaEndogenous
+
+            await Run(lambdaEndogenous);
         }
 
         private static async Task Run<T>(IEvolutionaryAlgorithm<T, BitArray, bool> algorithm)

@@ -26,11 +26,14 @@ namespace EvolutionaryAlgorithm.Core.Infrastructure
 
         private void Refill(int key, int amount)
         {
-            if (!_reserves.ContainsKey(key))
-                _reserves[key] = new List<TIndividual>(amount);
-            var missing = amount - _reserves[key].Count;
+            var reserves = _reserves.TryGetValue(key, out var list)
+                ? list
+                : new List<TIndividual>(amount);
+
+            var missing = amount - reserves.Count;
             for (var i = 0; i < missing; i++)
-                _reserves[key].Add((TIndividual) _example.Clone());
+                reserves.Add((TIndividual) _example.Clone());
+            _reserves[key] = reserves;
         }
 
         public List<TIndividual> Get(int key, int amount)
@@ -39,7 +42,7 @@ namespace EvolutionaryAlgorithm.Core.Infrastructure
             if (_reserves[key].Count == amount)
             {
                 var used = _reserves[key];
-                _reserves[key] = null;
+                _reserves.Remove(key);
                 return used;
             }
             else
@@ -52,10 +55,10 @@ namespace EvolutionaryAlgorithm.Core.Infrastructure
 
         public void Dump(int key, List<TIndividual> bodies)
         {
-            if (_reserves[key] == null)
-                _reserves[key] = bodies;
-            else
+            if (_reserves.ContainsKey(key))
                 _reserves[key].AddRange(bodies);
+            else
+                _reserves[key] = bodies;
         }
     }
 }

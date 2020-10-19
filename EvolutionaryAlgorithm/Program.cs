@@ -24,7 +24,7 @@ namespace EvolutionaryAlgorithm
             const int mutationRate = 2;
             const int repairRate = 2;
             const int learningRate = 2;
-            const int observationPhase = 5;
+            const int observationPhase = 1000;
             const double beta = 1.5;
 
             var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
@@ -74,7 +74,7 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingRandomPopulation()
                 .UsingStatistics(new AsymmetricBasicEvolutionaryStatistics<IBitIndividual>())
-                .UsingHeuristic(new AsymmetricGenerationGenerator(0.05, observationPhase))
+                .UsingHeuristic(new AsymmetricGenerationGenerator(0.02, observationPhase))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             asymmetric.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
@@ -135,7 +135,7 @@ namespace EvolutionaryAlgorithm
             //  ? Asymmetric
             //  1 OneLambdaLambda
             //  1 HeavyTail
-            //    lambdaEndogenous
+            //  - lambdaEndogenous
 
             await Run(lambdaEndogenous);
         }

@@ -38,11 +38,6 @@ namespace EvolutionaryAlgorithm.Core.Infrastructure
 
         public List<TIndividual> Get(int key, int amount)
         {
-            if (amount < 1)
-            {
-                Console.WriteLine(1);
-            }
-
             Refill(key, amount);
             var reserves = _reserves[key];
             if (reserves.Count == amount)

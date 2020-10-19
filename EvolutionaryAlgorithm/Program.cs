@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Parameters;
+using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
@@ -57,7 +58,7 @@ namespace EvolutionaryAlgorithm
                 .UsingStagnationStatistics()
                 .UsingEndogenousRandomPopulation(learningRate)
                 .UsingHeuristic(new StagnationDetectionHyperHeuristic(mutationRate))
-                .UsingEvaluation(new JumpFitness<IEndogenousBitIndividual>(5));
+                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
             stagnation.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
             var asymmetric = new BitEvolutionaryAlgorithm<IBitIndividual>()
@@ -128,14 +129,14 @@ namespace EvolutionaryAlgorithm
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
             lambdaEndogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            await Run(stagnation);
+            await Run(oneLambdaLambda);
         }
 
         private static async Task Run<T>(IEvolutionaryAlgorithm<T, BitArray, bool> algorithm)
             where T : IBitIndividual
         {
-            var n = algorithm.Parameters.GeneCount;
-            await algorithm.Evolve(() => algorithm.Statistics.Best.Fitness >= n);
+            //await algorithm.Evolve(new TimeoutTermination<T, BitArray, bool>(TimeSpan.FromSeconds(1)));
+            await algorithm.Evolve(new FitnessTermination<T, BitArray, bool>(algorithm.Parameters.GeneCount));
             Console.WriteLine(algorithm.Statistics);
         }
     }

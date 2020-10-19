@@ -6,7 +6,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
 {
     public class AsymmetricGenerationGenerator : BitGenerationGenerator<IBitIndividual>
     {
-        public AsymmetricGenerationGenerator(int learningRate, int observationPhase)
+        public AsymmetricGenerationGenerator(double learningRate, int observationPhase)
         {
             Mutator = new BitMutator<IBitIndividual>()
                 .CloneGenesFrom(new FirstParentSelector<IBitIndividual>())

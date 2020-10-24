@@ -130,7 +130,9 @@ namespace EvolutionaryAlgorithm.BitImplementation
             {
                 if (roll < d) break;
                 roll -= d;
-                individual.Flip(lookup[_random.Next(n)]);
+                var r = _random.Next(n);
+                var index = lookup[r];
+                individual.Flip(index);
             }
         }
 

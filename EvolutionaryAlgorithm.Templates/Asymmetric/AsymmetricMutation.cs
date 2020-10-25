@@ -8,7 +8,7 @@ using EvolutionaryAlgorithm.Core.Statistics;
 
 namespace EvolutionaryAlgorithm.Template.Asymmetric
 {
-    public class AsymmetricMutation : IBitMutation<IBitIndividual>
+    public class AsymmetricMutation : IBitMutation<IEndogenousBitIndividual>
     {
         private readonly int _observationPhase;
         private readonly double _learningRate, _learningCap;
@@ -18,13 +18,13 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         public double R0 { get; private set; }
         public double R1 { get; private set; }
 
-        private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
+        private IEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool> _statistics;
         private readonly Random _random = new Random();
         private bool _oddGeneration;
         private readonly MutationApplier _applier = new MutationApplier();
         private IParameters _parameters;
 
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public AsymmetricMutation(double learningRate, int observationPhase)
         {
@@ -45,7 +45,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
             _parameters = Algorithm.Parameters;
         }
 
-        public void Mutate(int index, IBitIndividual child)
+        public void Mutate(int index, IEndogenousBitIndividual child)
         {
             double zeroRate, oneRate;
             if (_oddGeneration)

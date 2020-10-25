@@ -7,16 +7,16 @@ using EvolutionaryAlgorithm.Core.Parameters;
 
 namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 {
-    public class CrossoverPhase : IBitMutation<IBitIndividual>
+    public class CrossoverPhase : IBitMutation<IEndogenousBitIndividual>
     {
         private readonly Random _random = new Random();
-        private IndividualStorage<IBitIndividual, BitArray, bool> _storage;
+        private IndividualStorage<IEndogenousBitIndividual, BitArray, bool> _storage;
         private readonly MutationApplier _applier = new MutationApplier();
-        private IBitIndividual _xMark;
+        private IEndogenousBitIndividual _xMark;
         private IParameters _parameters;
         private int[] _flips;
         private readonly double _c;
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public CrossoverPhase(double repairChance)
         {
@@ -66,7 +66,7 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         public void Initialize()
         {
             _parameters = Algorithm.Parameters;
-            _storage = new IndividualStorage<IBitIndividual, BitArray, bool>(Algorithm);
+            _storage = new IndividualStorage<IEndogenousBitIndividual, BitArray, bool>(Algorithm);
             _xMark = _storage.Get(-1, 1)[0];
             _flips = new int[0];
             MutationPhase();
@@ -74,6 +74,6 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 
         public void Update() => MutationPhase();
 
-        public void Mutate(int index, IBitIndividual y) => _applier.MutatePart(y, _flips, _c);
+        public void Mutate(int index, IEndogenousBitIndividual y) => _applier.MutatePart(y, _flips, _c);
     }
 }

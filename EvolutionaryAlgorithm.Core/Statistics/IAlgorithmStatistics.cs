@@ -5,7 +5,7 @@ using EvolutionaryAlgorithm.Core.Population;
 namespace EvolutionaryAlgorithm.Core.Statistics
 {
     public interface IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
-        : IEvolutionary<TIndividual, TGeneStructure, TGene>
+        : IEvolutionary<TIndividual, TGeneStructure, TGene>, ICloneable
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {

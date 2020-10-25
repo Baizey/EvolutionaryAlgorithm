@@ -5,8 +5,7 @@ using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.Core.Statistics
 {
-
-    public class History<T> where T : ICloneable, ICopyTo<T>
+    public class History<T> : ICloneable where T : ICloneable, ICopyTo<T>
     {
         private readonly int _maxDataPoints;
         private int _counter;
@@ -36,6 +35,17 @@ namespace EvolutionaryAlgorithm.Core.Statistics
             StepSize = 1;
         }
 
+        private History(History<T> other)
+        {
+            _maxDataPoints = other._maxDataPoints;
+            Count = other.Count;
+            StepSize = other.StepSize;
+            _counter = other._counter;
+            _items = new T[other._items.Length];
+            for (var i = 0; i < _items.Length; i++)
+                _items[i] = (T) other._items[i].Clone();
+        }
+
         private bool Resize()
         {
             if (Count < _maxDataPoints) return false;
@@ -52,6 +62,11 @@ namespace EvolutionaryAlgorithm.Core.Statistics
             if (Resize()) return;
             _counter = 0;
             item.CopyTo(_items[Count++]);
+        }
+
+        public object Clone()
+        {
+            return new History<T>(this);
         }
     }
 
@@ -79,6 +94,13 @@ namespace EvolutionaryAlgorithm.Core.Statistics
             _maxDataPoints = maxDataPoints;
         }
 
+        private UiEvolutionaryStatistics(IUiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> other)
+            : base(other)
+        {
+            GeneHistory = (History<TIndividual>) other.GeneHistory?.Clone();
+            ParameterHistory = (History<IParameters>) other.ParameterHistory?.Clone();
+        }
+
         public override void Initialize()
         {
             base.Initialize();
@@ -91,6 +113,11 @@ namespace EvolutionaryAlgorithm.Core.Statistics
             base.Update();
             GeneHistory.Add(Algorithm.Best);
             ParameterHistory.Add(Algorithm.Parameters);
+        }
+
+        public override object Clone()
+        {
+            return new UiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>(this);
         }
     }
 }

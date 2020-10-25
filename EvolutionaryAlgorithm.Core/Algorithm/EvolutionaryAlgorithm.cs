@@ -15,14 +15,18 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        private CancellationTokenSource _cancellationTokenSource;
-        public void Terminate() => _cancellationTokenSource.Cancel();
+        public void Terminate()
+        {
+        }
+
         public IParameters Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
         public IHyperHeuristic<TIndividual, TGeneStructure, TGene> HyperHeuristic { get; set; }
         public IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> Statistics { get; set; }
+        public Action<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>> OnInitialization { get; set; }
         public Action<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>> OnGenerationProgress { get; set; }
+        public Action<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>> OnTermination { get; set; }
         public bool IsInitialized { get; set; }
 
         private void ArgumentValidation()
@@ -60,7 +64,10 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
             Statistics.Initialize();
             HyperHeuristic.Initialize();
 
+            OnInitialization ??= _ => { };
             OnGenerationProgress ??= _ => { };
+            OnTermination ??= _ => { };
+            OnInitialization(this);
             OnGenerationProgress(this);
         }
 
@@ -75,7 +82,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public async Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination)
         {
             termination.Algorithm = this;
-            var token = (_cancellationTokenSource = new CancellationTokenSource()).Token;
             if (!IsInitialized) Initialize();
 
             while (!termination.ShouldTerminate())
@@ -83,12 +89,10 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
                 await EvolveOneGeneration();
                 Update();
                 OnGenerationProgress(this);
-                if (!token.IsCancellationRequested) continue;
-                Statistics.Finish();
-                return;
             }
 
             Statistics.Finish();
+            OnTermination(this);
         }
     }
 }

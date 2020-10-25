@@ -9,6 +9,21 @@ namespace EvolutionaryAlgorithm.Core.Statistics
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public BasicEvolutionaryStatistics()
+        {
+        }
+
+        public BasicEvolutionaryStatistics(IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> other)
+        {
+            StartTime = other.StartTime;
+            EndTime = other.EndTime;
+            Best = (TIndividual) other.Best?.Clone();
+            Current = (TIndividual) other.Current?.Clone();
+            Previous = (TIndividual) other.Previous?.Clone();
+            StagnantGeneration = other.StagnantGeneration;
+            Generations = other.Generations;
+        }
+
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
 
         public DateTime StartTime { get; private set; }
@@ -49,5 +64,7 @@ namespace EvolutionaryAlgorithm.Core.Statistics
 
         public override string ToString() =>
             $"Runtime: {(DateTime.Now - StartTime).TotalSeconds} seconds, Generations: {Generations}, Fitness: {Best.Fitness}";
+
+        public virtual object Clone() => new BasicEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>(this);
     }
 }

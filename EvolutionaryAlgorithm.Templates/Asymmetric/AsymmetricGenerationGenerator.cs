@@ -4,14 +4,14 @@ using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
 namespace EvolutionaryAlgorithm.Template.Asymmetric
 {
-    public class AsymmetricGenerationGenerator : BitGenerationGenerator<IBitIndividual>
+    public class AsymmetricGenerationGenerator : BitGenerationGenerator<IEndogenousBitIndividual>
     {
         public AsymmetricGenerationGenerator(double learningRate, int observationPhase)
         {
-            Mutator = new BitMutator<IBitIndividual>()
-                .CloneGenesFrom(new FirstParentSelector<IBitIndividual>())
+            Mutator = new BitMutator<IEndogenousBitIndividual>()
+                .CloneGenesFrom(new FirstParentSelector<IEndogenousBitIndividual>())
                 .ThenApply(new AsymmetricMutation(learningRate, observationPhase));
-            Filter = new BitElitismGenerationFilter<IBitIndividual>(true);
+            Filter = new BitElitismGenerationFilter<IEndogenousBitIndividual>(true);
         }
     }
 }

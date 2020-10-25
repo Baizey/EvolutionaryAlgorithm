@@ -8,10 +8,10 @@ using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
 namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 {
-    public class OneLambdaLambdaGenerationGenerator : BitGenerationGenerator<IBitIndividual>
+    public class OneLambdaLambdaGenerationGenerator : BitGenerationGenerator<IEndogenousBitIndividual>
     {
         private IParameters _parameters;
-        private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
+        private IEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool> _statistics;
         private readonly double _shrinkRate, _growthRate;
         
         // Keep a double-lambda so we can keep track of small changes between eventual increases
@@ -22,10 +22,10 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
             _shrinkRate = learningRate;
             _growthRate = Math.Pow(learningRate, 0.25D);
 
-            Mutator = new BitMutator<IBitIndividual>()
-                .CloneGenesFrom(new FirstParentSelector<IBitIndividual>())
+            Mutator = new BitMutator<IEndogenousBitIndividual>()
+                .CloneGenesFrom(new FirstParentSelector<IEndogenousBitIndividual>())
                 .ThenApply(new CrossoverPhase(c));
-            Filter = new BitElitismGenerationFilter<IBitIndividual>(true);
+            Filter = new BitElitismGenerationFilter<IEndogenousBitIndividual>(true);
         }
 
         public override void Initialize()

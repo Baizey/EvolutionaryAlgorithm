@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Core.Fitness;
 using EvolutionaryAlgorithm.Core.HyperHeuristic;
@@ -16,6 +17,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public void Terminate();
+        public bool IsRunning { get; }
         public IParameters Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IHyperHeuristic<TIndividual, TGeneStructure, TGene> HyperHeuristic { get; set; }
@@ -26,12 +28,14 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public TIndividual Best => Population.Best;
         public bool IsInitialized { get; set; }
         public Task EvolveOneGeneration();
-        public Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination);
+        public Task EvolveAsync(ITermination<TIndividual, TGeneStructure, TGene> termination);
+        public Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination, CancellationToken token);
 
-        public Task Evolve(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, bool> termination) =>
-            Evolve(new LambdaTermination<TIndividual, TGeneStructure, TGene>(termination));
+        public Task Evolve(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, bool> termination,
+            CancellationToken token) =>
+            Evolve(new LambdaTermination<TIndividual, TGeneStructure, TGene>(termination), token);
 
-        public Task Evolve(Func<bool> termination) =>
-            Evolve(new LambdaTermination<TIndividual, TGeneStructure, TGene>(_ => termination.Invoke()));
+        public Task Evolve(Func<bool> termination, CancellationToken token) =>
+            Evolve(new LambdaTermination<TIndividual, TGeneStructure, TGene>(_ => termination.Invoke()), token);
     }
 }

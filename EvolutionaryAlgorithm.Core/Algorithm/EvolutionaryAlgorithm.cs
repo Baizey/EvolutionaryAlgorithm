@@ -15,10 +15,11 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public void Terminate()
-        {
-        }
+        private CancellationTokenSource _cancellationSource;
 
+        public void Terminate() => _cancellationSource.Cancel();
+
+        public bool IsRunning { get; private set; }
         public IParameters Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
@@ -79,8 +80,17 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
         public async Task EvolveOneGeneration() => Population.Individuals = await HyperHeuristic.Generate();
 
-        public async Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination)
+        public Task EvolveAsync(ITermination<TIndividual, TGeneStructure, TGene> termination)
         {
+            _cancellationSource = new CancellationTokenSource();
+            return Task.Run(async () => await Evolve(termination, _cancellationSource.Token),
+                _cancellationSource.Token);
+        }
+
+        public async Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination,
+            CancellationToken cancellationToken)
+        {
+            IsRunning = true;
             termination.Algorithm = this;
             if (!IsInitialized) Initialize();
 
@@ -89,10 +99,13 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
                 await EvolveOneGeneration();
                 Update();
                 OnGenerationProgress(this);
+                if (cancellationToken.IsCancellationRequested) break;
             }
 
             Statistics.Finish();
             OnTermination(this);
+            IsRunning = false;
         }
+
     }
 }

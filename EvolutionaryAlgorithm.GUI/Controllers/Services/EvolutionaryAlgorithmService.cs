@@ -47,10 +47,9 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
     {
         private IUiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool> _statistics;
         public IBitEvolutionaryAlgorithm<IEndogenousBitIndividual> Algorithm { get; private set; }
-        private Task _run;
         private bool _requestStatistics;
 
-        public bool IsRunning => Algorithm != null && (_run?.IsCompleted ?? false);
+        public bool IsRunning => Algorithm?.IsRunning ?? false;
 
         public IUiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool> Statistics
         {
@@ -106,14 +105,16 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
         public void Run(ITermination<IEndogenousBitIndividual, BitArray, bool> termination)
         {
             Terminate();
-            Task.Run(() => _run = Algorithm.Evolve(termination));
+            Algorithm.EvolveAsync(termination);
         }
 
         public void Terminate()
         {
             if (!IsRunning) return;
             Algorithm.Terminate();
-            _run.GetAwaiter().GetResult();
+
+            while (Algorithm.IsRunning) Task.Delay(25).GetAwaiter().GetResult();
+
             Statistics = Algorithm.CloneUiStatistics();
         }
 

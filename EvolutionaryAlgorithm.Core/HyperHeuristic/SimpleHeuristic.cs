@@ -16,6 +16,6 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic
 
         public override void Update() => States[0].Update();
 
-        public override async Task<List<TIndividual>> Generate() => await States[0].Generate();
+        public override Task<List<TIndividual>> Generate() => States[0].Generate();
     }
 }

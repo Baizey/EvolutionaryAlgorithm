@@ -7,17 +7,19 @@ using EvolutionaryAlgorithm.Core.HyperHeuristic;
 using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Core.Statistics;
 using EvolutionaryAlgorithm.Core.Terminations;
+using EvolutionaryAlgorithm.GUI.Controllers.Services.Enums;
 using EvolutionaryAlgorithm.GUI.Controllers.Services.Extensions;
 using EvolutionaryAlgorithm.GUI.Services.Enums;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
 using EvolutionaryAlgorithm.Template.Endogenous;
+using EvolutionaryAlgorithm.Template.HeavyTail;
 using EvolutionaryAlgorithm.Template.LambdaLambdaEndogenous;
 using EvolutionaryAlgorithm.Template.OneLambdaLambda;
 using EvolutionaryAlgorithm.Template.Stagnation;
 using static EvolutionaryAlgorithm.GUI.Services.Enums.FitnessFunctions;
-using static EvolutionaryAlgorithm.GUI.Services.Enums.Heuristics;
+using static EvolutionaryAlgorithm.GUI.Controllers.Services.Enums.Heuristics;
 
 namespace EvolutionaryAlgorithm.GUI.Controllers.Services
 {
@@ -39,14 +41,15 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             int mutationRate = 2,
             int observationPhase = 10,
             double c = 1,
+            double beta = 1.5,
             int jump = 1);
     }
 
     public class EvolutionaryAlgorithmService : IEvolutionaryAlgorithmService
     {
         private IUiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool> _statistics;
-        public IBitEvolutionaryAlgorithm<IEndogenousBitIndividual> Algorithm { get; private set; }
         private bool _requestStatistics;
+        public IBitEvolutionaryAlgorithm<IEndogenousBitIndividual> Algorithm { get; private set; }
 
         public bool IsRunning => Algorithm?.IsRunning ?? false;
 
@@ -73,6 +76,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             int mutationRate = 2,
             int observationPhase = 10,
             double c = 1,
+            double beta = 1.5,
             int jump = 1)
         {
             Terminate();
@@ -97,7 +101,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
                 new UiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool>(datapoints));
             Algorithm.UsingEvaluation(CreateFitness(fitness, jump));
             Algorithm.UsingEndogenousRandomPopulation(mutationRate);
-            Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase, c));
+            Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase, c, beta));
             Statistics = Algorithm.CloneUiStatistics();
         }
 
@@ -121,7 +125,8 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             double learningRate = 0.05D,
             int mutationRate = 2,
             int observationPhase = 10,
-            double c = 1
+            double c = 1,
+            double beta = 1.5
         ) => heuristic switch
         {
             Asymmetric => new SimpleHeuristic<IEndogenousBitIndividual, BitArray, bool>(
@@ -132,6 +137,8 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
                 new EndogenousGenerationGenerator((int) learningRate)),
             MultiEndogenous => new SimpleHeuristic<IEndogenousBitIndividual, BitArray, bool>(
                 new LambdaLambdaEndogenousGenerationGenerator((int) learningRate)),
+            HeavyTail => new SimpleHeuristic<IEndogenousBitIndividual, BitArray, bool>(
+                new HeavyTailGenerationGenerator(beta)),
             StagnationDetection => new StagnationDetectionHyperHeuristic(mutationRate),
             _ => throw new ArgumentOutOfRangeException(nameof(heuristic), heuristic, null)
         };

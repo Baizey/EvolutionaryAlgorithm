@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation;
-using EvolutionaryAlgorithm.Core.Statistics;
 using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.GUI.Controllers.Services;
+using EvolutionaryAlgorithm.GUI.Controllers.Services.Enums;
 using EvolutionaryAlgorithm.GUI.Controllers.Services.Extensions;
 using EvolutionaryAlgorithm.GUI.Models;
 using EvolutionaryAlgorithm.GUI.Services.Enums;
@@ -38,12 +38,13 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
 
             _service.Initialize(
                 FitnessFunctions.OneMax,
-                Heuristics.StagnationDetection,
+                Heuristics.Asymmetric,
                 mutationRate: 2,
                 geneCount: n,
                 mu: 1,
                 lambda: (int) (3 * Math.Log(n)),
-                datapoints: n,
+                datapoints: 50000,
+                beta: 1.5,
                 learningRate: 2);
             _service.Run(new FitnessTermination<IEndogenousBitIndividual, BitArray, bool>(n));
         }

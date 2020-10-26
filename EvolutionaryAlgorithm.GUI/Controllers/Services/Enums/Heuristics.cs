@@ -1,4 +1,4 @@
-﻿namespace EvolutionaryAlgorithm.GUI.Services.Enums
+﻿namespace EvolutionaryAlgorithm.GUI.Controllers.Services.Enums
 {
     public enum Heuristics
     {
@@ -6,6 +6,7 @@
         SingleEndogenous,
         StagnationDetection,
         Repair,
-        MultiEndogenous
+        MultiEndogenous,
+        HeavyTail
     }
 }

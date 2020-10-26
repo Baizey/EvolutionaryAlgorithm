@@ -26,7 +26,7 @@ namespace EvolutionaryAlgorithm.Core.Statistics
 
         public History(int maxDataPoints, T first)
         {
-            _maxDataPoints = maxDataPoints;
+            _maxDataPoints = Math.Max(2, maxDataPoints);
             if (_maxDataPoints % 2 == 1) _maxDataPoints++;
             _items = new T[_maxDataPoints];
             for (var i = 0; i < _maxDataPoints; i++)
@@ -49,8 +49,13 @@ namespace EvolutionaryAlgorithm.Core.Statistics
         private bool Resize()
         {
             if (Count < _maxDataPoints) return false;
-            for (int i = 0, j = 0; i < _maxDataPoints; i += 2, j++)
-                _items[j] = _items[i];
+            for (int keep = 0, i = 0; keep < _maxDataPoints; keep += 2, i++)
+            {
+                var old = _items[i];
+                _items[i] = _items[keep];
+                _items[keep] = old;
+            }
+
             StepSize *= 2;
             Count /= 2;
             return true;

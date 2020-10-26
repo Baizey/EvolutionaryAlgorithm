@@ -1,7 +1,95 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<div class="row full" style="text-align: center">
-    <div id="chartContainer" style="height: 500px; width: 500px; margin: auto">
+<header style="height: 10%">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <h1 style="text-align: center; width: 100%">Evolutionary Algorithm</h1>
+        </div>
+    </nav>
+</header>
+
+<div class="row full" style="text-align: center; height: 90%">
+    <div id="options" class="col-3 side-panel">
+        <div class="primary">
+            <div class="primary padded" style="height: 90%; background-color: lightgrey">
+                <div id="row_heuristic" class="row">
+                    <label class="optionLabel" for="input_heuristic">Heuristic</label>
+                    <select class="optionValue" id="input_heuristic">
+                        <option value="Asymmetric">Asymmetric</option>
+                        <option value="StagnationDetection">Stagnation Detection</option>
+                        <option value="Repair">1 + (lambda, lamda) with repair</option>
+                        <option value="SingleEndogenous">Single Endogenous</option>
+                        <option value="MultiEndogenous">Multi Endogenous</option>
+                        <option value="HeavyTail">Heavytail</option>
+                    </select>
+                </div>
+                <div id="row_fitness" class="row">
+                    <label class="optionLabel" for="input_fitness">Fitness function</label>
+                    <select class="optionValue" id="input_fitness">
+                        <option value="OneMax">OneMax</option>
+                        <option value="LeadingOnes">LeadingOnes</option>
+                        <option value="Jump">Jump</option>
+                    </select>
+                </div>
+                <div id="row_datapoints" class="row">
+                    <label class="optionLabel" for="input_datapoints">Max Datapoints</label>
+                    <input class="optionValue" id="input_datapoints" type="number"/>
+                </div>
+                <div id="row_jump" class="row hidden">
+                    <label class="optionLabel" for="input_jump">Jump size</label>
+                    <input class="optionValue" id="input_jump" type="number"/>
+                </div>
+                <div id="row_geneCount" class="row hidden">
+                    <label class="optionLabel" for="input_geneCount">Gene count</label>
+                    <input class="optionValue" id="input_geneCount" type="number"/>
+                </div>
+                <div id="row_mu" class="row hidden">
+                    <label class="optionLabel" for="input_mu">Mu</label>
+                    <input class="optionValue" id="input_mu" type="number"/>
+                </div>
+                <div id="row_lambda" class="row hidden">
+                    <label class="optionLabel" for="input_lambda">Lambda</label>
+                    <input class="optionValue" id="input_lambda" type="number"/>
+                </div>
+                <div id="row_mutationRate" class="row hidden">
+                    <label class="optionLabel" for="input_mutationRate">Mutation rate (p in p/n)</label>
+                    <input class="optionValue" id="input_mutationRate" type="number"/>
+                </div>
+                <div id="row_beta" class="row hidden">
+                    <label class="optionLabel" for="input_beta">Beta</label>
+                    <input class="optionValue" id="input_beta" type="number"/>
+                </div>
+                <div id="row_learningRate" class="row hidden">
+                    <label class="optionLabel" for="input_learningRate">Learning rate</label>
+                    <input class="optionValue" id="input_learningRate" type="number"/>
+                </div>
+                <div id="row_observationPhase" class="row hidden">
+                    <label class="optionLabel" for="input_observationPhase">Observation phase</label>
+                    <input class="optionValue" id="input_observationPhase" type="number"/>
+                </div>
+                <div id="row_repairChance" class="row hidden">
+                    <label class="optionLabel" for="input_repairChance">Repair chance (p in p/n)</label>
+                    <input class="optionValue" id="input_repairChance" type="number"/>
+                </div>
+            </div>
+            <div class="secondary padded" style="height: 10%; background-color: grey">
+                <button id="button_initialize"
+                        class="btn btn-primary"
+                        style="width: 100%; height: 100%">
+                    Initialize
+                </button>
+            </div>
+        </div>
+        <div class="secondary" style="background-color: orangered">
+            <div id="button_run" class="btn btn-info">Run</div>
+            <div id="button_pause" class="btn btn-danger">Pause</div>
+        </div>
+    </div>
+    <div class="col-9">
+        <div id="primaryGraph" class="primary" style="background-color: lightblue">
+        </div>
+        <div id="secondaryGraph" class="secondary" style="background-color: gold">
+        </div>
     </div>
 </div>

@@ -9,7 +9,6 @@ using EvolutionaryAlgorithm.Core.Statistics;
 using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.GUI.Controllers.Services.Enums;
 using EvolutionaryAlgorithm.GUI.Controllers.Services.Extensions;
-using EvolutionaryAlgorithm.GUI.Services.Enums;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
@@ -18,7 +17,7 @@ using EvolutionaryAlgorithm.Template.HeavyTail;
 using EvolutionaryAlgorithm.Template.LambdaLambdaEndogenous;
 using EvolutionaryAlgorithm.Template.OneLambdaLambda;
 using EvolutionaryAlgorithm.Template.Stagnation;
-using static EvolutionaryAlgorithm.GUI.Services.Enums.FitnessFunctions;
+using static EvolutionaryAlgorithm.GUI.Controllers.Services.Enums.FitnessFunctions;
 using static EvolutionaryAlgorithm.GUI.Controllers.Services.Enums.Heuristics;
 
 namespace EvolutionaryAlgorithm.GUI.Controllers.Services
@@ -28,8 +27,8 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
         public bool IsRunning { get; }
         public IBitEvolutionaryAlgorithm<IEndogenousBitIndividual> Algorithm { get; }
         public IUiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool> Statistics { get; }
-        public void Run(ITermination<IEndogenousBitIndividual, BitArray, bool> termination);
-        public void Terminate();
+        public bool Run(ITermination<IEndogenousBitIndividual, BitArray, bool> termination);
+        public void Pause();
 
         public void Initialize(
             FitnessFunctions fitness, Heuristics heuristic,
@@ -59,7 +58,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             {
                 _requestStatistics = true;
                 while (_requestStatistics && IsRunning)
-                    Task.Delay(25).GetAwaiter().GetResult();
+                    Task.Delay(5).GetAwaiter().GetResult();
                 _requestStatistics = false;
                 return _statistics;
             }
@@ -79,7 +78,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             double beta = 1.5,
             int jump = 1)
         {
-            Terminate();
+            Pause();
             Algorithm = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>
             {
                 OnGenerationProgress = algorithm =>
@@ -105,18 +104,20 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             Statistics = Algorithm.CloneUiStatistics();
         }
 
-        public void Run(ITermination<IEndogenousBitIndividual, BitArray, bool> termination)
+        public bool Run(ITermination<IEndogenousBitIndividual, BitArray, bool> termination)
         {
-            Terminate();
+            if (IsRunning) return false;
+            Pause();
             Algorithm.EvolveAsync(termination);
+            return true;
         }
 
-        public void Terminate()
+        public void Pause()
         {
             if (!IsRunning) return;
             Algorithm.Terminate();
 
-            while (Algorithm.IsRunning) Task.Delay(25).GetAwaiter().GetResult();
+            while (Algorithm.IsRunning) Task.Delay(5).GetAwaiter().GetResult();
 
             Statistics = Algorithm.CloneUiStatistics();
         }

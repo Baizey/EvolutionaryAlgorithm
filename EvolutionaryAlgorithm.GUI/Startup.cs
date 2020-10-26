@@ -19,7 +19,7 @@ namespace EvolutionaryAlgorithm.GUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IEvolutionaryAlgorithmService, EvolutionaryAlgorithmService>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddSwaggerGen();
         }
 

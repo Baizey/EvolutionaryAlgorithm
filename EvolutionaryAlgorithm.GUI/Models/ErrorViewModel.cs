@@ -1,5 +1,3 @@
-using System;
-
 namespace EvolutionaryAlgorithm.GUI.Models
 {
     public class ErrorViewModel

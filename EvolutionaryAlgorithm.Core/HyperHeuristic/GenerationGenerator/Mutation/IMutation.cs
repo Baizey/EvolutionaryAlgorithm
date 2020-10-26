@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Core.Infrastructure;
 using EvolutionaryAlgorithm.Core.Population;
 

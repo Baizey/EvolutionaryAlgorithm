@@ -129,14 +129,14 @@ namespace EvolutionaryAlgorithm
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
             lambdaEndogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            await Run(asymmetric);
+            Run(asymmetric);
         }
 
-        private static async Task Run<T>(IEvolutionaryAlgorithm<T, BitArray, bool> algorithm)
+        private static void Run<T>(IEvolutionaryAlgorithm<T, BitArray, bool> algorithm)
             where T : IBitIndividual
         {
             //await algorithm.Evolve(new TimeoutTermination<T, BitArray, bool>(TimeSpan.FromSeconds(1)));
-            await algorithm.Evolve(new FitnessTermination<T, BitArray, bool>(algorithm.Parameters.GeneCount));
+            algorithm.Evolve(new FitnessTermination<T, BitArray, bool>(algorithm.Parameters.GeneCount));
             Console.WriteLine(algorithm.Statistics);
         }
     }

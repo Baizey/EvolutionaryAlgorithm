@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
@@ -66,7 +65,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
 
         public void Initialize(
             FitnessFunctions fitness, Heuristics heuristic,
-            int geneCount = 0,
+            int geneCount = 100,
             int mu = 1,
             int lambda = 1,
             int datapoints = 1000,

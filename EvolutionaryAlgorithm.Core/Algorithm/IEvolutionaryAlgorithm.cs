@@ -29,7 +29,9 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public bool IsInitialized { get; set; }
         public Task EvolveOneGeneration();
         public Task EvolveAsync(ITermination<TIndividual, TGeneStructure, TGene> termination);
-        public Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination, CancellationToken token);
+
+        public Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination,
+            CancellationToken token = new CancellationToken());
 
         public Task Evolve(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, bool> termination,
             CancellationToken token) =>

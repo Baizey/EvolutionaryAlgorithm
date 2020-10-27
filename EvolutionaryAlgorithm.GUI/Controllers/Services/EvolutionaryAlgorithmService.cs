@@ -100,7 +100,8 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
                 new UiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool>(datapoints));
             Algorithm.UsingEvaluation(CreateFitness(fitness, jump));
             Algorithm.UsingEndogenousRandomPopulation(mutationRate);
-            Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase, repairChance, beta));
+            Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase,
+                repairChance, beta));
             Statistics = Algorithm.CloneUiStatistics();
         }
 
@@ -127,8 +128,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             int mutationRate = 2,
             int observationPhase = 10,
             double repairChance = 1,
-            double beta = 1.5
-        ) => heuristic switch
+            double beta = 1.5) => heuristic switch
         {
             Asymmetric => new SimpleHeuristic<IEndogenousBitIndividual, BitArray, bool>(
                 new AsymmetricGenerationGenerator(learningRate, observationPhase)),

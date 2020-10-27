@@ -156,7 +156,7 @@ class Api {
         for (let i = 0; i < statistics.history.length; i++)
             lambdaData.push({x: i * statistics.stepSize, y: statistics.parameters[i].lambda});
 
-        new CanvasJS.Chart("secondaryGraph", {
+        const a = new CanvasJS.Chart("secondaryGraph", {
             animationEnabled: false,
             theme: "light2",
             title: {text: "Mutation rate"},
@@ -181,7 +181,10 @@ class Api {
                 indexLabelFontSize: 12,
                 dataPoints: mutationRateData
             }]
-        }).render();
+        }); a.render();
+        a.data
+        
+        
         new CanvasJS.Chart("ternaryGraph", {
             animationEnabled: false,
             theme: "light2",

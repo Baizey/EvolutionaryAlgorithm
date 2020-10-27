@@ -13,7 +13,7 @@ body {
     height: 100%;
 }
 
-.row, .col-3, .col-9 {
+.row, .col-3, .col-6, .col-9 {
     margin: 0;
     padding: 0;
 }

@@ -145,7 +145,6 @@ class Api {
     }
 
     async display() {
-        console.log("Display");
         const statistics = await api.getStatistics();
         const mutationRateData = [];
         for (let i = 0; i < statistics.history.length; i++)
@@ -153,31 +152,18 @@ class Api {
         const fitnessData = [];
         for (let i = 0; i < statistics.history.length; i++)
             fitnessData.push({x: i * statistics.stepSize, y: statistics.history[i].fitness});
+        const lambdaData = [];
+        for (let i = 0; i < statistics.history.length; i++)
+            lambdaData.push({x: i * statistics.stepSize, y: statistics.parameters[i].lambda});
 
-        const chart = new CanvasJS.Chart("primaryGraph", {
+        new CanvasJS.Chart("secondaryGraph", {
             animationEnabled: false,
             theme: "light2",
-            title: {
-                text: "Generation statistics"
-            },
-            axisX: {
-                title: 'Generation'
-            },
-            axisY: {
-                title: 'Self adjusting parameter'
-            },
-            axisY2: {
-                title: 'Fitness'
-            },
+            title: {text: "Mutation rate"},
+            axisX: {title: 'Generation'},
+            axisY: {title: 'Fitness'},
+            axisY2: {title: 'Mutation rate'},
             data: [{
-                name: 'Mutation rate',
-                type: "line",
-                yValueFormatString: "#### mutation rate",
-                xValueFormatString: "Generation ########",
-                showInLegend: true,
-                indexLabelFontSize: 12,
-                dataPoints: mutationRateData
-            }, {
                 name: 'Fitness',
                 type: "line",
                 showInLegend: true,
@@ -186,9 +172,42 @@ class Api {
                 axisYType: 'secondary',
                 indexLabelFontSize: 12,
                 dataPoints: fitnessData
+            }, {
+                name: 'Mutation rate',
+                type: "line",
+                yValueFormatString: "#### mutation rate",
+                xValueFormatString: "Generation ########",
+                showInLegend: true,
+                indexLabelFontSize: 12,
+                dataPoints: mutationRateData
             }]
-        });
-        chart.render();
+        }).render();
+        new CanvasJS.Chart("ternaryGraph", {
+            animationEnabled: false,
+            theme: "light2",
+            title: {text: "Lambda"},
+            axisX: {title: 'Generation'},
+            axisY: {title: 'Fitness'},
+            axisY2: {title: 'Lambda'},
+            data: [{
+                name: 'Fitness',
+                type: "line",
+                showInLegend: true,
+                yValueFormatString: "#### fitness",
+                xValueFormatString: "Generation ########",
+                axisYType: 'secondary',
+                indexLabelFontSize: 12,
+                dataPoints: fitnessData
+            }, {
+                name: 'Lambda',
+                type: "line",
+                showInLegend: true,
+                yValueFormatString: "#### lambda",
+                xValueFormatString: "Generation ########",
+                indexLabelFontSize: 12,
+                dataPoints: lambdaData
+            }]
+        }).render();
     }
 }
 

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "GUI";
 }
 <header style="height: 10%">
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -89,7 +89,9 @@
     <div class="col-9">
         <div id="primaryGraph" class="primary" style="background-color: lightblue">
         </div>
-        <div id="secondaryGraph" class="secondary" style="background-color: gold">
+        <div class="row secondary">
+            <div id="secondaryGraph" class="col-6" style="background-color: gold"></div>
+            <div id="ternaryGraph" class="col-6" style="background-color: goldenrod"></div>
         </div>
     </div>
 </div>

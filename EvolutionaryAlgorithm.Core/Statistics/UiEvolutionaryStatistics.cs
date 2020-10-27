@@ -21,11 +21,14 @@ namespace EvolutionaryAlgorithm.Core.Statistics
             }
         }
 
+        private Func<T, T, T> _average;
+
         public int StepSize { get; private set; }
         public int Count { get; private set; }
 
-        public History(int maxDataPoints, T first)
+        public History(int maxDataPoints, T first, Func<T, T, T> average)
         {
+            _average = average;
             _maxDataPoints = Math.Max(2, maxDataPoints);
             if (_maxDataPoints % 2 == 1) _maxDataPoints++;
             _items = new T[_maxDataPoints];
@@ -52,7 +55,10 @@ namespace EvolutionaryAlgorithm.Core.Statistics
             for (int keep = 0, i = 0; keep < _maxDataPoints; keep += 2, i++)
             {
                 var old = _items[i];
-                _items[i] = _items[keep];
+                if (keep + 1 < _maxDataPoints)
+                    _items[i] = _average(_items[keep], _items[keep + 1]);
+                else
+                    _items[i] = _items[keep];
                 _items[keep] = old;
             }
 
@@ -109,8 +115,18 @@ namespace EvolutionaryAlgorithm.Core.Statistics
         public override void Initialize()
         {
             base.Initialize();
-            GeneHistory = new History<TIndividual>(_maxDataPoints, Algorithm.Best);
-            ParameterHistory = new History<IParameters>(_maxDataPoints, Algorithm.Parameters);
+            GeneHistory = new History<TIndividual>(_maxDataPoints, Algorithm.Best, (a, b) =>
+            {
+                a.Fitness = (a.Fitness + b.Fitness) / 2;
+                return a;
+            });
+            ParameterHistory = new History<IParameters>(_maxDataPoints, Algorithm.Parameters, (a, b) =>
+            {
+                a.Lambda = (a.Lambda + b.Lambda) / 2;
+                a.Mu = (a.Mu + b.Mu) / 2;
+                a.MutationRate = (a.MutationRate + b.MutationRate) / 2;
+                return a;
+            });
         }
 
         public override void Update()

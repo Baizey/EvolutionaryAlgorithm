@@ -39,7 +39,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             double learningRate = 0.05D,
             int mutationRate = 2,
             int observationPhase = 10,
-            double c = 1,
+            double repairChance = 1,
             double beta = 1.5,
             int jump = 1);
     }
@@ -74,7 +74,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             double learningRate = 0.05D,
             int mutationRate = 2,
             int observationPhase = 10,
-            double c = 1,
+            double repairChance = 1,
             double beta = 1.5,
             int jump = 1)
         {
@@ -100,7 +100,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
                 new UiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool>(datapoints));
             Algorithm.UsingEvaluation(CreateFitness(fitness, jump));
             Algorithm.UsingEndogenousRandomPopulation(mutationRate);
-            Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase, c, beta));
+            Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase, repairChance, beta));
             Statistics = Algorithm.CloneUiStatistics();
         }
 
@@ -126,14 +126,14 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services
             double learningRate = 0.05D,
             int mutationRate = 2,
             int observationPhase = 10,
-            double c = 1,
+            double repairChance = 1,
             double beta = 1.5
         ) => heuristic switch
         {
             Asymmetric => new SimpleHeuristic<IEndogenousBitIndividual, BitArray, bool>(
                 new AsymmetricGenerationGenerator(learningRate, observationPhase)),
             Repair => new SimpleHeuristic<IEndogenousBitIndividual, BitArray, bool>(
-                new OneLambdaLambdaGenerationGenerator((int) learningRate, c)),
+                new OneLambdaLambdaGenerationGenerator((int) learningRate, repairChance)),
             SingleEndogenous => new SimpleHeuristic<IEndogenousBitIndividual, BitArray, bool>(
                 new EndogenousGenerationGenerator((int) learningRate)),
             MultiEndogenous => new SimpleHeuristic<IEndogenousBitIndividual, BitArray, bool>(

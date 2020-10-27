@@ -8,12 +8,9 @@ namespace EvolutionaryAlgorithm.GUI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -44,11 +41,11 @@ namespace EvolutionaryAlgorithm.GUI
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evolutionary Algorithm GUI V1");
                 c.RoutePrefix = string.Empty;
             });
             */
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

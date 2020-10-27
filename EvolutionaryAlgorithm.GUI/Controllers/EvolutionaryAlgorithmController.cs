@@ -52,7 +52,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
                 mutationRate: data.MutationRate ?? 1,
                 learningRate: data.LearningRate ?? 2,
                 observationPhase: data.ObservationPhase ?? 10,
-                c: data.RepairChance ?? 1,
+                repairChance: data.RepairChance ?? 1,
                 beta: data.Beta ?? 1.5D,
                 jump: data.Jump ?? 5
             );

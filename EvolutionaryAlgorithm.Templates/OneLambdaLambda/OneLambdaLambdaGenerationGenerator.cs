@@ -17,14 +17,14 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         // Keep a double-lambda so we can keep track of small changes between eventual increases
         private double _actualLambda;
 
-        public OneLambdaLambdaGenerationGenerator(int learningRate, double c)
+        public OneLambdaLambdaGenerationGenerator(int learningRate, double repairChance)
         {
             _shrinkRate = learningRate;
             _growthRate = Math.Pow(learningRate, 0.25D);
 
             Mutator = new BitMutator<IEndogenousBitIndividual>()
                 .CloneGenesFrom(new FirstParentSelector<IEndogenousBitIndividual>())
-                .ThenApply(new CrossoverPhase(c));
+                .ThenApply(new CrossoverPhase(repairChance));
             Filter = new BitElitismGenerationFilter<IEndogenousBitIndividual>(true);
         }
 

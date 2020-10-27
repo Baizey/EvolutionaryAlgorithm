@@ -15,12 +15,12 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
         private IEndogenousBitIndividual _xMark;
         private IParameters _parameters;
         private int[] _flips;
-        private readonly double _c;
+        private readonly double _repairChance;
         public IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> Algorithm { get; set; }
 
         public CrossoverPhase(double repairChance)
         {
-            _c = repairChance;
+            _repairChance = repairChance;
         }
 
         private int Mutations()
@@ -74,6 +74,6 @@ namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
 
         public void Update() => MutationPhase();
 
-        public void Mutate(int index, IEndogenousBitIndividual y) => _applier.MutatePart(y, _flips, _c);
+        public void Mutate(int index, IEndogenousBitIndividual y) => _applier.MutatePart(y, _flips, _repairChance);
     }
 }

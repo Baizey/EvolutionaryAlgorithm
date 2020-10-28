@@ -1,93 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using EvolutionaryAlgorithm.Core.Infrastructure;
 using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.Core.Statistics
 {
-    public class History<T> : ICloneable where T : ICloneable, ICopyTo<T>
-    {
-        private readonly int _maxDataPoints;
-        private int _counter;
-        private readonly T[] _items;
-
-        public T[] Items
-        {
-            get
-            {
-                var arr = new T[Count];
-                Array.Copy(_items, arr, arr.Length);
-                return arr;
-            }
-        }
-
-        private Func<T, T, T> _average;
-
-        public int StepSize { get; private set; }
-        public int Count { get; private set; }
-
-        public History(int maxDataPoints, T first, Func<T, T, T> average)
-        {
-            _average = average;
-            _maxDataPoints = Math.Max(2, maxDataPoints);
-            if (_maxDataPoints % 2 == 1) _maxDataPoints++;
-            _items = new T[_maxDataPoints];
-            for (var i = 0; i < _maxDataPoints; i++)
-                _items[i] = (T) first.Clone();
-            Count = 1;
-            StepSize = 1;
-        }
-
-        private History(History<T> other)
-        {
-            _maxDataPoints = other._maxDataPoints;
-            Count = other.Count;
-            StepSize = other.StepSize;
-            _counter = other._counter;
-            _items = new T[other._items.Length];
-            for (var i = 0; i < _items.Length; i++)
-                _items[i] = (T) other._items[i].Clone();
-        }
-
-        private bool Resize()
-        {
-            if (Count < _maxDataPoints) return false;
-            for (int keep = 0, i = 0; keep < _maxDataPoints; keep += 2, i++)
-            {
-                var old = _items[i];
-                if (keep + 1 < _maxDataPoints)
-                    _items[i] = _average(_items[keep], _items[keep + 1]);
-                else
-                    _items[i] = _items[keep];
-                _items[keep] = old;
-            }
-
-            StepSize *= 2;
-            Count /= 2;
-            return true;
-        }
-
-        public void Add(T item)
-        {
-            if (++_counter < StepSize) return;
-            if (Resize()) return;
-            _counter = 0;
-            item.CopyTo(_items[Count++]);
-        }
-
-        public object Clone()
-        {
-            return new History<T>(this);
-        }
-    }
-
     public interface IUiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
         : IEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>, ICopyTo<TIndividual>
     {
-        public History<TIndividual> GeneHistory { get; }
-        public History<IParameters> ParameterHistory { get; }
+        public List<TIndividual> GeneHistory { get; set; }
+        public List<IParameters> ParameterHistory { get; set; }
     }
 
     public class UiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>
@@ -96,49 +21,36 @@ namespace EvolutionaryAlgorithm.Core.Statistics
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>, ICopyTo<TIndividual>
     {
-        private readonly int _maxDataPoints;
-        public History<TIndividual> GeneHistory { get; private set; }
-        public History<IParameters> ParameterHistory { get; private set; }
+        public List<TIndividual> GeneHistory { get; set; }
+        public List<IParameters> ParameterHistory { get; set; }
 
-        public UiEvolutionaryStatistics(int maxDataPoints)
+        public UiEvolutionaryStatistics()
         {
-            _maxDataPoints = maxDataPoints;
         }
 
         private UiEvolutionaryStatistics(IUiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene> other)
             : base(other)
         {
-            GeneHistory = (History<TIndividual>) other.GeneHistory?.Clone();
-            ParameterHistory = (History<IParameters>) other.ParameterHistory?.Clone();
+            GeneHistory = other.GeneHistory;
+            ParameterHistory = other.ParameterHistory;
+            other.GeneHistory = new List<TIndividual>();
+            other.ParameterHistory = new List<IParameters>();
         }
 
         public override void Initialize()
         {
             base.Initialize();
-            GeneHistory = new History<TIndividual>(_maxDataPoints, Algorithm.Best, (a, b) =>
-            {
-                a.Fitness = (a.Fitness + b.Fitness) / 2;
-                return a;
-            });
-            ParameterHistory = new History<IParameters>(_maxDataPoints, Algorithm.Parameters, (a, b) =>
-            {
-                a.Lambda = (a.Lambda + b.Lambda) / 2;
-                a.Mu = (a.Mu + b.Mu) / 2;
-                a.MutationRate = (a.MutationRate + b.MutationRate) / 2;
-                return a;
-            });
+            GeneHistory = new List<TIndividual> {(TIndividual) Algorithm.Best.Clone()};
+            ParameterHistory = new List<IParameters> {(IParameters) Algorithm.Parameters.Clone()};
         }
 
         public override void Update()
         {
             base.Update();
-            GeneHistory.Add(Algorithm.Best);
-            ParameterHistory.Add(Algorithm.Parameters);
+            GeneHistory.Add((TIndividual) Algorithm.Best.Clone());
+            ParameterHistory.Add((IParameters) Algorithm.Parameters.Clone());
         }
 
-        public override object Clone()
-        {
-            return new UiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>(this);
-        }
+        public override object Clone() => new UiEvolutionaryStatistics<TIndividual, TGeneStructure, TGene>(this);
     }
 }

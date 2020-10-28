@@ -1,12 +1,32 @@
 # EvolutionaryAlgorithm
  
-## Pre-usage steps:
+# Pre-usage steps:
 
 Install .net core 3.1.X sdk (https://dotnet.microsoft.com/download/dotnet-core/3.1)
 
-Optionally have an IDE, fx Visual Studio (code) or Jetbrains Rider or similar to edit and run C#
+Install an IDE such as Jetbrains Rider or Visual Studio, or your prefered IDE as long as it has support for C#
 
-## General
+# Accessing GUI for Jetbrains Rider
+
+In the top right corner of the IDE setup a run configuration for EvolutionaryAlgorithm.GUI
+
+with the options set as such (any not mentioned should be left empty)
+
+Project: EvolutionaryAlgorithm.GUI
+Target: .NETCoreApp,Version=v3.1
+Exe path: <your solution location>/EvolutionaryAlgorithm/EvolutionaryAlgorithm.GUI/bin/Debug/netcoreapp3.1/EvolutionaryAlgorithm.GUI.dll
+Working directory: <your solution location>/EvolutionaryAlgorithm/EvolutionaryAlgorithm.GUI
+
+Most of these should be set automatically when you set the project.
+
+From here you can apply settings and click ok.
+
+Now you can run the new configuration, it should log that the website is up at localhost:5001
+
+you should however go to localhost:5001/Home in order to use the GUI
+
+# Algorithm framework
+
 An algorithm is initialized like:
     var algorithm = new BitEvolutionaryAlgorithm<IBitIndividual>()
  

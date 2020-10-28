@@ -26,10 +26,12 @@ namespace EvolutionaryAlgorithm.Template.Endogenous
                     _geneCount / (2D * _learningRate),
                     _learningRate));
             _minRate = 1;
+            Algorithm.Parameters.MutationRate = Algorithm.Population[0].MutationRate;
         }
 
         public void Update()
         {
+            Algorithm.Parameters.MutationRate = Algorithm.Population[0].MutationRate;
         }
 
         public void Mutate(int index, IEndogenousBitIndividual child)

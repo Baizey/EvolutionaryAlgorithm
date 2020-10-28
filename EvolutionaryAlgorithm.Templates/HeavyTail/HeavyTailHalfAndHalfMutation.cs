@@ -30,7 +30,7 @@ namespace EvolutionaryAlgorithm.Template.HeavyTail
 
         public void Update()
         {
-            _parameters.MutationRate = Algorithm.Population[0].MutationRate;
+            _parameters.MutationRate = Algorithm.Population.Best.MutationRate;
             BeforeGeneration();
         }
 

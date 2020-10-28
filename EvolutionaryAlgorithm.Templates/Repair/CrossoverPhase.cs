@@ -5,7 +5,7 @@ using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Infrastructure;
 using EvolutionaryAlgorithm.Core.Parameters;
 
-namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
+namespace EvolutionaryAlgorithm.Template.Repair
 {
     public class CrossoverPhase : IBitMutation<IEndogenousBitIndividual>
     {

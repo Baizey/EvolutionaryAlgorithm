@@ -1,12 +1,13 @@
 ﻿class Graph {
     lambda() {
         this.formatter = statistics => {
+            const start = statistics.generations - statistics.history.length;
             const fitness = [];
             for (let i = 0; i < statistics.history.length; i++)
-                fitness.push({x: i * statistics.stepSize, y: statistics.history[i].fitness});
+                fitness.push({x: start + i, y: statistics.history[i].fitness});
             const lambda = [];
             for (let i = 0; i < statistics.history.length; i++)
-                fitness.push({x: i * statistics.stepSize, y: statistics.parameters[i].lambda});
+                lambda.push({x: start + i, y: statistics.parameters[i].lambda});
             return {primary: fitness, secondary: lambda}
         };
         this.graph = new CanvasJS.Chart(this.id, {
@@ -40,12 +41,13 @@
 
     mutation() {
         this.formatter = statistics => {
+            const start = statistics.generations - statistics.history.length;
             const fitness = [];
             for (let i = 0; i < statistics.history.length; i++)
-                fitness.push({x: i * statistics.stepSize, y: statistics.history[i].fitness});
+                fitness.push({x: start + i, y: statistics.history[i].fitness});
             const mutation = [];
             for (let i = 0; i < statistics.history.length; i++)
-                fitness.push({x: i * statistics.stepSize, y: statistics.parameters[i].mutationRate});
+                mutation.push({x: start + i, y: statistics.parameters[i].mutationRate});
             return {primary: fitness, secondary: mutation}
         };
         this.graph = new CanvasJS.Chart(this.id, {
@@ -98,7 +100,7 @@
                 name: 'Border',
                 type: "line",
                 markerType: 'none',
-                showInLegend: true,
+                showInLegend: false,
                 yValueFormatString: "",
                 xValueFormatString: "",
                 indexLabelFontSize: 12,
@@ -129,7 +131,7 @@
      * @param {Statistics} statistics
      */
     add(statistics) {
-        if (!this.formatter) return;
+        if (!statistics || !this.formatter) return;
         const dataPoints = this.formatter(statistics);
         const p = this.graph.options.data[0];
         const s = this.graph.options.data[1];

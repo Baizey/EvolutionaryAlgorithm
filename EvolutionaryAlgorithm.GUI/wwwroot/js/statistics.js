@@ -1,7 +1,7 @@
 ﻿class Statistics {
     /**
      * @param {{
-     *     history: Individual[],
+     *     history: CheapIndividual[],
      *     parameters: Parameters[],
      *     generations: number,
      *     stagnantGenerations: number,
@@ -13,6 +13,8 @@
      * }} data
      */
     constructor(data) {
+        this.history = data.history;
+        this.parameters = data.parameters;
         this.individuals = data.history;
         this.parameters = data.parameters;
         this.generations = data.generations;

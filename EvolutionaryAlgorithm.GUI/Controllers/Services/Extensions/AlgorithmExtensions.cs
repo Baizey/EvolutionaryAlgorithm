@@ -16,6 +16,11 @@ namespace EvolutionaryAlgorithm.GUI.Controllers.Services.Extensions
     public static class StatisticsExtensions
     {
         public static StatisticsView MapToView(
+            this IEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool> statistics, bool includeHistory) =>
+            new StatisticsView((IUiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool>) statistics,
+                includeHistory);
+
+        public static StatisticsView MapToView(
             this IUiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool> statistics, bool includeHistory) =>
             new StatisticsView(statistics, includeHistory);
     }

@@ -6,7 +6,7 @@ using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Core.Statistics;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
 
-namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
+namespace EvolutionaryAlgorithm.Template.Repair
 {
     public class OneLambdaLambdaGenerationGenerator : BitGenerationGenerator<IEndogenousBitIndividual>
     {

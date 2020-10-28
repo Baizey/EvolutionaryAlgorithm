@@ -7,7 +7,6 @@
         public int GeneCount { get; set; }
         public int Lambda { get; set; }
         public int Mu { get; set; }
-        public int Datapoints { get; set; }
         public double? Beta { get; set; }
         public int? MutationRate { get; set; }
         public double? LearningRate { get; set; }

@@ -2,7 +2,7 @@
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Statistics;
 
-namespace EvolutionaryAlgorithm.Template.OneLambdaLambda
+namespace EvolutionaryAlgorithm.Template.Repair
 {
     public class LambdaBasicStatistics<T> : BasicEvolutionaryStatistics<T, BitArray, bool>
         where T : IBitIndividual

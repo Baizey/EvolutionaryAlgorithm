@@ -5,7 +5,6 @@ using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.GUI.Controllers.Services;
 using EvolutionaryAlgorithm.GUI.Controllers.Services.Enums;
-using EvolutionaryAlgorithm.GUI.Controllers.Services.Extensions;
 using EvolutionaryAlgorithm.GUI.Models;
 using EvolutionaryAlgorithm.GUI.Models.Input;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +29,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
         public StatisticsView GetStatistics([FromQuery] StatisticsInput data) =>
-            _service.Statistics?.MapToView(data.IncludeHistory);
+            _service.Statistics;
 
         [HttpPost("Initialize")]
         [ProducesResponseType(200)]
@@ -48,7 +47,6 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
                 mu: data.Mu,
                 geneCount: data.GeneCount,
                 lambda: data.Lambda,
-                datapoints: data.Datapoints,
                 mutationRate: data.MutationRate ?? 1,
                 learningRate: data.LearningRate ?? 2,
                 observationPhase: data.ObservationPhase ?? 10,

@@ -10,8 +10,8 @@ using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
 using EvolutionaryAlgorithm.Template.Endogenous;
 using EvolutionaryAlgorithm.Template.HeavyTail;
-using EvolutionaryAlgorithm.Template.LambdaLambdaEndogenous;
-using EvolutionaryAlgorithm.Template.OneLambdaLambda;
+using EvolutionaryAlgorithm.Template.MultiEndogenous;
+using EvolutionaryAlgorithm.Template.Repair;
 using EvolutionaryAlgorithm.Template.Stagnation;
 
 namespace EvolutionaryAlgorithm
@@ -125,7 +125,7 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingStatistics(new EndogenousBasicEvolutionaryStatistics())
                 .UsingEndogenousRandomPopulation(mutationRate)
-                .UsingHeuristic(new LambdaLambdaEndogenousGenerationGenerator(learningRate))
+                .UsingHeuristic(new MultiEndogenousGenerationGenerator(learningRate))
                 .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
             lambdaEndogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 

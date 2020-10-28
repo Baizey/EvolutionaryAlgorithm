@@ -1,4 +1,15 @@
-﻿class Individual {
+﻿class CheapIndividual {
+    /**
+     * @param {{
+     *     fitness: number,
+     * }} data
+     */
+    constructor(data) {
+        this.fitness = data.fitness;
+    }
+}
+
+class Individual extends CheapIndividual {
     /**
      * @param {{
      *     mutationRate: number,
@@ -7,8 +18,7 @@
      * }} data
      */
     constructor(data) {
-        this.mutationRate = data.mutationRate;
-        this.fitness = data.fitness;
+        super(data);
         this.genes = data.genes;
     }
 }

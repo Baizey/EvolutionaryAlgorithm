@@ -5,11 +5,11 @@ using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Selector;
 using EvolutionaryAlgorithm.Template.Endogenous;
 
-namespace EvolutionaryAlgorithm.Template.LambdaLambdaEndogenous
+namespace EvolutionaryAlgorithm.Template.MultiEndogenous
 {
-    public class LambdaLambdaEndogenousGenerationGenerator : BitGenerationGenerator<IEndogenousBitIndividual>
+    public class MultiEndogenousGenerationGenerator : BitGenerationGenerator<IEndogenousBitIndividual>
     {
-        public LambdaLambdaEndogenousGenerationGenerator(int learningRate)
+        public MultiEndogenousGenerationGenerator(int learningRate)
         {
             Mutator = new BitMutator<IEndogenousBitIndividual>()
                 .Crossover(new BitMiddlePointCrossover<IEndogenousBitIndividual>(

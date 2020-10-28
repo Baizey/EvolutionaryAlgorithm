@@ -1,6 +1,5 @@
 ﻿class OptionsController {
     constructor() {
-        this.datapoints = new Input('datapoints');
         this.jump = new Input('jump');
         this.geneCount = new Input('geneCount');
         this.lambda = new Input('lambda');
@@ -40,8 +39,7 @@
         const heuristic = this.heuristicInput.value;
         const body = {
             heuristic: heuristic,
-            fitness: fitness,
-            datapoints: Math.floor(this.datapoints.value - 0),
+            fitness: fitness
         };
         switch (fitness) {
             case 'OneMax':

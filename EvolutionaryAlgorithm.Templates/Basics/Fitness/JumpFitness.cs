@@ -11,11 +11,8 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 
         public void Initialize()
         {
-            _total = Algorithm.Parameters.GeneCount;
-            _limit = _total - _jump;
         }
 
-        private int _total, _limit;
         private readonly int _jump;
 
         public JumpFitness(int jump)
@@ -25,9 +22,12 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 
         public double Evaluate(TIndividual individual)
         {
-            var flipped = individual.Ones;
-            if (flipped == _total) return _total;
-            return flipped < _limit ? flipped : _total - flipped;
+            if (individual.Zeros == 0)
+                return individual.Ones;
+            else if (individual.Zeros <= _jump)
+                return individual.Zeros;
+            else
+                return individual.Ones;
         }
     }
 }

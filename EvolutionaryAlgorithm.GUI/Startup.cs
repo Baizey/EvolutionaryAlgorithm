@@ -1,4 +1,4 @@
-using EvolutionaryAlgorithm.GUI.Controllers.Services;
+using EvolutionaryAlgorithm.GUI.Models.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

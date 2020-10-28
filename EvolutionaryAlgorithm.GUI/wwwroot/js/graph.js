@@ -21,8 +21,8 @@
                 name: 'Fitness',
                 type: "line",
                 showInLegend: true,
-                xValueFormatString: "generation #",
-                yValueFormatString: "# fitness",
+                xValueFormatString: "generation #####",
+                yValueFormatString: "##### fitness",
                 indexLabelFontSize: 12,
                 dataPoints: [],
             }, {
@@ -30,7 +30,7 @@
                 type: "line",
                 axisYType: 'secondary',
                 showInLegend: true,
-                xValueFormatString: 'generation #',
+                xValueFormatString: 'generation #####',
                 yValueFormatString: '# lambda',
                 indexLabelFontSize: 12,
                 dataPoints: []
@@ -61,8 +61,8 @@
                 name: 'Fitness',
                 type: "line",
                 showInLegend: true,
-                xValueFormatString: "generation #",
-                yValueFormatString: "# fitness",
+                xValueFormatString: "generation #####",
+                yValueFormatString: "##### fitness",
                 indexLabelFontSize: 12,
                 dataPoints: [],
             }, {
@@ -70,8 +70,8 @@
                 type: "line",
                 axisYType: 'secondary',
                 showInLegend: true,
-                xValueFormatString: 'generation #',
-                yValueFormatString: '# mutation rate',
+                xValueFormatString: 'generation #####',
+                yValueFormatString: '##### mutation rate',
                 indexLabelFontSize: 12,
                 dataPoints: []
             }]
@@ -79,8 +79,35 @@
         this.update();
     }
 
+    _calcY(genes) {
+        let max = 0, min = 0, count = 0;
+        let maxValue = genes.length;
+        let minValue = 1;
+        for (let i = 0; i < genes.length; i++) {
+            if (genes[i]) {
+                count += i + 1;
+                min += minValue++;
+                max += maxValue--;
+            }
+        }
+        const progress = (count - min) / (max - min);
+        const middle = 50;
+        return middle - (middle * (1. - Math.abs(1. - progress * 2.)) * (progress * 2. - 1.));
+    }
+
     search(geneCount) {
-        this.dataFormatter = statistics => ({primary: []});
+        this.formatter = statistics => {
+            const ones = statistics.current.ones;
+            const y = this._calcY(statistics.current.genes);
+            console.log(y);
+            return {
+                primary: [{
+                    x: ones,
+                    y: y
+                }],
+                secondary: null
+            }
+        };
         const height = 100;
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -92,8 +119,8 @@
                 name: 'Explored',
                 type: "scatter",
                 showInLegend: true,
-                xValueFormatString: "#",
-                yValueFormatString: "# ones",
+                xValueFormatString: "##### ones",
+                yValueFormatString: "#####",
                 indexLabelFontSize: 12,
                 dataPoints: [],
             }, {

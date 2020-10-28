@@ -7,9 +7,8 @@ using EvolutionaryAlgorithm.Core.HyperHeuristic;
 using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Core.Statistics;
 using EvolutionaryAlgorithm.Core.Terminations;
-using EvolutionaryAlgorithm.GUI.Controllers.Services.Enums;
-using EvolutionaryAlgorithm.GUI.Controllers.Services.Extensions;
-using EvolutionaryAlgorithm.GUI.Models;
+using EvolutionaryAlgorithm.GUI.Models.Enums;
+using EvolutionaryAlgorithm.GUI.Models.Extensions;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.Asymmetric;
 using EvolutionaryAlgorithm.Template.Basics.Fitness;
@@ -18,10 +17,10 @@ using EvolutionaryAlgorithm.Template.HeavyTail;
 using EvolutionaryAlgorithm.Template.MultiEndogenous;
 using EvolutionaryAlgorithm.Template.Repair;
 using EvolutionaryAlgorithm.Template.Stagnation;
-using static EvolutionaryAlgorithm.GUI.Controllers.Services.Enums.FitnessFunctions;
-using static EvolutionaryAlgorithm.GUI.Controllers.Services.Enums.Heuristics;
+using static EvolutionaryAlgorithm.GUI.Models.Enums.FitnessFunctions;
+using static EvolutionaryAlgorithm.GUI.Models.Enums.Heuristics;
 
-namespace EvolutionaryAlgorithm.GUI.Controllers.Services
+namespace EvolutionaryAlgorithm.GUI.Models.Services
 {
     public interface IEvolutionaryAlgorithmService
     {

@@ -1,6 +1,4 @@
-﻿using EvolutionaryAlgorithm.GUI.Controllers.Services.Enums;
-
-namespace EvolutionaryAlgorithm.GUI.Models.Input
+﻿namespace EvolutionaryAlgorithm.GUI.Models.Input
 {
     public class StatisticsInput
     {

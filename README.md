@@ -17,9 +17,9 @@ Target: .NETCoreApp,Version=v3.1
 Exe path: <your solution location>/EvolutionaryAlgorithm/EvolutionaryAlgorithm.GUI/bin/Debug/netcoreapp3.1/EvolutionaryAlgorithm.GUI.dll
 Working directory: <your solution location>/EvolutionaryAlgorithm/EvolutionaryAlgorithm.GUI
 
-Most of these should be set automatically when you set the project.
+You should only need to set the project and the rest will be auto configured.
 
-From here you can apply settings and click ok.
+From here you can apply changes and click ok.
 
 Now you can run the new configuration, it should log that the website is up at localhost:5001
 

@@ -3,10 +3,10 @@ using System.Collections;
 using System.IO;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Terminations;
-using EvolutionaryAlgorithm.GUI.Controllers.Services;
-using EvolutionaryAlgorithm.GUI.Controllers.Services.Enums;
 using EvolutionaryAlgorithm.GUI.Models;
+using EvolutionaryAlgorithm.GUI.Models.Enums;
 using EvolutionaryAlgorithm.GUI.Models.Input;
+using EvolutionaryAlgorithm.GUI.Models.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EvolutionaryAlgorithm.GUI.Controllers
@@ -28,7 +28,7 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
         [HttpGet("Statistics")]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
-        public StatisticsView GetStatistics([FromQuery] StatisticsInput data) =>
+        public StatisticsView GetStatistics() =>
             _service.Statistics;
 
         [HttpPost("Initialize")]

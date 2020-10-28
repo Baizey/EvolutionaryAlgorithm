@@ -35,8 +35,8 @@
     /**
      * @returns {Promise<Statistics>}
      */
-    getStatistics(includeHistory = true) {
-        return this._call('Statistics', 'GET', {includeHistory: includeHistory});
+    async getStatistics(includeHistory = true) {
+        return new Statistics(await this._call('Statistics', 'GET', {includeHistory: includeHistory}));
     }
 
     /**

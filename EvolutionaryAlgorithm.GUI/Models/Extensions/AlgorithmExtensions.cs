@@ -2,9 +2,8 @@
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Statistics;
-using EvolutionaryAlgorithm.GUI.Models;
 
-namespace EvolutionaryAlgorithm.GUI.Controllers.Services.Extensions
+namespace EvolutionaryAlgorithm.GUI.Models.Extensions
 {
     public static class AlgorithmExtensions
     {

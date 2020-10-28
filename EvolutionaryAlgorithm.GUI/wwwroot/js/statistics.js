@@ -13,15 +13,16 @@
      * }} data
      */
     constructor(data) {
+        data ||= {};
         this.history = data.history;
         this.parameters = data.parameters;
         this.individuals = data.history;
         this.parameters = data.parameters;
         this.generations = data.generations;
         this.stagnantGenerations = data.stagnantGenerations;
-        this.current = data.current;
-        this.previous = data.previous;
-        this.best = data.best;
+        this.current = new Individual(data.current);
+        this.previous = new Individual(data.previous);
+        this.best = new Individual(data.best);
         this.startTime = data.startTime;
         this.endTime = data.endTime;
     }

@@ -8,6 +8,7 @@
      * }} data
      */
     constructor(data) {
+        data ||= {};
         this.geneCount = data.geneCount;
         this.lambda = data.lambda;
         this.mu = data.mu;

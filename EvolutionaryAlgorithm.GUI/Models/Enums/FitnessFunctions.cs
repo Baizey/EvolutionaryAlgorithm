@@ -1,4 +1,4 @@
-﻿namespace EvolutionaryAlgorithm.GUI.Controllers.Services.Enums
+﻿namespace EvolutionaryAlgorithm.GUI.Models.Enums
 {
     public enum FitnessFunctions
     {

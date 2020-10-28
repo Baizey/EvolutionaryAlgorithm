@@ -22,12 +22,10 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
 
         public double Evaluate(TIndividual individual)
         {
-            if (individual.Zeros == 0)
+            if (individual.Zeros == 0 || individual.Zeros > _jump)
                 return individual.Ones;
-            else if (individual.Zeros <= _jump)
-                return individual.Zeros;
             else
-                return individual.Ones;
+                return individual.Zeros;
         }
     }
 }

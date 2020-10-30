@@ -1,14 +1,106 @@
 ﻿class Graph {
+
+    asymmetric() {
+        this.formatter = statistics => ({
+            primary: {x: statistics.generations, y: statistics.current.fitness},
+            secondary: {x: statistics.generations, y: statistics.r0},
+            ternary: {x: statistics.generations, y: statistics.r1},
+        });
+        this.graph = new CanvasJS.Chart(this.id, {
+            animationEnabled: false,
+            theme: "light2",
+            title: {text: 'Lambda evolution'},
+            axisX: {title: 'Generations'},
+            axisY: {title: 'Fitness'},
+            axisY2: {title: 'Asymmetric split', minimum: 0, maximum: 1},
+            data: [{
+                name: 'Fitness',
+                type: "line",
+                showInLegend: true,
+                xValueFormatString: "generation #####",
+                yValueFormatString: "##### fitness",
+                indexLabelFontSize: 12,
+                dataPoints: [],
+            }, {
+                name: 'R0',
+                type: "line",
+                axisYType: 'secondary',
+                showInLegend: true,
+                xValueFormatString: 'generation #####',
+                yValueFormatString: '# lambda',
+                indexLabelFontSize: 12,
+                dataPoints: []
+            }, {
+                name: 'R1',
+                type: "line",
+                axisYType: 'secondary',
+                showInLegend: true,
+                xValueFormatString: 'generation #####',
+                yValueFormatString: '# lambda',
+                indexLabelFontSize: 12,
+                dataPoints: []
+            }]
+        });
+        this.update();
+    }
+
+    stagnation() {
+        this.formatter = statistics => {
+            if (statistics.inStagnation)
+                return {
+                    primary: {x: statistics.generations, y: statistics.current.fitness},
+                    secondary: {x: statistics.generations, y: statistics.stagnationProgress}
+                }
+            else
+                return {
+                    primary: {x: statistics.generations, y: statistics.current.fitness},
+                    ternary: {x: statistics.generations, y: statistics.stagnationProgress}
+                }
+        };
+        this.graph = new CanvasJS.Chart(this.id, {
+            animationEnabled: false,
+            theme: "light2",
+            title: {text: 'Progress towards stagnation'},
+            axisX: {title: 'Generations'},
+            axisY: {title: 'Fitness'},
+            axisY2: {title: 'Progress in percent', minimum: 0, maximum: 1},
+            data: [{
+                name: 'Fitness',
+                type: "line",
+                showInLegend: true,
+                xValueFormatString: "Generation ####",
+                yValueFormatString: "##### fitness",
+                indexLabelFontSize: 12,
+                dataPoints: [],
+            }, {
+                name: 'In stagnation',
+                type: "scatter",
+                axisYType: 'secondary',
+                showInLegend: true,
+                xValueFormatString: "Generation ####",
+                yValueFormatString: "#####% progress",
+                indexLabelFontSize: 12,
+                dataPoints: [],
+            }, {
+                name: 'Towards stagnation',
+                type: "scatter",
+                axisYType: 'secondary',
+                showInLegend: true,
+                xValueFormatString: "Generation ####",
+                yValueFormatString: "#####% progress",
+                indexLabelFontSize: 12,
+                dataPoints: [],
+            }]
+        });
+        this.update();
+    }
+
     lambda() {
         this.formatter = statistics => {
-            const start = statistics.generations - statistics.history.length;
-            const fitness = [];
-            for (let i = 0; i < statistics.history.length; i++)
-                fitness.push({x: start + i, y: statistics.history[i].fitness});
-            const lambda = [];
-            for (let i = 0; i < statistics.history.length; i++)
-                lambda.push({x: start + i, y: statistics.parameters[i].lambda});
-            return {primary: fitness, secondary: lambda}
+            return {
+                primary: {x: statistics.generations, y: statistics.current.fitness},
+                secondary: {x: statistics.generations, y: statistics.parameters.lambda},
+            }
         };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -41,14 +133,10 @@
 
     mutation() {
         this.formatter = statistics => {
-            const start = statistics.generations - statistics.history.length;
-            const fitness = [];
-            for (let i = 0; i < statistics.history.length; i++)
-                fitness.push({x: start + i, y: statistics.history[i].fitness});
-            const mutation = [];
-            for (let i = 0; i < statistics.history.length; i++)
-                mutation.push({x: start + i, y: statistics.parameters[i].mutationRate});
-            return {primary: fitness, secondary: mutation}
+            return {
+                primary: {x: statistics.generations, y: statistics.current.fitness},
+                secondary: {x: statistics.generations, y: statistics.parameters.mutationRate}
+            }
         };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -79,7 +167,14 @@
         this.update();
     }
 
-    _calcY(genes) {
+    _calcY(individual) {
+        const step = 50 / (individual.genes.length / 2);
+        const stepsTaken = individual.ones > individual.genes.length / 2 ? individual.zeroes : individual.ones;
+        const minimum = 50 - step * stepsTaken;
+        const maximum = 50 + step * stepsTaken;
+        const range = maximum - minimum;
+        
+        const genes = individual.genes;
         let max = 0, min = 0, count = 0;
         let maxValue = genes.length;
         let minValue = 1;
@@ -91,22 +186,13 @@
             }
         }
         const progress = (count - min) / (max - min);
-        const middle = 50;
-        return middle - (middle * (1. - Math.abs(1. - progress * 2.)) * (progress * 2. - 1.));
+        return minimum + range * progress;
     }
 
     search(geneCount) {
         this.formatter = statistics => {
-            const ones = statistics.current.ones;
-            const y = this._calcY(statistics.current.genes);
-            console.log(y);
-            return {
-                primary: [{
-                    x: ones,
-                    y: y
-                }],
-                secondary: null
-            }
+            const y = this._calcY(statistics.current);
+            return {primary: {x: statistics.current.ones, y: y, label: statistics.generations}}
         };
         const height = 100;
         this.graph = new CanvasJS.Chart(this.id, {
@@ -145,7 +231,11 @@
 
     /**
      * @param {string} id
-     * @param {function(Statistics):{primary: {x: number, y: number}[], secondary: {x: number, y: number}[]}} formatter
+     * @param {function(Statistics):{
+     *      primary: {x: number, y: number}, 
+     *      secondary: {x: number, y: number},
+     *      ternary: {x: number, y: number}
+     *  }} formatter
      */
     constructor(id, formatter = null) {
         this.id = id;
@@ -162,10 +252,13 @@
         const dataPoints = this.formatter(statistics);
         const p = this.graph.options.data[0];
         const s = this.graph.options.data[1];
+        const t = this.graph.options.data[2];
         if (dataPoints.primary)
-            p.dataPoints = p.dataPoints.concat(dataPoints.primary);
+            p.dataPoints.push(dataPoints.primary);
         if (dataPoints.secondary)
-            s.dataPoints = s.dataPoints.concat(dataPoints.secondary);
+            s.dataPoints.push(dataPoints.secondary);
+        if (dataPoints.ternary)
+            t.dataPoints.push(dataPoints.ternary);
         this.update();
     }
 

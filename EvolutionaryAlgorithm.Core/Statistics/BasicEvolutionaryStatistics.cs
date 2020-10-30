@@ -1,5 +1,6 @@
 ﻿using System;
 using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.Core.Statistics
@@ -20,6 +21,7 @@ namespace EvolutionaryAlgorithm.Core.Statistics
             Best = (TIndividual) other.Best?.Clone();
             Current = (TIndividual) other.Current?.Clone();
             Previous = (TIndividual) other.Previous?.Clone();
+            Parameters = (IParameters) other.Parameters.Clone();
             StagnantGeneration = other.StagnantGeneration;
             Generations = other.Generations;
         }
@@ -28,6 +30,7 @@ namespace EvolutionaryAlgorithm.Core.Statistics
 
         public DateTime StartTime { get; private set; }
         public DateTime? EndTime { get; private set; }
+        public IParameters Parameters { get; private set; }
         public TIndividual Best { get; private set; }
         public TIndividual Previous { get; private set; }
         public TIndividual Current { get; private set; }
@@ -40,6 +43,7 @@ namespace EvolutionaryAlgorithm.Core.Statistics
             Current = (TIndividual) Algorithm.Best.Clone();
             Best = (TIndividual) Current.Clone();
             Previous = (TIndividual) Current.Clone();
+            Parameters = (IParameters) Algorithm.Parameters.Clone();
         }
 
         public virtual void Update()
@@ -48,6 +52,7 @@ namespace EvolutionaryAlgorithm.Core.Statistics
             Previous = Current;
             Current = temp;
             Algorithm.Best.CopyTo(Current);
+            Algorithm.Parameters.CopyTo(Parameters);
 
             Generations++;
 

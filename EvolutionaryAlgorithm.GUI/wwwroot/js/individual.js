@@ -21,7 +21,7 @@ class Individual extends CheapIndividual {
     constructor(data) {
         super(data);
         data ||= {};
-        this.genes = data.genes;
+        this.genes = data.genes || [];
         this._ones = -1;
     }
 

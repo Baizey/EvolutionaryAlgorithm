@@ -57,8 +57,9 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
             {
                 _requestStatistics = true;
                 while (_requestStatistics && IsRunning)
-                    Task.Delay(5).GetAwaiter().GetResult();
+                    Task.Delay(1).GetAwaiter().GetResult();
                 _requestStatistics = false;
+                if (!IsRunning) _statistics ??= Algorithm.MapToStatisticsView();
                 var result = _statistics;
                 _statistics = null;
                 return result;
@@ -85,9 +86,8 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
                 {
                     if (!_requestStatistics) return;
                     _requestStatistics = false;
-                    Statistics = Algorithm.Statistics.MapToView(true);
-                },
-                OnTermination = algorithm => Statistics = Algorithm.Statistics.MapToView(true)
+                    Statistics = Algorithm.MapToStatisticsView();
+                }
             };
             Algorithm.UsingParameters(new Parameters
             {
@@ -97,7 +97,7 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
                 MutationRate = mutationRate
             });
             Algorithm.UsingStatistics(
-                new UiEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool>());
+                new BasicEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool>());
             Algorithm.UsingEvaluation(CreateFitness(fitness, jump));
             Algorithm.UsingEndogenousRandomPopulation(mutationRate);
             Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase,
@@ -116,10 +116,8 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
         {
             if (!IsRunning) return;
             Algorithm.Terminate();
-
-            while (Algorithm.IsRunning) Task.Delay(5).GetAwaiter().GetResult();
-
-            Statistics = Algorithm.Statistics.MapToView(true);
+            while (Algorithm.IsRunning)
+                Task.Delay(1).GetAwaiter().GetResult();
         }
 
         private static IHyperHeuristic<IEndogenousBitIndividual, BitArray, bool> CreateHeuristic(Heuristics heuristic,

@@ -1,5 +1,6 @@
 ﻿using System;
 using EvolutionaryAlgorithm.Core.Infrastructure;
+using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.Core.Statistics
@@ -11,6 +12,7 @@ namespace EvolutionaryAlgorithm.Core.Statistics
     {
         public DateTime StartTime { get; }
         public DateTime? EndTime { get; }
+        public IParameters Parameters { get; }
         public TIndividual Best { get; }
         public TIndividual Current { get; }
         public TIndividual Previous { get; }

@@ -28,12 +28,15 @@ document.getElementById('button_initialize').onclick = () => {
     }
     switch (heuristic) {
         case 'Asymmetric':
-            // TODO: this (show R0 and R1)
+            secondaryGraph.asymmetric();
+            break;
+        case 'StagnationDetection':
+            secondaryGraph.mutation();
+            ternaryGraph.stagnation();
             break;
         case 'HeavyTail':
         case 'MultiEndogenous':
         case 'SingleEndogenous':
-        case 'StagnationDetection':
             secondaryGraph.mutation();
             break;
         case 'Repair':

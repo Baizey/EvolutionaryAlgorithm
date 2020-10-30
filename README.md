@@ -13,8 +13,11 @@ In the top right corner of the IDE setup a run configuration for EvolutionaryAlg
 with the options set as such (any not mentioned should be left empty)
 
 Project: EvolutionaryAlgorithm.GUI
+
 Target: .NETCoreApp,Version=v3.1
+
 Exe path: <your solution location>/EvolutionaryAlgorithm/EvolutionaryAlgorithm.GUI/bin/Debug/netcoreapp3.1/EvolutionaryAlgorithm.GUI.dll
+ 
 Working directory: <your solution location>/EvolutionaryAlgorithm/EvolutionaryAlgorithm.GUI
 
 You should only need to set the project and the rest will be auto configured.

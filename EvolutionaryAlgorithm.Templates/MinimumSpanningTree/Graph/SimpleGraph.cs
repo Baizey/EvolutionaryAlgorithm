@@ -3,23 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EvolutionaryAlgorithm.Template.Graph
+namespace EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph
 {
-    public class Graph
+    public class SimpleGraph
     {
         public List<Node> Nodes { get; set; }
         public List<Edge> Edges { get; set; }
 
-        public Graph(int nodes, double edgeChance, int maxX = 10000, int maxY = 10000)
+        public SimpleGraph(int nodes, double edgeChance, int maxX = 10000, int maxY = 10000)
         {
             Edge.Reset();
             AddNodes(nodes, maxX, maxY);
             AddEdges(edgeChance);
         }
 
-        private bool IsOneComponent() => IsOneComponent(EnableAllEdges());
+        public double Distance(BitArray activatedEdges) => Edges.Where(e => activatedEdges[e.Id])
+            .Select(e => e.Distance)
+            .Sum();
 
-        private bool IsOneComponent(BitArray activatedEdges) => GetRandomComponent(activatedEdges).Count == Nodes.Count;
+        public bool IsOneComponent(BitArray activatedEdges) => GetRandomComponent(activatedEdges).Count == Nodes.Count;
 
         private HashSet<Node> GetRandomComponent() => GetRandomComponent(EnableAllEdges());
 

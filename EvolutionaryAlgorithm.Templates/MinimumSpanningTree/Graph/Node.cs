@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EvolutionaryAlgorithm.Template.Graph
+namespace EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph
 {
     public class Node
     {
@@ -9,12 +9,12 @@ namespace EvolutionaryAlgorithm.Template.Graph
         public double Y { get; set; }
         public List<Edge> Edges { get; } = new List<Edge>();
 
-        public void Add(Node other, Graph graph = null)
+        public void Add(Node other, SimpleGraph simpleGraph = null)
         {
             var edge = new Edge(this, other);
             Edges.Add(edge);
             other.Edges.Add(edge);
-            graph?.Edges.Add(edge);
+            simpleGraph?.Edges.Add(edge);
         }
 
         public Node()

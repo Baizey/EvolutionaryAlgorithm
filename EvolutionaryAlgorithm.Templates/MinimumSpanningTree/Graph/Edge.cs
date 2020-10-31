@@ -1,4 +1,4 @@
-﻿namespace EvolutionaryAlgorithm.Template.Graph
+﻿namespace EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph
 {
     public class Edge
     {

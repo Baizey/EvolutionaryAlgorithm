@@ -9,34 +9,34 @@
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
             theme: "light2",
-            title: {text: 'Lambda evolution'},
+            title: {text: 'Mutation focus'},
             axisX: {title: 'Generations'},
             axisY: {title: 'Fitness'},
-            axisY2: {title: 'Asymmetric split', minimum: 0, maximum: 1},
+            axisY2: {title: 'Focus in percent', minimum: 0, maximum: 1},
             data: [{
                 name: 'Fitness',
                 type: "line",
                 showInLegend: true,
-                xValueFormatString: "generation #####",
-                yValueFormatString: "##### fitness",
+                xValueFormatString: "generation 0",
+                yValueFormatString: "#####0 fitness",
                 indexLabelFontSize: 12,
                 dataPoints: [],
             }, {
-                name: 'R0',
+                name: 'Zeros',
                 type: "line",
                 axisYType: 'secondary',
                 showInLegend: true,
-                xValueFormatString: 'generation #####',
-                yValueFormatString: '# lambda',
+                xValueFormatString: 'generation 0',
+                yValueFormatString: '0% on zeroes',
                 indexLabelFontSize: 12,
                 dataPoints: []
             }, {
-                name: 'R1',
+                name: 'Ones',
                 type: "line",
                 axisYType: 'secondary',
                 showInLegend: true,
-                xValueFormatString: 'generation #####',
-                yValueFormatString: '# lambda',
+                xValueFormatString: 'generation 0',
+                yValueFormatString: '0% on ones',
                 indexLabelFontSize: 12,
                 dataPoints: []
             }]
@@ -68,8 +68,8 @@
                 name: 'Fitness',
                 type: "line",
                 showInLegend: true,
-                xValueFormatString: "Generation ####",
-                yValueFormatString: "##### fitness",
+                xValueFormatString: "Generation 0",
+                yValueFormatString: "0 fitness",
                 indexLabelFontSize: 12,
                 dataPoints: [],
             }, {
@@ -77,8 +77,8 @@
                 type: "scatter",
                 axisYType: 'secondary',
                 showInLegend: true,
-                xValueFormatString: "Generation ####",
-                yValueFormatString: "#####% progress",
+                xValueFormatString: "Generation 0",
+                yValueFormatString: "0% progress",
                 indexLabelFontSize: 12,
                 dataPoints: [],
             }, {
@@ -86,8 +86,8 @@
                 type: "scatter",
                 axisYType: 'secondary',
                 showInLegend: true,
-                xValueFormatString: "Generation ####",
-                yValueFormatString: "#####% progress",
+                xValueFormatString: "Generation 0",
+                yValueFormatString: "0% progress",
                 indexLabelFontSize: 12,
                 dataPoints: [],
             }]
@@ -113,8 +113,8 @@
                 name: 'Fitness',
                 type: "line",
                 showInLegend: true,
-                xValueFormatString: "generation #####",
-                yValueFormatString: "##### fitness",
+                xValueFormatString: "generation 0",
+                yValueFormatString: "0 fitness",
                 indexLabelFontSize: 12,
                 dataPoints: [],
             }, {
@@ -122,8 +122,8 @@
                 type: "line",
                 axisYType: 'secondary',
                 showInLegend: true,
-                xValueFormatString: 'generation #####',
-                yValueFormatString: '# lambda',
+                xValueFormatString: 'generation 0',
+                yValueFormatString: '0 lambda',
                 indexLabelFontSize: 12,
                 dataPoints: []
             }]
@@ -149,8 +149,8 @@
                 name: 'Fitness',
                 type: "line",
                 showInLegend: true,
-                xValueFormatString: "generation #####",
-                yValueFormatString: "##### fitness",
+                xValueFormatString: "generation 0",
+                yValueFormatString: "0 fitness",
                 indexLabelFontSize: 12,
                 dataPoints: [],
             }, {
@@ -158,8 +158,8 @@
                 type: "line",
                 axisYType: 'secondary',
                 showInLegend: true,
-                xValueFormatString: 'generation #####',
-                yValueFormatString: '##### mutation rate',
+                xValueFormatString: 'generation 0',
+                yValueFormatString: '0 mutation rate',
                 indexLabelFontSize: 12,
                 dataPoints: []
             }]

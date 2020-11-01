@@ -132,7 +132,9 @@ namespace EvolutionaryAlgorithm.BitImplementation
                 roll -= d;
                 var r = _random.Next(n);
                 var index = lookup[r];
+                Console.WriteLine(individual[index]);
                 individual.Flip(index);
+                Console.WriteLine(individual[index]);
             }
         }
 

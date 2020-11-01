@@ -13,7 +13,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         {
             var mutation = (AsymmetricMutation) Algorithm.HyperHeuristic[0].Mutator.Mutations[1];
             return
-                $"Runtime: {(DateTime.Now - StartTime).TotalSeconds} seconds, Generations: {Generations}, Fitness: {Algorithm.Best.Fitness}, MutationRate: {Algorithm.Parameters.MutationRate}, B: {mutation.B}, Counter: {mutation.ObservationCounter} Zero: {mutation.R0}, One: {mutation.R1}";
+                $"Runtime: {(DateTime.Now - StartTime).TotalSeconds} seconds, Generations: {Generations}, Fitness: {Algorithm.Best.Fitness}, MutationRate: {Algorithm.Parameters.MutationRate}, B: {mutation.ShouldFocusZero}, Counter: {mutation.ObservationCounter} Zero: {mutation.R0}, One: {mutation.R1}";
         }
     }
 }

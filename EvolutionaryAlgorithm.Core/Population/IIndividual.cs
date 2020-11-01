@@ -11,7 +11,6 @@ namespace EvolutionaryAlgorithm.Core.Population
     {
         public double Fitness { get; set; }
         public TGeneStructure Genes { get; set; }
-        public void Reset();
         public int Count { get; }
     }
 }

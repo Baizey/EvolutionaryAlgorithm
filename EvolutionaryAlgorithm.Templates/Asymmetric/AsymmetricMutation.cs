@@ -12,14 +12,14 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         private readonly int _observationPhase;
         private readonly double _learningRate, _learningCap;
 
-        public int B { get; private set; }
+        public int ShouldFocusZero { get; private set; }
         public int ObservationCounter { get; private set; }
         public double R0 { get; private set; }
         public double R1 { get; private set; }
 
         private IEvolutionaryStatistics<IEndogenousBitIndividual, BitArray, bool> _statistics;
         private readonly Random _random = new Random();
-        private bool _oddGeneration;
+        private bool _focusZero;
         private readonly MutationApplier _applier = new MutationApplier();
         private IParameters _parameters;
 
@@ -30,12 +30,12 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
             _observationPhase = observationPhase;
             ObservationCounter = _observationPhase;
 
-            _oddGeneration = true;
+            _focusZero = true;
             _learningRate = learningRate;
             _learningCap = 2 * _learningRate;
             R0 = 0.5;
             R1 = 1D - R0;
-            B = 0;
+            ShouldFocusZero = 0;
         }
 
         public void Initialize()
@@ -47,7 +47,7 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         public void Mutate(int index, IEndogenousBitIndividual child)
         {
             double zeroRate, oneRate;
-            if (_oddGeneration)
+            if (_focusZero)
             {
                 zeroRate = R0 + _learningRate;
                 oneRate = R1 - _learningRate;
@@ -64,20 +64,21 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
         public void Update()
         {
             if (_statistics.ImprovedFitness)
-                B += _oddGeneration ? 1 : -1;
+                ShouldFocusZero += _focusZero ? 1 : -1;
 
             if (--ObservationCounter <= 0)
             {
-                if (B < 0) LowerR0();
-                else if (B > 0) RaiseR0();
+                Console.WriteLine($"Observing update B: {ShouldFocusZero}, 0: {R0}, 1: {R1}");
+                if (ShouldFocusZero < 0) LowerR0();
+                else if (ShouldFocusZero > 0) RaiseR0();
                 else if (_random.NextDouble() >= 0.5) LowerR0();
                 else RaiseR0();
-
+                Console.WriteLine($"0: {R0}, 1: {R1}");
                 ObservationCounter = _observationPhase;
-                B = 0;
+                ShouldFocusZero = 0;
             }
 
-            _oddGeneration = (Algorithm.Statistics.Generations & 1L) == 1L;
+            _focusZero = !_focusZero;
         }
 
         private void LowerR0()

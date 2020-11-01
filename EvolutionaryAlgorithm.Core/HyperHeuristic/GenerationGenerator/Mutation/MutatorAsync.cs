@@ -15,7 +15,6 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
         public override async Task Mutate(List<TIndividual> newIndividuals) =>
             await Enumerable.Range(0, newIndividuals.Count).ParallelForEachAsync(async i =>
             {
-                newIndividuals[i].Reset();
                 foreach (var t in Mutations)
                     t.Mutate(i, newIndividuals[i]);
             });

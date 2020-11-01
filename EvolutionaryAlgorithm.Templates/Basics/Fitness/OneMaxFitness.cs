@@ -13,6 +13,10 @@ namespace EvolutionaryAlgorithm.Template.Basics.Fitness
         {
         }
 
-        public double Evaluate(TIndividual individual) => individual.Ones;
+        public double Evaluate(TIndividual individual)
+        {
+            var ones = individual.Ones;
+            return ones;
+        }
     }
 }

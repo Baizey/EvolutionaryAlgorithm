@@ -15,13 +15,12 @@ namespace EvolutionaryAlgorithm.BitImplementation
         }
 
         bool Flip(int i);
-        int Ones { get; set; }
+        int Ones { get; }
         int Zeros { get; }
     }
 
     public class BitIndividual : IBitIndividual
     {
-        private int _ones = -1;
         public double Fitness { get; set; }
         public BitArray Genes { get; set; }
         public int Count => Genes.Count;
@@ -30,14 +29,12 @@ namespace EvolutionaryAlgorithm.BitImplementation
         {
             get
             {
-                if (_ones != -1) return _ones;
-                _ones = 0;
+                var ones = 0;
                 for (var i = 0; i < Count; i++)
                     if (Genes[i])
-                        _ones++;
-                return _ones;
+                        ones++;
+                return ones;
             }
-            set => _ones = value;
         }
 
         public int Zeros => Count - Ones;
@@ -66,12 +63,6 @@ namespace EvolutionaryAlgorithm.BitImplementation
         {
             Genes.CopyTo(other.Genes);
             other.Fitness = Fitness;
-            other.Reset();
-        }
-
-        public void Reset()
-        {
-            _ones = -1;
         }
 
         public bool Flip(int i) => Genes[i] = !Genes[i];

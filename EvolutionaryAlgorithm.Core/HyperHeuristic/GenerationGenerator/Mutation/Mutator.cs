@@ -35,7 +35,6 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
         {
             for (var i = 0; i < newIndividuals.Count; i++)
             {
-                newIndividuals[i].Reset();
                 foreach (var t in Mutations)
                     t.Mutate(i, newIndividuals[i]);
             }

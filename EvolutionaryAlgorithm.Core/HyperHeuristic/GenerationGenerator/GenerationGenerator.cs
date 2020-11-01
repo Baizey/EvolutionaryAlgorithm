@@ -19,6 +19,8 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator
         public IMutator<TIndividual, TGeneStructure, TGene> Mutator { get; set; }
         public IGenerationFilter<TIndividual, TGeneStructure, TGene> Filter { get; set; }
 
+        public TIndividual Best => Algorithm.Population.Best;
+
         public virtual void Initialize()
         {
             _storage = new IndividualStorage<TIndividual, TGeneStructure, TGene>(Algorithm);

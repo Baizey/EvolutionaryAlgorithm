@@ -68,12 +68,10 @@ namespace EvolutionaryAlgorithm.Template.Asymmetric
 
             if (--ObservationCounter <= 0)
             {
-                Console.WriteLine($"Observing update B: {ShouldFocusZero}, 0: {R0}, 1: {R1}");
                 if (ShouldFocusZero < 0) LowerR0();
                 else if (ShouldFocusZero > 0) RaiseR0();
                 else if (_random.NextDouble() >= 0.5) LowerR0();
                 else RaiseR0();
-                Console.WriteLine($"0: {R0}, 1: {R1}");
                 ObservationCounter = _observationPhase;
                 ShouldFocusZero = 0;
             }

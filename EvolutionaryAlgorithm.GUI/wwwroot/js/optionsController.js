@@ -58,6 +58,7 @@
                 body.mu = 1;
                 body.lambda = 1;
                 body.learningRate = this.learningRate.value - 0;
+                body.mutationRate = Math.floor(this.mutationRate.value - 0);
                 body.observationPhase = Math.floor(this.observationPhase.value - 0);
                 break;
             case 'StagnationDetection':
@@ -108,7 +109,10 @@
         }
         switch (this.heuristicInput.value) {
             case 'Asymmetric':
+                this.mutationRate.show();
                 this.observationPhase.show();
+                
+                if (this.learningRate.value >= 1) this.learningRate.set(0.05);
                 this.learningRate.show();
                 break;
             case 'StagnationDetection':
@@ -117,18 +121,28 @@
                 break;
             case 'Repair':
                 this.lambda.show();
-                this.learningRate.show();
+                this.mutationRate.show();
                 this.repairChance.show();
+                
+                if (this.learningRate.value <= 1) this.learningRate.set(2);
+                this.learningRate.show();
                 break;
             case 'SingleEndogenous':
                 this.lambda.show();
+                this.mutationRate.show();
+                
+                if (this.learningRate.value <= 1) this.learningRate.set(2);
                 this.learningRate.show();
                 break;
             case 'MultiEndogenous':
                 this.lambda.show();
+                this.mutationRate.show();
+                
+                if (this.learningRate.value <= 1) this.learningRate.set(2);
                 this.learningRate.show();
                 break;
             case 'HeavyTail':
+                this.mutationRate.show();
                 this.lambda.show();
                 this.beta.show();
                 break;

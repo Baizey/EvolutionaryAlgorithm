@@ -1,11 +1,40 @@
 ﻿class Graph {
 
+    /**
+     * @param {{x: number, y: number}[]} nodes
+     */
+    graph(nodes) {
+        this.clear();
+        const self = this;
+        this.formatter = (graph, _, edges) => {
+            edges = edges.map(e => ({
+                data: {id: `e${e.id}`, source: `n${e.from}`, target: `n${e.to}`},
+                group: 'edges'
+            }));
+            graph.remove(self._edges);
+            self._edges = edges;
+            graph.add(edges);
+        };
+        this.graph = new cytoscape({container: this.element});
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].group = 'nodes'
+            nodes[i].data = {id: `n${i}`}
+        }
+        this._nodes = nodes;
+        this._edges = [];
+        this.graph.add(nodes);
+    }
+
     asymmetric() {
-        this.formatter = statistics => ({
-            primary: {x: statistics.generations, y: statistics.current.fitness},
-            secondary: {x: statistics.generations, y: statistics.r0},
-            ternary: {x: statistics.generations, y: statistics.r1},
-        });
+        this.clear();
+        this.formatter = (graph, statistics) => {
+            const p = graph.options.data[0].dataPoints;
+            const s = graph.options.data[1].dataPoints;
+            const t = graph.options.data[2].dataPoints;
+            p.push({x: statistics.generations, y: statistics.current.fitness})
+            s.push({x: statistics.generations, y: statistics.r0})
+            t.push({x: statistics.generations, y: statistics.r1})
+        };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
             theme: "light2",
@@ -45,17 +74,12 @@
     }
 
     stagnation() {
-        this.formatter = statistics => {
-            if (statistics.inStagnation)
-                return {
-                    primary: {x: statistics.generations, y: statistics.current.fitness},
-                    secondary: {x: statistics.generations, y: statistics.stagnationProgress}
-                }
-            else
-                return {
-                    primary: {x: statistics.generations, y: statistics.current.fitness},
-                    ternary: {x: statistics.generations, y: statistics.stagnationProgress}
-                }
+        this.clear();
+        this.formatter = (graph, statistics) => {
+            const p = graph.options.data[0].dataPoints;
+            const s = graph.options.data[statistics.inStagnation ? 1 : 2].dataPoints;
+            p.push({x: statistics.generations, y: statistics.current.fitness})
+            s.push({x: statistics.generations, y: statistics.stagnationProgress})
         };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -96,11 +120,12 @@
     }
 
     lambda() {
-        this.formatter = statistics => {
-            return {
-                primary: {x: statistics.generations, y: statistics.current.fitness},
-                secondary: {x: statistics.generations, y: statistics.parameters.lambda},
-            }
+        this.clear();
+        this.formatter = (graph, statistics) => {
+            const p = graph.options.data[0].dataPoints;
+            const s = graph.options.data[1].dataPoints;
+            p.push({x: statistics.generations, y: statistics.current.fitness})
+            s.push({x: statistics.generations, y: statistics.parameters.lambda})
         };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -132,11 +157,12 @@
     }
 
     mutation() {
-        this.formatter = statistics => {
-            return {
-                primary: {x: statistics.generations, y: statistics.current.fitness},
-                secondary: {x: statistics.generations, y: statistics.parameters.mutationRate}
-            }
+        this.clear();
+        this.formatter = (graph, statistics) => {
+            const p = graph.options.data[0].dataPoints;
+            const s = graph.options.data[1].dataPoints;
+            p.push({x: statistics.generations, y: statistics.current.fitness})
+            s.push({x: statistics.generations, y: statistics.parameters.mutationRate})
         };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -173,7 +199,7 @@
         const minimum = 50 - step * stepsTaken;
         const maximum = 50 + step * stepsTaken;
         const range = maximum - minimum;
-        
+
         const genes = individual.genes;
         let max = 0, min = 0, count = 0;
         let maxValue = genes.length;
@@ -190,9 +216,11 @@
     }
 
     search(geneCount) {
-        this.formatter = statistics => {
+        this.clear();
+        this.formatter = (graph, statistics) => {
+            const p = graph.options.data[0].dataPoints;
             const y = this._calcY(statistics.current);
-            return {primary: {x: statistics.current.ones, y: y, label: statistics.generations}}
+            p.push({x: statistics.current.ones, y: y})
         };
         const height = 100;
         this.graph = new CanvasJS.Chart(this.id, {
@@ -231,11 +259,7 @@
 
     /**
      * @param {string} id
-     * @param {function(Statistics):{
-     *      primary: {x: number, y: number}, 
-     *      secondary: {x: number, y: number},
-     *      ternary: {x: number, y: number}
-     *  }} formatter
+     * @param {function(any, Statistics, {id: string, from: string, to: string}[])} formatter
      */
     constructor(id, formatter = null) {
         this.id = id;
@@ -246,20 +270,11 @@
 
     /**
      * @param {Statistics} statistics
+     * @param {{id: string, source: string, target: string}[]} edges
      */
-    add(statistics) {
+    add(statistics, edges) {
         if (!statistics || !this.formatter) return;
-        const dataPoints = this.formatter(statistics);
-        const p = this.graph.options.data[0];
-        const s = this.graph.options.data[1];
-        const t = this.graph.options.data[2];
-        if (dataPoints.primary)
-            p.dataPoints.push(dataPoints.primary);
-        if (dataPoints.secondary)
-            s.dataPoints.push(dataPoints.secondary);
-        if (dataPoints.ternary)
-            t.dataPoints.push(dataPoints.ternary);
-        this.update();
+        this.formatter(this.graph, statistics, edges);
     }
 
     update() {

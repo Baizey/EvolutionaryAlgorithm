@@ -7,9 +7,10 @@
     graph2D(nodes, edges) {
         this.clear();
         this.formatter = (graph, data) => {
-            graph.edges().removeClass('active', false);
             const ids = data.edges.map(e => `#p${e.id}`).join(', ');
-            graph.$(ids).toggleClass('active', true);
+            graph.edges().removeClass('highlighted');
+            graph.edges().toggleClass('highlighted', false);
+            graph.edges(ids).addClass('highlighted');
         };
         const element = document.createElement('div');
         element.setAttribute('style', 'width: 100%; height: 100%; display: block; text-align: left;')
@@ -17,12 +18,18 @@
         this.graph = new cytoscape({
             container: element,
             autolock: true,
-            style: [
-                {
-                    selector: 'node',
-                    style: {label: 'data(id)'}
-                }
-            ]
+            style: cytoscape.stylesheet()
+                .selector('edge').style({
+                    'width': 5,
+                    'height': 5,
+                    'line-color': '#2a6cd6',
+                    'opacity': 0.2,
+                }).selector('edge.highlighted').style({
+                    'width': 10,
+                    'height': 10,
+                    'line-color': '#2a6cd6',
+                    'opacity': 1,
+                })
         });
         for (let i = 0; i < nodes.length; i++)
             nodes[i] = {
@@ -51,7 +58,6 @@
         this._nodes = nodes;
         this._edges = [];
         this.graph.fit();
-        this.graph.edges().addClass('shit');
     }
 
     asymmetric() {

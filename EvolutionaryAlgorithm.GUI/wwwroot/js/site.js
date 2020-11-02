@@ -18,10 +18,11 @@ document.getElementById('button_initialize').onclick = async () => {
     const heuristic = optionsController.heuristicInput.value;
     const fitness = optionsController.fitnessInput.value;
     const geneCount = optionsController.geneCount.value - 0;
+    const edges = await api.getEdges();
     switch (fitness) {
         case 'MinimumSpanningTree':
-            primaryGraph.graph2D(await api.getNodes(), await api.getEdges());
-            ternaryGraph.clear();
+            primaryGraph.graph2D(await api.getNodes(), edges);
+            ternaryGraph.search(edges.length);
             break;
         case 'OneMax':
         case 'LeadingOnes':

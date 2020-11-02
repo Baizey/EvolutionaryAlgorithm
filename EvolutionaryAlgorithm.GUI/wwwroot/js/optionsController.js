@@ -139,7 +139,6 @@
 
     updateOptions() {
         this.rows.forEach(r => r.hide());
-        this.geneCount.show();
         switch (this.terminationInput.value) {
             case 'Fitness':
                 switch (this.fitnessInput.value) {
@@ -159,8 +158,6 @@
         }
         switch (this.fitnessInput.value) {
             case 'OneMax':
-                this.geneCount.show();
-                break;
             case 'LeadingOnes':
                 this.geneCount.show();
                 break;

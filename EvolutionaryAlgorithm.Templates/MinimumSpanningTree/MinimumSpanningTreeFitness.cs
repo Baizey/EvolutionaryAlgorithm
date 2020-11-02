@@ -20,8 +20,8 @@ namespace EvolutionaryAlgorithm.Template.MinimumSpanningTree
         public double Evaluate(T individual)
         {
             if (_simpleGraph.IsOneComponent(individual.Genes))
-                return _simpleGraph.Distance(individual.Genes);
-            return -1;
+                return -_simpleGraph.Distance(individual.Genes);
+            return int.MinValue;
         }
     }
 }

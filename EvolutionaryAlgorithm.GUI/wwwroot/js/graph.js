@@ -34,6 +34,7 @@
             p.push({x: statistics.generations, y: statistics.current.fitness})
             s.push({x: statistics.generations, y: statistics.r0})
             t.push({x: statistics.generations, y: statistics.r1})
+            graph.render();
         };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -80,6 +81,7 @@
             const s = graph.options.data[statistics.inStagnation ? 1 : 2].dataPoints;
             p.push({x: statistics.generations, y: statistics.current.fitness})
             s.push({x: statistics.generations, y: statistics.stagnationProgress})
+            graph.render();
         };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -126,6 +128,7 @@
             const s = graph.options.data[1].dataPoints;
             p.push({x: statistics.generations, y: statistics.current.fitness})
             s.push({x: statistics.generations, y: statistics.parameters.lambda})
+            graph.render();
         };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -163,6 +166,7 @@
             const s = graph.options.data[1].dataPoints;
             p.push({x: statistics.generations, y: statistics.current.fitness})
             s.push({x: statistics.generations, y: statistics.parameters.mutationRate})
+            graph.render();
         };
         this.graph = new CanvasJS.Chart(this.id, {
             animationEnabled: false,
@@ -221,6 +225,7 @@
             const p = graph.options.data[0].dataPoints;
             const y = this._calcY(statistics.current);
             p.push({x: statistics.current.ones, y: y})
+            graph.render();
         };
         const height = 100;
         this.graph = new CanvasJS.Chart(this.id, {

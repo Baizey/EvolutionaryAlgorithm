@@ -13,12 +13,16 @@ async function updateView() {
     if (running) await updateView();
 }
 
-document.getElementById('button_initialize').onclick = () => {
-    optionsController.initialize();
+document.getElementById('button_initialize').onclick = async () => {
+    await optionsController.initialize();
     const heuristic = optionsController.heuristicInput.value;
     const fitness = optionsController.fitnessInput.value;
     const geneCount = optionsController.geneCount.value - 0;
     switch (fitness) {
+        case 'MinimumSpanningTree':
+            primaryGraph.graph2D(await api.getNodes(), await api.getEdges());
+            ternaryGraph.clear();
+            break;
         case 'OneMax':
         case 'LeadingOnes':
         case 'Jump':
@@ -45,7 +49,7 @@ document.getElementById('button_initialize').onclick = () => {
     }
 }
 document.getElementById('button_run').onclick = () => {
-    api.run().then(() => updateView());
+    optionsController.run().then(() => updateView());
 }
 document.getElementById('button_pause').onclick = () => {
     api.pause().finally();

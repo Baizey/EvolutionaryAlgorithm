@@ -5,6 +5,8 @@ namespace EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph
 {
     public class Node
     {
+        private static int _nextId;
+        public int Id { get; } = _nextId++;
         public double X { get; set; }
         public double Y { get; set; }
         public List<Edge> Edges { get; } = new List<Edge>();
@@ -26,6 +28,8 @@ namespace EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph
             X = x;
             Y = y;
         }
+
+        public static void Reset() => _nextId = 0;
 
         public double Distance(Node other) => Math.Abs(X - other.X) + Math.Abs(Y - other.Y);
     }

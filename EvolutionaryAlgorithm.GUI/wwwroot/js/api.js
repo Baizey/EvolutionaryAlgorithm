@@ -33,10 +33,24 @@
     }
 
     /**
+     * @returns {Promise<{from: number, to: number, id: number}[]>}
+     */
+    async getEdges() {
+        return (await this._call('Edges', 'GET'));
+    }
+
+    /**
+     * @returns {Promise<Node[]>}
+     */
+    async getNodes() {
+        return (await this._call('Nodes', 'GET')).map(e => new GraphNode(e));
+    }
+
+    /**
      * @returns {Promise<Statistics>}
      */
-    async getStatistics(includeHistory = true) {
-        return new Statistics(await this._call('Statistics', 'GET', {includeHistory: includeHistory}));
+    async getStatistics() {
+        return new Statistics(await this._call('Statistics', 'GET'));
     }
 
     /**
@@ -48,10 +62,11 @@
     }
 
     /**
+     * @param {Object} body
      * @returns Promise<void>
      */
-    run() {
-        return this._call('Run', 'PUT');
+    run(body) {
+        return this._call('Run', 'PUT', body);
     }
 
     /**

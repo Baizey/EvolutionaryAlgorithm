@@ -13,7 +13,8 @@
      *     r0: number,
      *     r1: number,
      *     inStagnation: boolean,
-     *     stagnationProgress: number
+     *     stagnationProgress: number,
+     *     edges: {from: number, to: number, id: number}[]
      * }} data
      */
     constructor(data) {
@@ -31,5 +32,6 @@
         this.r1 = data.r1;
         this.inStagnation = data.inStagnation;
         this.stagnationProgress = data.stagnationProgress;
+        this.edges = data.edges;
     }
 }

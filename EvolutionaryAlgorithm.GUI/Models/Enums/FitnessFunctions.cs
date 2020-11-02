@@ -4,6 +4,8 @@
     {
         OneMax,
         LeadingOnes,
-        Jump
+        Jump,
+        MinimumSpanningTree,
+        Satisfiability
     }
 }

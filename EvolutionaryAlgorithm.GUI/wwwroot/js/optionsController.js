@@ -1,6 +1,13 @@
 ﻿class OptionsController {
     constructor() {
+        this.termination = new Input('termination');
+        this.seconds = new Input('seconds');
+        this.fitnessLimit = new Input('fitnessLimit');
+        this.generations = new Input('generations');
+
         this.jump = new Input('jump');
+        this.nodes = new Input('nodes');
+        this.edgeChance = new Input('edgeChance');
         this.geneCount = new Input('geneCount');
         this.lambda = new Input('lambda');
         this.mu = new Input('mu');
@@ -10,6 +17,11 @@
         this.observationPhase = new Input('observationPhase');
         this.repairChance = new Input('repairChance');
         this.rows = [
+            this.nodes,
+            this.edgeChance,
+            this.seconds,
+            this.fitnessLimit,
+            this.generations,
             this.jump,
             this.geneCount,
             this.lambda,
@@ -20,9 +32,13 @@
             this.observationPhase,
             this.repairChance,
         ];
+        this.terminationInput = document.getElementById('input_termination');
         this.heuristicInput = document.getElementById('input_heuristic');
         this.fitnessInput = document.getElementById('input_fitness');
         const self = this;
+        this.terminationInput.onchange = () => {
+            self.updateOptions()
+        }
         this.heuristicInput.onchange = () => {
             self.updateOptions()
         }
@@ -34,7 +50,31 @@
         this.api = new Api();
     }
 
-    initialize() {
+    async run() {
+        const body = {
+            termination: this.terminationInput.value
+        }
+        switch (this.terminationInput.value) {
+            case 'Fitness':
+                switch (this.fitnessInput.value) {
+                    case 'MinimumSpanningTree':
+                    case 'Satisfiability':
+                        body.fitness = this.fitnessLimit.value - 0;
+                        break;
+                }
+                break;
+            case 'Time':
+                body.seconds = Math.floor(this.fitnessLimit.value - 0);
+                break;
+            case 'Stagnation':
+            case 'Generations':
+                body.generations = Math.floor(this.fitnessLimit.value - 0);
+                break;
+        }
+        await this.api.run(body);
+    }
+
+    async initialize() {
         const fitness = this.fitnessInput.value;
         const heuristic = this.heuristicInput.value;
         const body = {
@@ -52,7 +92,12 @@
                 body.geneCount = Math.floor(this.geneCount.value - 0);
                 body.jump = Math.floor(this.jump.value - 0);
                 break;
+            case 'MinimumSpanningTree':
+                body.nodes = Math.floor(this.nodes.value - 0);
+                body.edgeChance = this.edgeChance.value - 0;
+                break;
         }
+
         switch (heuristic) {
             case 'Asymmetric':
                 body.mu = 1;
@@ -89,12 +134,29 @@
                 break;
         }
 
-        this.api.initialize(body).finally();
+        await this.api.initialize(body);
     }
 
     updateOptions() {
         this.rows.forEach(r => r.hide());
         this.geneCount.show();
+        switch (this.terminationInput.value) {
+            case 'Fitness':
+                switch (this.fitnessInput.value) {
+                    case 'MinimumSpanningTree':
+                    case 'Satisfiability':
+                        this.fitnessLimit.show();
+                        break;
+                }
+                break;
+            case 'Time':
+                this.seconds.show();
+                break;
+            case 'Stagnation':
+            case 'Generations':
+                this.generations.show();
+                break;
+        }
         switch (this.fitnessInput.value) {
             case 'OneMax':
                 this.geneCount.show();
@@ -106,12 +168,16 @@
                 this.geneCount.show();
                 this.jump.show();
                 break;
+            case 'MinimumSpanningTree':
+                this.nodes.show();
+                this.edgeChance.show();
+                break;
         }
         switch (this.heuristicInput.value) {
             case 'Asymmetric':
                 this.mutationRate.show();
                 this.observationPhase.show();
-                
+
                 if (this.learningRate.value >= 1) this.learningRate.set(0.05);
                 this.learningRate.show();
                 break;
@@ -123,21 +189,21 @@
                 this.lambda.show();
                 this.mutationRate.show();
                 this.repairChance.show();
-                
+
                 if (this.learningRate.value <= 1) this.learningRate.set(2);
                 this.learningRate.show();
                 break;
             case 'SingleEndogenous':
                 this.lambda.show();
                 this.mutationRate.show();
-                
+
                 if (this.learningRate.value <= 1) this.learningRate.set(2);
                 this.learningRate.show();
                 break;
             case 'MultiEndogenous':
                 this.lambda.show();
                 this.mutationRate.show();
-                
+
                 if (this.learningRate.value <= 1) this.learningRate.set(2);
                 this.learningRate.show();
                 break;

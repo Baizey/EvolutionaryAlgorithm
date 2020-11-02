@@ -12,7 +12,6 @@ namespace EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph
 
         public SimpleGraph(int nodes, double edgeChance, int maxX = 10000, int maxY = 10000)
         {
-            Edge.Reset();
             AddNodes(nodes, maxX, maxY);
             AddEdges(edgeChance);
         }
@@ -49,7 +48,8 @@ namespace EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph
 
         private void AddNodes(int nodes, int maxX = 10000, int maxY = 10000)
         {
-            Nodes.Clear();
+            Node.Reset();
+            Nodes = new List<Node>();
             var random = new Random();
             for (var i = 0; i < nodes; i++)
                 Nodes.Add(new Node(random.Next(maxX) + 1, random.Next(maxY) + 1));
@@ -58,7 +58,7 @@ namespace EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph
         private void AddEdges(double edgeChance)
         {
             Edge.Reset();
-            Edges.Clear();
+            Edges = new List<Edge>();
             var random = new Random();
             for (var i = 0; i < Nodes.Count; i++)
             {

@@ -1,28 +1,57 @@
 ﻿class Graph {
 
     /**
-     * @param {{x: number, y: number}[]} nodes
+     * @param {Node[]} nodes
+     * @param {{from: number, to: number, id: number}[]} edges
      */
-    graph(nodes) {
+    graph2D(nodes, edges) {
         this.clear();
-        const self = this;
-        this.formatter = (graph, _, edges) => {
-            edges = edges.map(e => ({
-                data: {id: `e${e.id}`, source: `n${e.from}`, target: `n${e.to}`},
-                group: 'edges'
-            }));
-            graph.remove(self._edges);
-            self._edges = edges;
-            graph.add(edges);
+        this.formatter = (graph, data) => {
+            graph.edges().removeClass('active', false);
+            const ids = data.edges.map(e => `#p${e.id}`).join(', ');
+            graph.$(ids).toggleClass('active', true);
         };
-        this.graph = new cytoscape({container: this.element});
-        for (let i = 0; i < nodes.length; i++) {
-            nodes[i].group = 'nodes'
-            nodes[i].data = {id: `n${i}`}
-        }
+        const element = document.createElement('div');
+        element.setAttribute('style', 'width: 100%; height: 100%; display: block; text-align: left;')
+        this.element.appendChild(element)
+        this.graph = new cytoscape({
+            container: element,
+            autolock: true,
+            style: [
+                {
+                    selector: 'node',
+                    style: {label: 'data(id)'}
+                }
+            ]
+        });
+        for (let i = 0; i < nodes.length; i++)
+            nodes[i] = {
+                group: 'nodes',
+                data: {
+                    weight: 75,
+                    id: `n${nodes[i].id}`
+                },
+                position: {
+                    x: nodes[i].x,
+                    y: nodes[i].y
+                }
+            }
+        for (let i = 0; i < edges.length; i++)
+            edges[i] = {
+                group: 'edges',
+                data: {
+                    id: `p${edges[i].id}`,
+                    source: `n${edges[i].from}`,
+                    target: `n${edges[i].to}`
+                },
+            }
+        this.graph.add(nodes);
+        this.graph.add(edges);
+
         this._nodes = nodes;
         this._edges = [];
-        this.graph.add(nodes);
+        this.graph.fit();
+        this.graph.edges().addClass('shit');
     }
 
     asymmetric() {
@@ -264,7 +293,7 @@
 
     /**
      * @param {string} id
-     * @param {function(any, Statistics, {id: string, from: string, to: string}[])} formatter
+     * @param {function(any, Statistics)} formatter
      */
     constructor(id, formatter = null) {
         this.id = id;

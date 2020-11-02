@@ -30,7 +30,16 @@
                         <option value="OneMax">OneMax</option>
                         <option value="LeadingOnes">LeadingOnes</option>
                         <option value="Jump">Jump</option>
+                        <option value="MinimumSpanningTree">Minimum spanning tree</option>
                     </select>
+                </div>
+                <div id="row_nodes" class="row hidden">
+                    <label class="optionLabel" for="input_nodes">Nodes</label>
+                    <input class="optionValue" value="20" id="input_nodes" type="number"/>
+                </div>
+                <div id="row_edgeChance" class="row hidden">
+                    <label class="optionLabel" for="input_edgeChance">Edge chance</label>
+                    <input class="optionValue" value="0.5" id="input_edgeChance" type="number"/>
                 </div>
                 <div id="row_jump" class="row hidden">
                     <label class="optionLabel" for="input_jump">Jump size</label>
@@ -78,8 +87,34 @@
             </div>
         </div>
         <div class="secondary" style="background-color: grey">
-            <div id="button_run" class="btn btn-info">Run</div>
-            <div id="button_pause" class="btn btn-danger">Pause</div>
+            <div class="primary padded">
+                <div id="row_termination" class="row">
+                    <label class="optionLabel" for="input_termination">Termination</label>
+                    <select class="optionValue" id="input_termination">
+                        <option value="Time">Timeout</option>
+                        <option value="Fitness">Fitness</option>
+                        <option value="Generations">Generations</option>
+                        <option value="Stagnation">Stagnation</option>
+                    </select>
+                </div>
+                <div id="row_seconds" class="row hidden">
+                    <label class="optionLabel" for="input_seconds">Time in seconds</label>
+                    <input class="optionValue" value="10" id="input_seconds" type="number"/>
+                </div>
+                <div id="row_fitnessLimit" class="row hidden">
+                    <label class="optionLabel" for="input_fitnessLimit">Fitness</label>
+                    <input class="optionValue" value="1000" id="input_fitnessLimit" type="number"/>
+                </div>
+                <div id="row_generations" class="row hidden">
+                    <label class="optionLabel" for="input_generations">Generations</label>
+                    <input class="optionValue" value="1000" id="input_generations" type="number"/>
+                </div>
+            </div>
+            <div class="secondary padded" style="background-color: black">
+                <button style="width:50%; height: 100%; float: left; border-top-right-radius: 0; border-bottom-right-radius: 0;" id="button_run" class="btn btn-info">Run</button>
+                <button style="width:50%; height: 100%; float: left; border-top-left-radius: 0; border-bottom-left-radius: 0;" id="button_pause" class="btn btn-danger">Pause</button>
+            </div>
+
         </div>
     </div>
     <div class="col-9">

@@ -1,4 +1,6 @@
-﻿namespace EvolutionaryAlgorithm.GUI.Models.Input
+﻿using EvolutionaryAlgorithm.GUI.Models.Enums;
+
+namespace EvolutionaryAlgorithm.GUI.Models.Input
 {
     public class InitializeInput
     {
@@ -13,5 +15,7 @@
         public int? Jump { get; set; }
         public int? ObservationPhase { get; set; }
         public double? RepairChance { get; set; }
+        public int? Nodes { get; set; }
+        public double? EdgeChance { get; set; }
     }
 }

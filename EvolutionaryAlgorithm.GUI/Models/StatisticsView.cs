@@ -5,8 +5,8 @@ using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Parameters;
-using EvolutionaryAlgorithm.Core.Statistics;
 using EvolutionaryAlgorithm.Template.Asymmetric;
+using EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph;
 using EvolutionaryAlgorithm.Template.Stagnation;
 
 namespace EvolutionaryAlgorithm.GUI.Models
@@ -25,8 +25,10 @@ namespace EvolutionaryAlgorithm.GUI.Models
         public double StagnationProgress { get; set; }
         public double R0 { get; set; }
         public double R1 { get; set; }
+        public IEnumerable<ViewEdge> Edges { get; set; }
 
-        public StatisticsView(IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm)
+        public StatisticsView(IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,
+            SimpleGraph graph)
         {
             var statistics = algorithm.Statistics;
             Parameters = (IParameters) algorithm.Parameters.Clone();
@@ -49,6 +51,12 @@ namespace EvolutionaryAlgorithm.GUI.Models
                 InStagnation = heuristic.InStagnationDetection;
                 StagnationProgress = heuristic.At / heuristic.Limit;
             }
+
+            if (graph != null && Current != null)
+                Edges = graph.Edges
+                    .Where(t => Current.Genes[t.Id])
+                    .Select(t => new ViewEdge(t))
+                    .ToList();
         }
     }
 }

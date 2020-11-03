@@ -20,7 +20,9 @@ Exe path: <your solution location>/EvolutionaryAlgorithm/EvolutionaryAlgorithm.G
  
 Working directory: <your solution location>/EvolutionaryAlgorithm/EvolutionaryAlgorithm.GUI
 
-You should only need to set the project and the rest will be auto configured.
+Environment variables: ASPNETCORE_ENVIRONMENT="Development"
+
+You should only need to set the project and Environment variables, the rest will be auto configured.
 
 From here you can apply changes and click ok.
 

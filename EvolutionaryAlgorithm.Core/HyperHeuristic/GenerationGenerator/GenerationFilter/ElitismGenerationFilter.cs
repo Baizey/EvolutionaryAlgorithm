@@ -33,10 +33,7 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Generati
             for (var i = 1; i < bodies.Count; i++)
                 if (bodies[i].Fitness > bodies[index].Fitness ||
                     bodies[i].Fitness == bodies[index].Fitness && bodies[i].MutationRate < oldRate)
-                {
-                    index = i;
-                    oldRate = bodies[index].MutationRate;
-                }
+                    oldRate = bodies[index = i].MutationRate;
 
             var best = bodies[index];
 

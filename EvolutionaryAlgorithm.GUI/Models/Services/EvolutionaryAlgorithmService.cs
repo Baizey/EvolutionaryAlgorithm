@@ -116,7 +116,7 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
             });
             Algorithm.UsingStatistics(
                 new BasicEvolutionaryStatistics<IBitIndividual, BitArray, bool>());
-            Algorithm.UsingEndogenousRandomPopulation(mutationRate);
+            Algorithm.UsingRandomPopulation(mutationRate);
             Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase,
                 repairChance, beta));
         }

@@ -35,7 +35,7 @@ namespace EvolutionaryAlgorithm
                     Mu = 1,
                 })
                 .UsingBasicStatistics()
-                .UsingEndogenousRandomPopulation(mutationRate)
+                .UsingRandomPopulation(mutationRate)
                 .UsingHeuristic(SingleEndogenous(learningRate))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             endogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
@@ -52,7 +52,7 @@ namespace EvolutionaryAlgorithm
                     Mu = 1,
                 })
                 .UsingStagnationStatistics()
-                .UsingEndogenousRandomPopulation(learningRate)
+                .UsingRandomPopulation(learningRate)
                 .UsingHeuristic(StagnationDetection(mutationRate, 1))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             stagnation.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
@@ -68,7 +68,7 @@ namespace EvolutionaryAlgorithm
                     // Always 1
                     Mu = 1,
                 })
-                .UsingEndogenousRandomPopulation(mutationRate)
+                .UsingRandomPopulation(mutationRate)
                 .UsingStatistics(new AsymmetricBasicEvolutionaryStatistics<IBitIndividual>())
                 .UsingHeuristic(Asymmetric(0.05, observationPhase))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
@@ -86,7 +86,7 @@ namespace EvolutionaryAlgorithm
                     Mu = 1,
                 })
                 .UsingStatistics(new LambdaBasicStatistics<IBitIndividual>())
-                .UsingEndogenousRandomPopulation(mutationRate)
+                .UsingRandomPopulation(mutationRate)
                 .UsingHeuristic(Repair(learningRate, repairRate))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             oneLambdaLambda.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
@@ -103,7 +103,7 @@ namespace EvolutionaryAlgorithm
                     Mu = 1,
                 })
                 .UsingBasicStatistics()
-                .UsingEndogenousRandomPopulation(mutationRate)
+                .UsingRandomPopulation(mutationRate)
                 .UsingHeuristic(HeavyTail(beta))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             heavyTail.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
@@ -120,7 +120,7 @@ namespace EvolutionaryAlgorithm
                     Mu = (int) (3 * Math.Log(geneCount)),
                 })
                 .UsingStatistics(new EndogenousBasicEvolutionaryStatistics())
-                .UsingEndogenousRandomPopulation(mutationRate)
+                .UsingRandomPopulation(mutationRate)
                 .UsingHeuristic(MultiEndogenous(learningRate))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             lambdaEndogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);

@@ -10,16 +10,8 @@ namespace EvolutionaryAlgorithm.Template
     public static class Extensions
     {
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingRandomPopulation(
-            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm)
-        {
-            var random = new Random();
-            return algorithm.UsingPopulation(
-                new BitPopulation<IBitIndividual>(g => new BitIndividual(g, () => random.NextDouble() >= 0.5)));
-        }
-
-        public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingEndogenousRandomPopulation(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
-            int mutationRate) =>
+            int mutationRate = 1) =>
             algorithm.UsingPopulation(BitIndividual.FromRandom(mutationRate));
 
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingBasicStatistics(

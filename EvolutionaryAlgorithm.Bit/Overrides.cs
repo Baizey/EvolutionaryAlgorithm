@@ -58,4 +58,9 @@ namespace EvolutionaryAlgorithm.BitImplementation
         where T : IBitIndividual
     {
     }
+
+    public interface IBitParameterAdjuster<T> : IParameterAdjuster<T, BitArray, bool>
+        where T : IBitIndividual
+    {
+    }
 }

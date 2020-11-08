@@ -7,9 +7,11 @@ const optionsController = new OptionsController();
 async function updateView() {
     const running = await api.isRunning();
     const statistics = await api.getStatistics();
-    primaryGraph.add(statistics);
-    secondaryGraph.add(statistics);
-    ternaryGraph.add(statistics);
+    if (statistics) {
+        primaryGraph.add(statistics);
+        secondaryGraph.add(statistics);
+        ternaryGraph.add(statistics);
+    }
     if (running) await updateView();
 }
 

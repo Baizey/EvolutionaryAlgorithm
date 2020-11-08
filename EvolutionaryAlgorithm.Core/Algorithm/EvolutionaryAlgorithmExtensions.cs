@@ -92,7 +92,7 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         }
 
         public static IMutator<TIndividual, TGeneStructure, TGene>
-            Crossover<TIndividual, TGeneStructure, TGene>(
+            CrossoverGenesFrom<TIndividual, TGeneStructure, TGene>(
                 this IMutator<TIndividual, TGeneStructure, TGene> mutator,
                 MultiParentCrossoverBase<TIndividual, TGeneStructure, TGene> crossover)
             where TIndividual : IIndividual<TGeneStructure, TGene>

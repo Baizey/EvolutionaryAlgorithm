@@ -22,6 +22,7 @@
                         <option value="SingleEndogenous">Single Endogenous</option>
                         <option value="MultiEndogenous">Multi Endogenous</option>
                         <option value="HeavyTail">Heavytail</option>
+                        <!-- <option value="Custom">Custom</option> -->
                     </select>
                 </div>
                 <div id="row_fitness" class="row">
@@ -33,6 +34,40 @@
                         <option value="MinimumSpanningTree">Minimum spanning tree</option>
                     </select>
                 </div>
+                
+                <div id="row_hyper_heuristic" class="row hidden">
+                    <label class="optionLabel" for="input_hyper_heuristic">Create individual by...</label>
+                    <select class="optionValue" id="input_hyper_heuristic">
+                        <option value="Simple">Simple</option>
+                        <option value="StagnationDetection">Stagnation detection</option>
+                    </select>
+                </div>
+                <div id="row_creation" class="row hidden">
+                    <label class="optionLabel" for="input_creation">Create using...</label>
+                    <select class="optionValue" id="input_creation">
+                        <option value="BestIndividual<">Best individual</option>
+                        <option value="TournamentSelection">Tournament Selection</option>
+                        <option value="MultiTournamentSelection">Tournament Selection + 2 parent crossover</option>
+                    </select>
+                </div>
+                <div id="row_mutation" class="row hidden">
+                    <select class="optionValue" id="input_mutation">
+                        <option value="">Then apply...</option>
+                        <option value="Asymmetric">Asymmetric mutation </option>
+                        <option value="EndogenousSelf">Endogenous self adapting</option>
+                        <option value="Repair">Mutate & repair</option>
+                        <option value="HeavyTail">Heavytail self adapting</option>
+                    </select>
+                </div>
+                <div id="row_generation_filter" class="row hidden">
+                    <label class="optionLabel" for="input_generation_filter">Filter generations by</label>
+                    <select class="optionValue" id="input_generation_filter">
+                        <option value="Elitism">Elitism + no bias</option>
+                        <option value="ElitismNew">Elitism + new bias</option>
+                        <option value="ElitismNewLow">Elitism + new bias + low mutation rate bias</option>
+                    </select>
+                </div>
+
                 <div id="row_nodes" class="row hidden">
                     <label class="optionLabel" for="input_nodes">Nodes</label>
                     <input class="optionValue" value="20" id="input_nodes" type="number"/>
@@ -91,8 +126,8 @@
                 <div id="row_termination" class="row">
                     <label class="optionLabel" for="input_termination">Termination</label>
                     <select class="optionValue" id="input_termination">
-                        <option value="Time">Timeout</option>
                         <option value="Fitness">Fitness</option>
+                        <option value="Time">Timeout</option>
                         <option value="Generations">Generations</option>
                         <option value="Stagnation">Stagnation</option>
                     </select>

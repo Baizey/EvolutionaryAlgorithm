@@ -11,23 +11,45 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
-        public List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; set; } =
+        public List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; } =
             new List<IMutation<TIndividual, TGeneStructure, TGene>>();
+
+        public List<IParameterAdjuster<TIndividual, TGeneStructure, TGene>> ParameterAdjusters { get; } =
+            new List<IParameterAdjuster<TIndividual, TGeneStructure, TGene>>();
 
         public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
 
-        public void Initialize() => Mutations.ForEach(mutation =>
+        public void Initialize()
         {
-            mutation.Algorithm = Algorithm;
-            mutation.Initialize();
-        });
+            ParameterAdjusters.ForEach(mutation =>
+            {
+                mutation.Algorithm = Algorithm;
+                mutation.Initialize();
+            });
+            Mutations.ForEach(mutation =>
+            {
+                mutation.Algorithm = Algorithm;
+                mutation.Initialize();
+            });
+        }
 
-        public void Update() => Mutations.ForEach(mutation => mutation.Update());
+        public void Update()
+        {
+            ParameterAdjusters.ForEach(m => m.Update());
+            Mutations.ForEach(mutation => mutation.Update());
+        }
 
         public IMutator<TIndividual, TGeneStructure, TGene> ThenApply(
             IMutation<TIndividual, TGeneStructure, TGene> mutation)
         {
             Mutations.Add(mutation);
+            return this;
+        }
+
+        public IMutator<TIndividual, TGeneStructure, TGene> ThenAfterGeneratingApply(
+            IParameterAdjuster<TIndividual, TGeneStructure, TGene> mutation)
+        {
+            ParameterAdjusters.Add(mutation);
             return this;
         }
 

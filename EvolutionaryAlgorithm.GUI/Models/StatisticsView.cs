@@ -5,9 +5,8 @@ using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Parameters;
-using EvolutionaryAlgorithm.Template.Asymmetric;
-using EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph;
-using EvolutionaryAlgorithm.Template.Stagnation;
+using EvolutionaryAlgorithm.Template.FitnessFunctions.Graph;
+using EvolutionaryAlgorithm.Template.Mutations;
 
 namespace EvolutionaryAlgorithm.GUI.Models
 {
@@ -27,7 +26,7 @@ namespace EvolutionaryAlgorithm.GUI.Models
         public double R1 { get; set; }
         public IEnumerable<ViewEdge> Edges { get; set; }
 
-        public StatisticsView(IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,
+        public StatisticsView(IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
             SimpleGraph graph)
         {
             var statistics = algorithm.Statistics;
@@ -42,8 +41,8 @@ namespace EvolutionaryAlgorithm.GUI.Models
 
             if (algorithm.HyperHeuristic[0].Mutator.Mutations[1] is AsymmetricMutation mutation)
             {
-                R0 = mutation.R0;
-                R1 = mutation.R1;
+                R0 = mutation.ZeroFocus;
+                R1 = mutation.OneFocus;
             }
 
             if (algorithm.HyperHeuristic is StagnationDetectionHyperHeuristic heuristic)

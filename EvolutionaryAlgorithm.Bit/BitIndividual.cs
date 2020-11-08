@@ -21,7 +21,17 @@ namespace EvolutionaryAlgorithm.BitImplementation
 
     public class BitIndividual : IBitIndividual
     {
+        public static Population<IBitIndividual, BitArray, bool> FromRandom(int mutationRate) =>
+            new Population<IBitIndividual, BitArray, bool>(Generate(mutationRate));
+
+        public static Func<int, IBitIndividual> Generate(double mutationRate)
+        {
+            var random = new Random();
+            return g => new BitIndividual(g, () => random.NextDouble() >= 0.5) {MutationRate = mutationRate};
+        }
+        
         public double Fitness { get; set; }
+        public double MutationRate { get; set; }
         public BitArray Genes { get; set; }
         public int Count => Genes.Count;
 
@@ -44,6 +54,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
         public BitIndividual(IBitIndividual individual)
         {
             Fitness = individual.Fitness;
+            MutationRate = individual.MutationRate;
             Genes = (BitArray) individual.Genes.Clone();
         }
 
@@ -62,13 +73,18 @@ namespace EvolutionaryAlgorithm.BitImplementation
         public virtual void CopyTo(IIndividual<BitArray, bool> other)
         {
             Genes.CopyTo(other.Genes);
+            other.MutationRate = MutationRate;
             other.Fitness = Fitness;
         }
 
         public bool Flip(int i) => Genes[i] = !Genes[i];
         public virtual object Clone() => new BitIndividual(this);
 
-        public int CompareTo(IIndividual<BitArray, bool> other) => Math.Sign(Fitness - other.Fitness);
+        public virtual int CompareTo(IIndividual<BitArray, bool> other)
+        {
+            var r = Math.Sign(Fitness - other.Fitness);
+            return r != 0 ? r : Math.Sign(((IBitIndividual) other).MutationRate - MutationRate);
+        }
 
         public override string ToString() =>
             Fitness + " -> " + string.Join("", Genes.Cast<bool>().Select(e => e ? "1" : "0"));

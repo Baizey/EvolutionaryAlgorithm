@@ -6,17 +6,13 @@ using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.Template;
-using EvolutionaryAlgorithm.Template.Asymmetric;
-using EvolutionaryAlgorithm.Template.Basics.Fitness;
-using EvolutionaryAlgorithm.Template.Endogenous;
-using EvolutionaryAlgorithm.Template.HeavyTail;
-using EvolutionaryAlgorithm.Template.MultiEndogenous;
-using EvolutionaryAlgorithm.Template.Repair;
-using EvolutionaryAlgorithm.Template.Stagnation;
+using EvolutionaryAlgorithm.Template.FitnessFunctions;
+using EvolutionaryAlgorithm.Template.Statistics;
+using static EvolutionaryAlgorithm.Template.Mutations.PresetGenerator;
 
 namespace EvolutionaryAlgorithm
 {
-    internal class Program
+    internal static class Program
     {
         private static async Task Main()
         {
@@ -27,7 +23,7 @@ namespace EvolutionaryAlgorithm
             const int observationPhase = 10;
             const double beta = 1.5;
 
-            var endogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
+            var endogenous = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -40,11 +36,11 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingBasicStatistics()
                 .UsingEndogenousRandomPopulation(mutationRate)
-                .UsingHeuristic(new EndogenousGenerationGenerator(learningRate))
-                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+                .UsingHeuristic(SingleEndogenous(learningRate))
+                .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             endogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            var stagnation = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
+            var stagnation = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -57,11 +53,11 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingStagnationStatistics()
                 .UsingEndogenousRandomPopulation(learningRate)
-                .UsingHeuristic(new StagnationDetectionHyperHeuristic(mutationRate))
-                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+                .UsingHeuristic(StagnationDetection(mutationRate, 1))
+                .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             stagnation.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            var asymmetric = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
+            var asymmetric = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -73,12 +69,12 @@ namespace EvolutionaryAlgorithm
                     Mu = 1,
                 })
                 .UsingEndogenousRandomPopulation(mutationRate)
-                .UsingStatistics(new AsymmetricBasicEvolutionaryStatistics<IEndogenousBitIndividual>())
-                .UsingHeuristic(new AsymmetricGenerationGenerator(0.05, observationPhase))
-                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+                .UsingStatistics(new AsymmetricBasicEvolutionaryStatistics<IBitIndividual>())
+                .UsingHeuristic(Asymmetric(0.05, observationPhase))
+                .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             asymmetric.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            var oneLambdaLambda = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
+            var oneLambdaLambda = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -89,13 +85,13 @@ namespace EvolutionaryAlgorithm
                     // Always 1
                     Mu = 1,
                 })
-                .UsingStatistics(new LambdaBasicStatistics<IEndogenousBitIndividual>())
+                .UsingStatistics(new LambdaBasicStatistics<IBitIndividual>())
                 .UsingEndogenousRandomPopulation(mutationRate)
-                .UsingHeuristic(new OneLambdaLambdaGenerationGenerator(learningRate, repairRate))
-                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+                .UsingHeuristic(Repair(learningRate, repairRate))
+                .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             oneLambdaLambda.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            var heavyTail = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
+            var heavyTail = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -108,11 +104,11 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingBasicStatistics()
                 .UsingEndogenousRandomPopulation(mutationRate)
-                .UsingHeuristic(new HeavyTailGenerationGenerator(beta))
-                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+                .UsingHeuristic(HeavyTail(beta))
+                .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             heavyTail.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            var lambdaEndogenous = new BitEvolutionaryAlgorithm<IEndogenousBitIndividual>()
+            var lambdaEndogenous = new BitEvolutionaryAlgorithm<IBitIndividual>()
                 .UsingParameters(new Parameters
                 {
                     GeneCount = geneCount,
@@ -125,8 +121,8 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingStatistics(new EndogenousBasicEvolutionaryStatistics())
                 .UsingEndogenousRandomPopulation(mutationRate)
-                .UsingHeuristic(new MultiEndogenousGenerationGenerator(learningRate))
-                .UsingEvaluation(new OneMaxFitness<IEndogenousBitIndividual>());
+                .UsingHeuristic(MultiEndogenous(learningRate))
+                .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             lambdaEndogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
             Run(asymmetric);

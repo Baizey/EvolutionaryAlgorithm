@@ -27,14 +27,14 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
         [HttpGet("Nodes")]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
-        public IEnumerable<ViewNode> GetNodes() => _service.Nodes
+        public IEnumerable<ViewNode> GetNodes() => _service.Nodes?
             .Select(e => new ViewNode(e))
             .ToList();
 
         [HttpGet("Edges")]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
-        public IEnumerable<ViewEdge> GetEdges() => _service.Edges
+        public IEnumerable<ViewEdge> GetEdges() => _service.Edges?
             .Select(e => new ViewEdge(e))
             .ToList();
 

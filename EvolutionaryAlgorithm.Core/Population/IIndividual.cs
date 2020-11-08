@@ -9,6 +9,7 @@ namespace EvolutionaryAlgorithm.Core.Population
         IComparable<IIndividual<TGeneStructure, TGene>>
         where TGeneStructure : ICloneable
     {
+        public double MutationRate { get; set; }
         public double Fitness { get; set; }
         public TGeneStructure Genes { get; set; }
         public int Count { get; }

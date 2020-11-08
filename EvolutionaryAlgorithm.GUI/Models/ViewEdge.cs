@@ -1,4 +1,4 @@
-﻿using EvolutionaryAlgorithm.Template.MinimumSpanningTree.Graph;
+﻿using EvolutionaryAlgorithm.Template.FitnessFunctions.Graph;
 
 namespace EvolutionaryAlgorithm.GUI.Models
 {

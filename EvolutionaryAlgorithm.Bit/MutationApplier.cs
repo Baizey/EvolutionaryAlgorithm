@@ -99,7 +99,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
                 individual.Flip(index);
         }
 
-        public void Mutate(IEndogenousBitIndividual individual, int n)
+        public void Mutate(IBitIndividual individual, int n)
         {
             var roll = _random.NextDouble();
             foreach (var d in CalculateOdds(individual.MutationRate, n))

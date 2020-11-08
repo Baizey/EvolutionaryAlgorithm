@@ -3,7 +3,7 @@ using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Statistics;
-using EvolutionaryAlgorithm.Template.Endogenous;
+using EvolutionaryAlgorithm.Template.Statistics;
 
 namespace EvolutionaryAlgorithm.Template
 {
@@ -17,14 +17,10 @@ namespace EvolutionaryAlgorithm.Template
                 new BitPopulation<IBitIndividual>(g => new BitIndividual(g, () => random.NextDouble() >= 0.5)));
         }
 
-        public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingEndogenousRandomPopulation(
-            this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm,
+        public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingEndogenousRandomPopulation(
+            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
             int mutationRate) =>
-            algorithm.UsingPopulation(EndogenousBitIndividual.FromRandom(mutationRate));
-
-        public static IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> UsingBasicStatistics(
-            this IEvolutionaryAlgorithm<IEndogenousBitIndividual, BitArray, bool> algorithm) =>
-            algorithm.UsingStatistics(new EndogenousBasicEvolutionaryStatistics());
+            algorithm.UsingPopulation(BitIndividual.FromRandom(mutationRate));
 
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingBasicStatistics(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm) =>

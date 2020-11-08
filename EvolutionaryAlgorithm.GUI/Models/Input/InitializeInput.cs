@@ -17,5 +17,8 @@ namespace EvolutionaryAlgorithm.GUI.Models.Input
         public double? RepairChance { get; set; }
         public int? Nodes { get; set; }
         public double? EdgeChance { get; set; }
+        public int? Variables { get; set; }
+        public int? Formulas { get; set; }
+        public int? FormulaSize { get; set; }
     }
 }

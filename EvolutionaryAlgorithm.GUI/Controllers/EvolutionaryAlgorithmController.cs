@@ -67,7 +67,10 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
                 beta: data.Beta ?? 1.5D,
                 jump: data.Jump ?? 5,
                 nodes: data.Nodes ?? 20,
-                edgeChance: data.EdgeChance ?? 0.5
+                edgeChance: data.EdgeChance ?? 0.5,
+                formulas: data.Formulas ?? 20,
+                variables: data.Variables ?? 60,
+                formulaSize: data.FormulaSize ?? 3
             );
         }
 

@@ -5,6 +5,10 @@
         this.fitnessLimit = new Input('fitnessLimit');
         this.generations = new Input('generations');
 
+        this.variables = new Input('variables');
+        this.formulas = new Input('formulas');
+        this.formulaSize = new Input('formula_size');
+
         this.jump = new Input('jump');
         this.nodes = new Input('nodes');
         this.edgeChance = new Input('edgeChance');
@@ -17,6 +21,9 @@
         this.observationPhase = new Input('observationPhase');
         this.repairChance = new Input('repairChance');
         this.rows = [
+            this.variables,
+            this.formulas,
+            this.formulaSize,
             this.nodes,
             this.edgeChance,
             this.seconds,
@@ -57,8 +64,10 @@
         switch (this.terminationInput.value) {
             case 'Fitness':
                 switch (this.fitnessInput.value) {
-                    case 'MinimumSpanningTree':
                     case 'Satisfiability':
+                        body.fitness = Math.floor(this.formulas.value - 0);
+                        break;
+                    case 'MinimumSpanningTree':
                         body.fitness = this.fitnessLimit.value - 0;
                         break;
                 }
@@ -95,6 +104,12 @@
             case 'MinimumSpanningTree':
                 body.nodes = Math.floor(this.nodes.value - 0);
                 body.edgeChance = this.edgeChance.value - 0;
+                break;
+            case 'Satisfiability':
+                body.geneCount = Math.floor(this.variables.value - 0);
+                body.variables = Math.floor(this.variables.value - 0);
+                body.formulas = Math.floor(this.formulas.value - 0);
+                body.formulaSize = Math.floor(this.formulaSize.value - 0);
                 break;
         }
 
@@ -143,7 +158,6 @@
             case 'Fitness':
                 switch (this.fitnessInput.value) {
                     case 'MinimumSpanningTree':
-                    case 'Satisfiability':
                         this.fitnessLimit.show();
                         break;
                 }
@@ -168,6 +182,11 @@
             case 'MinimumSpanningTree':
                 this.nodes.show();
                 this.edgeChance.show();
+                break;
+            case 'Satisfiability':
+                this.variables.show();
+                this.formulas.show();
+                this.formulaSize.show();
                 break;
         }
         switch (this.heuristicInput.value) {

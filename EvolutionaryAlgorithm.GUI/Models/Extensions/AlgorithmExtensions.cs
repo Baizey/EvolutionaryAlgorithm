@@ -9,6 +9,6 @@ namespace EvolutionaryAlgorithm.GUI.Models.Extensions
     {
         public static StatisticsView MapToStatisticsView(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm, SimpleGraph graph) =>
-            new StatisticsView(algorithm, graph);
+            algorithm == null ? null : new StatisticsView(algorithm, graph);
     }
 }

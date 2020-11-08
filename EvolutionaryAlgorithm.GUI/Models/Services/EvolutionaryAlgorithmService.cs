@@ -13,6 +13,7 @@ using EvolutionaryAlgorithm.GUI.Models.Extensions;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.FitnessFunctions;
 using EvolutionaryAlgorithm.Template.FitnessFunctions.Graph;
+using EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem;
 using EvolutionaryAlgorithm.Template.Mutations;
 using static EvolutionaryAlgorithm.GUI.Models.Enums.FitnessFunctions;
 using static EvolutionaryAlgorithm.GUI.Models.Enums.Heuristics;
@@ -47,12 +48,16 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
             double beta = 1.5,
             int jump = 1,
             int nodes = 20,
-            double edgeChance = 0.5);
+            double edgeChance = 0.5,
+            int formulas = 20,
+            int variables = 60,
+            int formulaSize = 3);
     }
 
     public class EvolutionaryAlgorithmService : IEvolutionaryAlgorithmService
     {
         private SimpleGraph _graph;
+        private SatisfiabilityProblem _problem;
         private StatisticsView _statistics;
         private bool _requestStatistics;
         public IBitEvolutionaryAlgorithm<IBitIndividual> Algorithm { get; private set; }
@@ -90,7 +95,10 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
             double beta = 1.5,
             int jump = 1,
             int nodes = 20,
-            double edgeChance = 0.5)
+            double edgeChance = 0.5,
+            int formulas = 20,
+            int variables = 60,
+            int formulaSize = 3)
         {
             Pause();
             Algorithm = new BitEvolutionaryAlgorithm<IBitIndividual>
@@ -103,7 +111,8 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
                 }
             };
             _graph = null;
-            Algorithm.UsingEvaluation(CreateFitness(fitness, jump, nodes, edgeChance));
+            Algorithm.UsingEvaluation(CreateFitness(fitness, jump, nodes, edgeChance, formulas, variables,
+                formulaSize));
             // If we created a graph we have genes to match edges
             if (_graph != null) geneCount = _graph.Edges.Count;
 
@@ -181,7 +190,10 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
         private IBitFitness<IBitIndividual> CreateFitness(FitnessFunctions fitnessFunction,
             int jump = 0,
             int nodes = 20,
-            double edgeChance = 0.5
+            double edgeChance = 0.5,
+            int formulas = 20,
+            int variables = 60,
+            int formulaSize = 3
         )
         {
             switch (fitnessFunction)
@@ -196,9 +208,8 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
                     _graph = new SimpleGraph(nodes, edgeChance);
                     return new MinimumSpanningTreeFitness<IBitIndividual>(_graph);
                 case Satisfiability:
-                    // TODO: this
-                    throw new NotImplementedException();
-                    break;
+                    _problem = SatisfiabilityProblem.Generate(variables, formulas, formulaSize);
+                    return new SatisfiabilityProblemFitness<IBitIndividual>(_problem);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(fitnessFunction), fitnessFunction, null);
             }

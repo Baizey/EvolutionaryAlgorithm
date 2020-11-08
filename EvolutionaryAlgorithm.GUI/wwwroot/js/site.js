@@ -20,11 +20,16 @@ document.getElementById('button_initialize').onclick = async () => {
     const heuristic = optionsController.heuristicInput.value;
     const fitness = optionsController.fitnessInput.value;
     const geneCount = optionsController.geneCount.value - 0;
-    const edges = await api.getEdges();
+    const variables = optionsController.variables.value - 0;
     switch (fitness) {
         case 'MinimumSpanningTree':
+            const edges = await api.getEdges();
             primaryGraph.graph2D(await api.getNodes(), edges);
             ternaryGraph.search(edges.length);
+            break;
+        case 'Satisfiability':
+            primaryGraph.search(variables);
+            ternaryGraph.clear();
             break;
         case 'OneMax':
         case 'LeadingOnes':

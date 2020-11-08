@@ -28,12 +28,16 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Generati
         {
             if (Algorithm.Population.Count > 1)
                 Algorithm.Population.Individuals = new List<TIndividual> {Algorithm.Population.Best};
-            var oldRate = Algorithm.Best.MutationRate;
             var index = 0;
+            var oldRate = bodies[index].MutationRate;
             for (var i = 1; i < bodies.Count; i++)
                 if (bodies[i].Fitness > bodies[index].Fitness ||
                     bodies[i].Fitness == bodies[index].Fitness && bodies[i].MutationRate < oldRate)
+                {
                     index = i;
+                    oldRate = bodies[index].MutationRate;
+                }
+
             var best = bodies[index];
 
             // If no-one beats current best

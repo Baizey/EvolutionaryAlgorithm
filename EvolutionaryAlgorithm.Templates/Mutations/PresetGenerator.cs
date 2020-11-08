@@ -6,7 +6,6 @@ using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.HyperHeuristic;
 using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Selector;
 using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
-using EvolutionaryAlgorithm.Template.GenerationFilters;
 using EvolutionaryAlgorithm.Template.Mutations.SelfAdjusters;
 
 namespace EvolutionaryAlgorithm.Template.Mutations
@@ -30,7 +29,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
                 .CloneGenesFrom(new FirstParentSelector<IBitIndividual>())
                 .ThenApply(new EndogenousMutation(learningRate))
                 .ThenAfterGeneratingApply(new UpdateMutationRateFromBestIndividual()),
-            Filter = new EndogenousElitismGenerationFilter<IBitIndividual>(true)
+            Filter = new BitElitismGenerationFilter<IBitIndividual>(true)
         };
 
         public static BitGenerationGenerator<IBitIndividual> MultiEndogenous(

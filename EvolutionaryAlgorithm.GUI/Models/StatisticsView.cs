@@ -39,11 +39,12 @@ namespace EvolutionaryAlgorithm.GUI.Models
             StagnantGeneration = statistics.StagnantGeneration;
             Generations = statistics.Generations;
 
-            if (algorithm.HyperHeuristic[0].Mutator.Mutations[1] is AsymmetricMutation mutation)
-            {
-                R0 = mutation.ZeroFocus;
-                R1 = mutation.OneFocus;
-            }
+            foreach (var m in algorithm.HyperHeuristic.States.SelectMany(g => g.Mutator.Mutations))
+                if (m is AsymmetricMutation mutation)
+                {
+                    R0 = mutation.ZeroFocus;
+                    R1 = mutation.OneFocus;
+                }
 
             if (algorithm.HyperHeuristic is StagnationDetectionHyperHeuristic heuristic)
             {

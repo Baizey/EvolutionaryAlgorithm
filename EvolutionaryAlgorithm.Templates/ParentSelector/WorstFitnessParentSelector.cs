@@ -3,7 +3,7 @@ using System.Linq;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 
-namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
+namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
     public class WorstFitnessParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
     {

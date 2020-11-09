@@ -13,6 +13,8 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
     [ApiController]
     [Consumes("application/json")]
     [Produces("application/json")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(204)]
     public class EvolutionaryAlgorithmController : Controller
     {
         private readonly IEvolutionaryAlgorithmService _service;
@@ -20,33 +22,23 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
         public EvolutionaryAlgorithmController(IEvolutionaryAlgorithmService service) => _service = service;
 
         [HttpGet("IsRunning")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(204)]
         public bool IsRunning() => _service.IsRunning;
 
         [HttpGet("Nodes")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(204)]
         public IEnumerable<ViewNode> GetNodes() => _service.Nodes?
             .Select(e => new ViewNode(e))
             .ToList();
 
         [HttpGet("Edges")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(204)]
         public IEnumerable<ViewEdge> GetEdges() => _service.Edges?
             .Select(e => new ViewEdge(e))
             .ToList();
 
         [HttpGet("Statistics")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(204)]
         public StatisticsView GetStatistics() =>
             _service.Statistics;
 
         [HttpPost("Initialize")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(204)]
         public void Initialize([FromBody] InitializeInput data)
         {
             if (!Enum.TryParse(data.Fitness, out FitnessFunctions fitness))
@@ -70,13 +62,12 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
                 edgeChance: data.EdgeChance ?? 0.5,
                 formulas: data.Formulas ?? 20,
                 variables: data.Variables ?? 60,
-                formulaSize: data.FormulaSize ?? 3
+                formulaSize: data.FormulaSize ?? 3,
+                limitFactor: data.LimitFactor ?? 1
             );
         }
 
         [HttpPut("Run")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(204)]
         public bool Run([FromBody] RunInput data)
         {
             if (!Enum.TryParse(data.Termination, out Termination termination))
@@ -91,8 +82,6 @@ namespace EvolutionaryAlgorithm.GUI.Controllers
         }
 
         [HttpDelete("Pause")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(204)]
         public void Pause() => _service.Pause();
     }
 }

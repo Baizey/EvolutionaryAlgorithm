@@ -8,7 +8,7 @@ using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.FitnessFunctions;
 using EvolutionaryAlgorithm.Template.Statistics;
-using static EvolutionaryAlgorithm.Template.Mutations.PresetGenerator;
+using static EvolutionaryAlgorithm.Template.PresetGenerator;
 
 namespace EvolutionaryAlgorithm
 {
@@ -53,7 +53,7 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingStagnationStatistics()
                 .UsingRandomPopulation(learningRate)
-                .UsingHeuristic(StagnationDetection(mutationRate, 1))
+                .UsingHeuristic(StagnationDetection(learningRate,mutationRate, 1))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             stagnation.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
@@ -104,7 +104,7 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingBasicStatistics()
                 .UsingRandomPopulation(mutationRate)
-                .UsingHeuristic(HeavyTail(beta))
+                .UsingHeuristic(HeavyTail(learningRate, beta))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             heavyTail.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 

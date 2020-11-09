@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.Core.Algorithm;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Crossover;
+using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Selector;
 using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
@@ -11,6 +13,8 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public IMutation<TIndividual, TGeneStructure, TGene> Crossover { get; private set; }
+
         public List<IMutation<TIndividual, TGeneStructure, TGene>> Mutations { get; } =
             new List<IMutation<TIndividual, TGeneStructure, TGene>>();
 
@@ -26,6 +30,8 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
                 mutation.Algorithm = Algorithm;
                 mutation.Initialize();
             });
+            Crossover.Algorithm = Algorithm;
+            Crossover.Initialize();
             Mutations.ForEach(mutation =>
             {
                 mutation.Algorithm = Algorithm;
@@ -36,20 +42,39 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
         public void Update()
         {
             ParameterAdjusters.ForEach(m => m.Update());
+            Crossover.Update();
             Mutations.ForEach(mutation => mutation.Update());
         }
 
-        public IMutator<TIndividual, TGeneStructure, TGene> ThenApply(
+        public IMutator<TIndividual, TGeneStructure, TGene> CloneGenesFrom(
+            ISingleParentSelector<TIndividual, TGeneStructure, TGene> parentSelector) =>
+            CloneGenesFrom(new CloneParent<TIndividual, TGeneStructure, TGene>(parentSelector));
+
+        public IMutator<TIndividual, TGeneStructure, TGene> CloneGenesFrom(
+            SingleParentCrossoverBase<TIndividual, TGeneStructure, TGene> parentSelector)
+        {
+            Crossover = parentSelector;
+            return this;
+        }
+
+        public IMutator<TIndividual, TGeneStructure, TGene> CrossoverGenesFrom(
+            MultiParentCrossoverBase<TIndividual, TGeneStructure, TGene> parentsSelector)
+        {
+            Crossover = parentsSelector;
+            return this;
+        }
+
+        public IMutator<TIndividual, TGeneStructure, TGene> ThenApplyMutation(
             IMutation<TIndividual, TGeneStructure, TGene> mutation)
         {
             Mutations.Add(mutation);
             return this;
         }
 
-        public IMutator<TIndividual, TGeneStructure, TGene> ThenAfterGeneratingApply(
-            IParameterAdjuster<TIndividual, TGeneStructure, TGene> mutation)
+        public IMutator<TIndividual, TGeneStructure, TGene> AdjustParameterUsing(
+            IParameterAdjuster<TIndividual, TGeneStructure, TGene> adjuster)
         {
-            ParameterAdjusters.Add(mutation);
+            ParameterAdjusters.Add(adjuster);
             return this;
         }
 
@@ -57,6 +82,9 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation
         {
             for (var i = 0; i < newIndividuals.Count; i++)
             {
+                Crossover.Mutate(i, newIndividuals[i]);
+                foreach (var adjuster in ParameterAdjusters)
+                    adjuster.Mutate(i, newIndividuals[i]);
                 foreach (var t in Mutations)
                     t.Mutate(i, newIndividuals[i]);
             }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Parameters;
-using EvolutionaryAlgorithm.Template.Basics.ParentSelector;
+using EvolutionaryAlgorithm.Template.ParentSelector;
 
 namespace EvolutionaryAlgorithm.Template.Mutations
 {
@@ -29,7 +29,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
             {
                 Mutator = new BitMutator<IBitIndividual>()
                     .CloneGenesFrom(new FirstParentSelector<IBitIndividual>())
-                    .ThenApply(new StagnationDetectionMutation()),
+                    .ThenApplyMutation(new StagnationDetectionMutation()),
                 Filter = new BitElitismGenerationFilter<IBitIndividual>(false)
             };
             _mutationModule = generator;
@@ -38,14 +38,6 @@ namespace EvolutionaryAlgorithm.Template.Mutations
             States.Add(_mutationModule);
 
             _initialMutationRate = initialMutationRate;
-        }
-
-        public StagnationDetectionHyperHeuristic(
-            int initialMutationRate, 
-            int limitFactor = 1)
-            : this(initialMutationRate, limitFactor,
-                PresetGenerator.HalfAndHalf(2, a => a.Parameters.GeneCount / 4))
-        {
         }
 
         public override void Initialize()

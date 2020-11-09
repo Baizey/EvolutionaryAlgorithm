@@ -9,6 +9,8 @@
         this.formulas = new Input('formulas');
         this.formulaSize = new Input('formula_size');
 
+        this.limitFactor = new Input('limitFactor');
+
         this.jump = new Input('jump');
         this.nodes = new Input('nodes');
         this.edgeChance = new Input('edgeChance');
@@ -21,6 +23,7 @@
         this.observationPhase = new Input('observationPhase');
         this.repairChance = new Input('repairChance');
         this.rows = [
+            this.limitFactor,
             this.variables,
             this.formulas,
             this.formulaSize,
@@ -123,6 +126,7 @@
                 break;
             case 'StagnationDetection':
                 body.mu = 1;
+                body.limitFactor = Math.floor(this.limitFactor.value - 0);
                 body.lambda = Math.floor(this.lambda.value - 0);
                 body.mutationRate = Math.floor(this.mutationRate.value - 0);
                 break;
@@ -154,6 +158,13 @@
 
     updateOptions() {
         this.rows.forEach(r => r.hide());
+
+        // Almost everything uses this
+        if (this.learningRate.value <= 1) this.learningRate.set(2);
+        this.learningRate.show();
+        this.lambda.show();
+        this.mutationRate.show();
+
         switch (this.terminationInput.value) {
             case 'Fitness':
                 switch (this.fitnessInput.value) {
@@ -191,41 +202,21 @@
         }
         switch (this.heuristicInput.value) {
             case 'Asymmetric':
-                this.mutationRate.show();
+                this.lambda.hide();
                 this.observationPhase.show();
-
                 if (this.learningRate.value >= 1) this.learningRate.set(0.05);
-                this.learningRate.show();
                 break;
             case 'StagnationDetection':
-                this.lambda.show();
-                this.mutationRate.show();
+                this.limitFactor.show();
                 break;
             case 'Repair':
-                this.lambda.show();
-                this.mutationRate.show();
                 this.repairChance.show();
-
-                if (this.learningRate.value <= 1) this.learningRate.set(2);
-                this.learningRate.show();
                 break;
             case 'SingleEndogenous':
-                this.lambda.show();
-                this.mutationRate.show();
-
-                if (this.learningRate.value <= 1) this.learningRate.set(2);
-                this.learningRate.show();
                 break;
             case 'MultiEndogenous':
-                this.lambda.show();
-                this.mutationRate.show();
-
-                if (this.learningRate.value <= 1) this.learningRate.set(2);
-                this.learningRate.show();
                 break;
             case 'HeavyTail':
-                this.mutationRate.show();
-                this.lambda.show();
                 this.beta.show();
                 break;
         }

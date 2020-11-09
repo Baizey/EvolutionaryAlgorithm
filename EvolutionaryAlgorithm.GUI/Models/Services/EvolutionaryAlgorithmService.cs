@@ -51,7 +51,8 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
             double edgeChance = 0.5,
             int formulas = 20,
             int variables = 60,
-            int formulaSize = 3);
+            int formulaSize = 3,
+            int limitFactor = 1);
     }
 
     public class EvolutionaryAlgorithmService : IEvolutionaryAlgorithmService
@@ -98,7 +99,8 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
             double edgeChance = 0.5,
             int formulas = 20,
             int variables = 60,
-            int formulaSize = 3)
+            int formulaSize = 3,
+            int limitFactor = 1)
         {
             Pause();
             Algorithm = new BitEvolutionaryAlgorithm<IBitIndividual>
@@ -127,7 +129,7 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
                 new BasicEvolutionaryStatistics<IBitIndividual, BitArray, bool>());
             Algorithm.UsingRandomPopulation(mutationRate);
             Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase,
-                repairChance, beta));
+                repairChance, beta, limitFactor));
         }
 
         public bool Run(
@@ -171,7 +173,8 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
             int mutationRate = 2,
             int observationPhase = 10,
             double repairChance = 1,
-            double beta = 1.5) => heuristic switch
+            double beta = 1.5,
+            int limitFactor = 1) => heuristic switch
         {
             Asymmetric => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
                 PresetGenerator.Asymmetric(learningRate, observationPhase)),
@@ -182,8 +185,8 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
             MultiEndogenous => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
                 PresetGenerator.MultiEndogenous((int) learningRate)),
             HeavyTail => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
-                PresetGenerator.HeavyTail(beta)),
-            StagnationDetection => new StagnationDetectionHyperHeuristic(mutationRate),
+                PresetGenerator.HeavyTail((int) learningRate, beta)),
+            StagnationDetection => PresetGenerator.StagnationDetection(mutationRate, limitFactor, (int) learningRate),
             _ => throw new ArgumentOutOfRangeException(nameof(heuristic), heuristic, null)
         };
 

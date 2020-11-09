@@ -3,7 +3,7 @@ using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 
-namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
+namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
     public class RandomParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
     {

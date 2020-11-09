@@ -5,7 +5,7 @@ using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Parameters;
 using EvolutionaryAlgorithm.Core.Statistics;
 
-namespace EvolutionaryAlgorithm.Template.Mutations.SelfAdjusters
+namespace EvolutionaryAlgorithm.Template.SelfAdjusters
 {
     public class OneFifthFitnessDependentLambda : IBitParameterAdjuster<IBitIndividual>
     {
@@ -27,6 +27,11 @@ namespace EvolutionaryAlgorithm.Template.Mutations.SelfAdjusters
             _parameters = Algorithm.Parameters;
             _statistics = Algorithm.Statistics;
             _actualLambda = _parameters.Lambda;
+        }
+
+        public void Mutate(int index, IBitIndividual child)
+        {
+            // Only changes lambda between generations
         }
 
         public void Update()

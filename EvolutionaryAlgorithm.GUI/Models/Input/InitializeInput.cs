@@ -20,5 +20,6 @@ namespace EvolutionaryAlgorithm.GUI.Models.Input
         public int? Variables { get; set; }
         public int? Formulas { get; set; }
         public int? FormulaSize { get; set; }
+        public int? LimitFactor { get; set; }
     }
 }

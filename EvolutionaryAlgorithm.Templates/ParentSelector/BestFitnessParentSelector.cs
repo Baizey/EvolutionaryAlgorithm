@@ -2,10 +2,9 @@
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 
-namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
+namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
-    public class
-        FirstParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
+    public class BestFitnessParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
     {
         public IEvolutionaryAlgorithm<T, BitArray, bool> Algorithm { get; set; }
 
@@ -17,7 +16,7 @@ namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
         {
         }
 
-        public T Select(int index) =>
-            Algorithm.Population[0];
+        public T Select(int index) => 
+            Algorithm.Population.Best;
     }
 }

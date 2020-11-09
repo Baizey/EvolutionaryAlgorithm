@@ -4,7 +4,7 @@ using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Population;
 
-namespace EvolutionaryAlgorithm.Template.Basics.ParentSelector
+namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
     public class LambdaParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
     {

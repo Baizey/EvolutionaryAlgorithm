@@ -28,5 +28,7 @@
             other.Lambda = Lambda;
             other.MutationRate = MutationRate;
         }
+
+        public override string ToString() => $"N: {GeneCount}, Mu: {Mu}, Lambda: {Lambda}, P: {MutationRate}";
     }
 }

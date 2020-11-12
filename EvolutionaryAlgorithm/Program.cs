@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
@@ -53,7 +57,7 @@ namespace EvolutionaryAlgorithm
                 })
                 .UsingStagnationStatistics()
                 .UsingRandomPopulation(learningRate)
-                .UsingHeuristic(StagnationDetection(learningRate,mutationRate, 1))
+                .UsingHeuristic(StagnationDetection(learningRate, mutationRate, 1))
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             stagnation.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
@@ -125,7 +129,27 @@ namespace EvolutionaryAlgorithm
                 .UsingEvaluation(new OneMaxFitness<IBitIndividual>());
             lambdaEndogenous.OnGenerationProgress = algo => Console.WriteLine(algo.Statistics);
 
-            Run(asymmetric);
+            var range = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>>();
+            var toCords = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, Point>>();
+            for (var i = 0; i < 50; i++)
+            {
+                var g = (i + 1) * 100;
+                range.Add(() => new BitEvolutionaryAlgorithm<IBitIndividual>()
+                    .UsingBasicStatistics()
+                    .UsingRandomPopulation()
+                    .UsingEvaluation(new LeadingOnesFitness<IBitIndividual>())
+                    .UsingHeuristic(Asymmetric(0.02, 10))
+                    .UsingParameters(new Parameters
+                    {
+                        GeneCount = g,
+                        Lambda = 1,
+                        Mu = 1,
+                        MutationRate = 2
+                    }));
+                toCords.Add(algo => new Point(g, (int) algo.Statistics.Generations));
+            }
+
+            await SimpleTester.Range("AsymmetricAsync1000StaticMutationRate", 1000, range, toCords);
         }
 
         private static void Run<T>(IEvolutionaryAlgorithm<T, BitArray, bool> algorithm)

@@ -41,10 +41,9 @@ namespace EvolutionaryAlgorithm
                 await tasks[i];
                 var point = toCordsUnrolled[i].Invoke(algorithms[i]);
                 await file.WriteLineAsync($"{point.X} {point.Y}");
-                Console.WriteLine($"Progress: {i + 1} / {algorithms.Count} ({100 * (i + 1) / algorithms.Count}%)");
+                await file.FlushAsync();
+                Console.WriteLine($"Progress: {i + 1} / {tasks.Count} ({100 * (i + 1) / tasks.Count}%)");
             }
-
-            await file.FlushAsync();
 
             Console.WriteLine("Done...");
         }

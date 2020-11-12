@@ -24,6 +24,8 @@ namespace EvolutionaryAlgorithm
             var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
             var toCordsUnrolled = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, Point>>();
             var tasks = new List<Task>();
+            var counter = 0;
+            Console.WriteLine($"Progress: 0 / {tasks.Count} (0%)");
             for (var j = 0; j < generator.Count; j++)
             {
                 for (var i = 0; i < rounds; i++)
@@ -32,19 +34,26 @@ namespace EvolutionaryAlgorithm
                     algorithms.Add(algo);
                     toCordsUnrolled.Add(toCords[j]);
                     var gene = algo.Parameters.GeneCount;
-                    tasks.Add(algo.EvolveAsync(new FitnessTermination<IBitIndividual, BitArray, bool>(gene)));
+                    tasks.Add(algo.EvolveAsync(new FitnessTermination<IBitIndividual, BitArray, bool>(gene))
+                        .ContinueWith(
+                            _ =>
+                            {
+                                var c = Interlocked.Increment(ref counter);
+                                Console.WriteLine(
+                                    $"Progress: {c} / {tasks.Count} ({100 * c / tasks.Count}%)");
+                            }));
                 }
             }
 
-            for (var i = 0; i < tasks.Count; i++)
+            await Task.WhenAll(tasks);
+
+            for (var i = 0; i < algorithms.Count; i++)
             {
-                await tasks[i];
                 var point = toCordsUnrolled[i].Invoke(algorithms[i]);
                 await file.WriteLineAsync($"{point.X} {point.Y}");
-                await file.FlushAsync();
-                Console.WriteLine($"Progress: {i + 1} / {tasks.Count} ({100 * (i + 1) / tasks.Count}%)");
             }
 
+            await file.FlushAsync();
             Console.WriteLine("Done...");
         }
     }

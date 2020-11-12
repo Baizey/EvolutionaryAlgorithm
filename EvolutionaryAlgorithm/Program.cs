@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Parameters;
-using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.FitnessFunctions;
 using static EvolutionaryAlgorithm.Template.PresetGenerator;

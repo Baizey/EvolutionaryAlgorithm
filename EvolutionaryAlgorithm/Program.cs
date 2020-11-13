@@ -31,9 +31,9 @@ namespace EvolutionaryAlgorithm
         {
             var range = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>>();
             var toCords = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, Point>>();
-            for (var i = 0; i < 200; i++)
+            for (var i = 0; i < 20; i++)
             {
-                var g = (i + 1) * 100;
+                var g = (i + 1) * 1000;
                 range.Add(() => new BitEvolutionaryAlgorithm<IBitIndividual>()
                     .UsingBasicStatistics()
                     .UsingRandomPopulation()

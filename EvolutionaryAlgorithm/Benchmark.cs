@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Terminations;
+using Microsoft.VisualBasic;
 
 namespace EvolutionaryAlgorithm
 {
@@ -26,6 +29,8 @@ namespace EvolutionaryAlgorithm
             var tasks = new List<Task>();
             var counter = 0;
             Console.WriteLine($"Progress: 0 / {tasks.Count} (0%)");
+            var start = DateTime.Now;
+            var total = rounds * generator.Count;
             for (var j = 0; j < generator.Count; j++)
             {
                 for (var i = 0; i < rounds; i++)
@@ -39,8 +44,11 @@ namespace EvolutionaryAlgorithm
                             _ =>
                             {
                                 var c = Interlocked.Increment(ref counter);
-                                Console.WriteLine(
-                                    $"Progress: {c} / {tasks.Count} ({100 * c / tasks.Count}%)");
+                                var used = (DateTime.Now - start).TotalMilliseconds / c;
+                                var remaining = TimeSpan.FromMilliseconds((total - c) * used);
+                                var progress = 100 * c / total;
+                                if (c % 100 == 0)
+                                    Console.WriteLine($"Progress: {c} / {total} ({progress}%) ~{remaining} remaining");
                             }));
                 }
             }

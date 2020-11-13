@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Terminations;
-using Microsoft.VisualBasic;
 
 namespace EvolutionaryAlgorithm
 {
@@ -23,16 +20,16 @@ namespace EvolutionaryAlgorithm
             int rounds = 1000)
         {
             await using var file = new StreamWriter($"{filename}.txt");
-            await file.WriteAsync("");
-            var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
-            var toCordsUnrolled = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, Point>>();
-            var tasks = new List<Task>();
             var counter = 0;
-            Console.WriteLine($"Progress: 0 / {tasks.Count} (0%)");
             var start = DateTime.Now;
             var total = rounds * generator.Count;
+            Console.WriteLine($"Progress: 0 / {total} (0%)");
             for (var j = 0; j < generator.Count; j++)
             {
+                var tasks = new List<Task>();
+                var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
+                var toCordsUnrolled = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, Point>>();
+                
                 for (var i = 0; i < rounds; i++)
                 {
                     var algo = generator[j].Invoke();
@@ -47,18 +44,18 @@ namespace EvolutionaryAlgorithm
                                 var used = (DateTime.Now - start).TotalMilliseconds / c;
                                 var remaining = TimeSpan.FromMilliseconds((total - c) * used);
                                 var progress = 100 * c / total;
-                                if (c % 100 == 0)
+                                if (c % 10 == 0)
                                     Console.WriteLine($"Progress: {c} / {total} ({progress}%) ~{remaining} remaining");
                             }));
                 }
-            }
-
-            await Task.WhenAll(tasks);
-
-            for (var i = 0; i < algorithms.Count; i++)
-            {
-                var point = toCordsUnrolled[i].Invoke(algorithms[i]);
-                await file.WriteLineAsync($"{point.X} {point.Y}");
+                
+                await Task.WhenAll(tasks);
+                for (var i = 0; i < algorithms.Count; i++)
+                {
+                    var point = toCordsUnrolled[i].Invoke(algorithms[i]);
+                    await file.WriteLineAsync($"{point.X} {point.Y}");
+                }
+                await file.FlushAsync();
             }
 
             await file.FlushAsync();

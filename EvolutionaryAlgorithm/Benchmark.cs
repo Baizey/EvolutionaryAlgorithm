@@ -57,8 +57,6 @@ namespace EvolutionaryAlgorithm
                 }
                 await file.FlushAsync();
             }
-
-            await file.FlushAsync();
             Console.WriteLine("Done...");
         }
     }

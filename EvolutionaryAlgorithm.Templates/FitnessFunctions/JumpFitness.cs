@@ -13,6 +13,7 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions
         {
         }
 
+        public long Calls { get; private set; }
         private readonly int _jump;
 
         public JumpFitness(int jump)
@@ -22,10 +23,13 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions
 
         public double Evaluate(TIndividual individual)
         {
-            if (individual.Zeros == 0 || individual.Zeros > _jump)
-                return individual.Ones;
+            Calls++;
+            var ones = individual.Ones;
+            var zeroes = individual.Count - ones;
+            if (zeroes == 0 || zeroes >= _jump)
+                return ones;
             else
-                return individual.Zeros;
+                return zeroes;
         }
     }
 }

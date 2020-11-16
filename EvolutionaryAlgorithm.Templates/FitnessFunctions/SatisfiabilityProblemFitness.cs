@@ -11,12 +11,19 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions
 
         public IEvolutionaryAlgorithm<T, BitArray, bool> Algorithm { get; set; }
 
-        public SatisfiabilityProblemFitness(SatisfiabilityProblem.SatisfiabilityProblem satisfiabilityProblem) => _satisfiabilityProblem = satisfiabilityProblem;
+        public SatisfiabilityProblemFitness(SatisfiabilityProblem.SatisfiabilityProblem satisfiabilityProblem) =>
+            _satisfiabilityProblem = satisfiabilityProblem;
+
+        public long Calls { get; private set; }
 
         public void Initialize()
         {
         }
 
-        public double Evaluate(T individual) => _satisfiabilityProblem.Satisfied(individual.Genes);
+        public double Evaluate(T individual)
+        {
+            Calls++;
+            return _satisfiabilityProblem.Satisfied(individual.Genes);
+        }
     }
 }

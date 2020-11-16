@@ -28,7 +28,7 @@ namespace EvolutionaryAlgorithm.Template
                     .CloneGenesFrom(new FirstParentSelector<IBitIndividual>())
                     .ThenApplyMutation(new SelfAdjustingMutation())
                     .AdjustParameterUsing(new EndogenousSelfAdjustingMutationRate(learningRate)),
-                Filter = new BitElitismGenerationFilterAlwaysNew<IBitIndividual>()
+                Filter = new BitElitismGenerationFilter<IBitIndividual>(true)
             };
 
         public static BitGenerationGenerator<IBitIndividual> MultiEndogenous(int learningRate) =>
@@ -39,7 +39,7 @@ namespace EvolutionaryAlgorithm.Template
                         new MultiTournamentSelection<IBitIndividual, BitArray, bool>(2)))
                     .ThenApplyMutation(new SelfAdjustingMutation())
                     .AdjustParameterUsing(new EndogenousSelfAdjustingMutationRate(learningRate)),
-                Filter = new BitElitismGenerationFilterAlwaysNew<IBitIndividual>()
+                Filter = new BitElitismGenerationFilter<IBitIndividual>(true)
             };
 
         public static BitGenerationGenerator<IBitIndividual> HeavyTail(

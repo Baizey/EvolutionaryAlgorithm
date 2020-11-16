@@ -4,11 +4,13 @@ using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.Core.Fitness
 {
-    public interface IFitness<TIndividual, TGeneStructure, TGene> 
-        : IInitializes, IKeepsReference<TIndividual, TGeneStructure, TGene> 
+    public interface IFitness<TIndividual, TGeneStructure, TGene>
+        : IInitializes, IKeepsReference<TIndividual, TGeneStructure, TGene>
         where TGeneStructure : ICloneable
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
+        public long Calls { get; }
+
         double Evaluate(TIndividual individual);
     }
 }

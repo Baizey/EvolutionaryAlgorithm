@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Threading;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 
@@ -13,6 +14,12 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions
         {
         }
 
-        public double Evaluate(TIndividual individual) => individual.Ones;
+        public long Calls { get; private set; }
+
+        public double Evaluate(TIndividual individual)
+        {
+            Calls++;
+            return individual.Ones;
+        }
     }
 }

@@ -13,8 +13,11 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions
         {
         }
 
+        public long Calls { get; private set; }
+
         public double Evaluate(TIndividual individual)
         {
+            Calls++;
             var i = 0;
             for (; i < individual.Count; i++)
                 if (!individual[i])

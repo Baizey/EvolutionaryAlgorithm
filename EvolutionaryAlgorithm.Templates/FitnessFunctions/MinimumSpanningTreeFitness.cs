@@ -17,8 +17,11 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions
         {
         }
 
+        public long Calls { get; private set; }
+
         public double Evaluate(T individual)
         {
+            Calls++;
             if (_simpleGraph.IsOneComponent(individual.Genes))
                 return -_simpleGraph.Distance(individual.Genes);
             return int.MinValue;

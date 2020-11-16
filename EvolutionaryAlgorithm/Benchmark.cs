@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
@@ -20,51 +21,98 @@ namespace EvolutionaryAlgorithm
     public static class Benchmark
     {
         public static async Task RunBenchmark(
+            int mode,
             FitnessFunctions? fitness = null,
             Heuristics? heuristic = null,
-            int geneStep = 100,
+            int stepSize = 100,
+            int steps = 20,
             int mutationRate = 2,
+            Func<int, int> mutationRateFunc = null,
+            string mutationRateString = null,
             double learningRate = 2,
-            int? mu = null,
-            int? lambda = null,
+            int mu = 1,
+            Func<int, int> muFunc = null,
+            string muString = null,
+            int lambda = 2,
+            Func<int, int> lambdaFunc = null,
+            string lambdaString = null,
             int? observationPhase = null,
-            double? repairChance = null,
+            int repairChance = 1,
+            Func<int, int> repairChanceFunc = null,
+            string repairChanceString = null,
             double? beta = null,
             int? jump = null,
             int? limitFactor = null)
         {
-            var filename = $"{heuristic}_{fitness}_{mutationRate}_{learningRate}";
-            if (lambda != null) filename += $"_{lambda}";
+            var filename = $"{mode}_{heuristic}_{fitness}_{learningRate}";
+            Console.WriteLine(filename);
+            if (mutationRateFunc == null) filename += $"_{mutationRate}";
+            if (lambdaFunc == null) filename += $"_{lambda}";
             if (observationPhase != null) filename += $"_{observationPhase}";
             if (beta != null) filename += $"_{beta}";
-            if (repairChance != null) filename += $"_{repairChance}";
+            if (repairChanceFunc == null) filename += $"_{repairChance}";
             if (limitFactor != null) filename += $"_{limitFactor}";
             if (jump != null) filename += $"_{jump}";
+            lambdaFunc ??= _ => lambda;
+            mutationRateFunc ??= _ => mutationRate;
+            repairChanceFunc ??= _ => repairChance;
+
+            muString ??= mu.ToString();
+            muFunc ??= _ => mu;
+
+            lambdaString ??= lambda.ToString();
+            lambdaFunc ??= _ => lambda;
+
+            mutationRateString ??= mutationRate.ToString();
+            mutationRateFunc ??= _ => mutationRate;
+
+            repairChanceString ??= repairChance.ToString();
+            repairChanceFunc ??= _ => repairChance;
+
+            await using (var file = new StreamWriter($"{filename}.txt"))
+            {
+                await file.WriteLineAsync($"{heuristic}: {fitness}");
+                await file.WriteLineAsync($"lambda: {lambdaString}");
+                await file.WriteLineAsync($"mu: {muString}");
+                await file.WriteLineAsync($"mutationRate: {mutationRateString}");
+                await file.WriteLineAsync($"learningRate: {learningRate}");
+                if (heuristic == Heuristics.HeavyTail)
+                    await file.WriteLineAsync($"beta: {beta}");
+                if (heuristic == Heuristics.Asymmetric)
+                    await file.WriteLineAsync($"observationPhase: {observationPhase}");
+                if (heuristic == Heuristics.Repair)
+                    await file.WriteLineAsync($"repairChance: {repairChanceString}");
+                if (heuristic == Heuristics.StagnationDetection)
+                    await file.WriteLineAsync($"limitFactor: {limitFactor}");
+                if (fitness == FitnessFunctions.Jump)
+                    await file.WriteLineAsync($"jump: {jump}");
+                await file.WriteLineAsync();
+                await file.FlushAsync();
+            }
 
             var range = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>>();
-            var toCords = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, Point>>();
-            for (var i = 0; i < 20; i++)
+            for (var i = 0; i < steps; i++)
             {
-                var g = (i + 1) * geneStep;
+                var g = (i + 1) * stepSize;
+                var mr = mutationRateFunc.Invoke(g);
+                var rr = repairChanceFunc.Invoke(g);
                 range.Add(() => new BitEvolutionaryAlgorithm<IBitIndividual>()
                     .UsingBasicStatistics()
-                    .UsingRandomPopulation(mutationRate)
+                    .UsingRandomPopulation(mr)
                     .UsingEvaluation(CreateFitness(fitness, jump ?? 5))
                     .UsingParameters(new Parameters
                     {
-                        Mu = mu ?? 1,
-                        Lambda = lambda ?? 1,
+                        Mu = muFunc.Invoke(g),
+                        Lambda = lambdaFunc.Invoke(g),
                         GeneCount = g,
-                        MutationRate = mutationRate
+                        MutationRate = mr
                     })
                     .UsingHeuristic(CreateHeuristic(
                         heuristic, learningRate, mutationRate, observationPhase ?? 10,
-                        repairChance ?? 1, beta ?? 1.5D, limitFactor ?? 1)));
-
-                toCords.Add(algo => new Point(g, (int) algo.Statistics.Generations));
+                        rr, beta ?? 1.5D, limitFactor ?? 1)));
             }
 
-            await Benchmark.Range(filename, range, toCords);
+            await Benchmark.Range(filename, range);
         }
 
         private static IHyperHeuristic<IBitIndividual, BitArray, bool> CreateHeuristic(Heuristics? heuristic,
@@ -110,26 +158,24 @@ namespace EvolutionaryAlgorithm
 
         private static async Task Range(
             string filename,
-            List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generator,
-            List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, Point>> toCords,
+            IReadOnlyCollection<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators,
             int rounds = 1000)
         {
-            await using var file = new StreamWriter($"{filename}.txt");
+            await using var file = new StreamWriter($"{filename}.txt", true);
+            await file.WriteLineAsync("GeneCount,Generations,FitnessCalls");
             var counter = 0;
             var start = DateTime.Now;
-            var total = rounds * generator.Count;
+            var total = rounds * generators.Count;
             Console.WriteLine($"Progress: 0 / {total} (0%)");
-            for (var j = 0; j < generator.Count; j++)
+            foreach (var generator in generators)
             {
                 var tasks = new List<Task>();
                 var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
-                var toCordsUnrolled = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, Point>>();
 
                 for (var i = 0; i < rounds; i++)
                 {
-                    var algo = generator[j].Invoke();
+                    var algo = generator.Invoke();
                     algorithms.Add(algo);
-                    toCordsUnrolled.Add(toCords[j]);
                     var gene = algo.Parameters.GeneCount;
                     tasks.Add(algo.EvolveAsync(new FitnessTermination<IBitIndividual, BitArray, bool>(gene))
                         .ContinueWith(
@@ -145,11 +191,9 @@ namespace EvolutionaryAlgorithm
                 }
 
                 await Task.WhenAll(tasks);
-                for (var i = 0; i < algorithms.Count; i++)
-                {
-                    var point = toCordsUnrolled[i].Invoke(algorithms[i]);
-                    await file.WriteLineAsync($"{point.X} {point.Y}");
-                }
+                foreach (var algo in algorithms)
+                    await file.WriteLineAsync(
+                        $"{algo.Parameters.GeneCount},{algo.Statistics.Generations},{algo.Fitness.Calls}");
 
                 await file.FlushAsync();
             }

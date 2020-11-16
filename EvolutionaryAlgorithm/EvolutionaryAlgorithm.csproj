@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\EvolutionaryAlgorithm.GUI\EvolutionaryAlgorithm.GUI.csproj" />
       <ProjectReference Include="..\EvolutionaryAlgorithm.Templates\EvolutionaryAlgorithm.Templates.csproj" />
     </ItemGroup>
 

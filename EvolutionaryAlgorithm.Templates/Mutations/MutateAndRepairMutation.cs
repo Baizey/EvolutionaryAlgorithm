@@ -74,6 +74,6 @@ namespace EvolutionaryAlgorithm.Template.Mutations
 
         public void Update() => MutationPhase();
 
-        public void Mutate(int index, IBitIndividual y) => _applier.MutatePart(y, _flips, _repairChance);
+        public void Mutate(int index, IBitIndividual y) => _applier.MutatePart(y, _repairChance, _flips);
     }
 }

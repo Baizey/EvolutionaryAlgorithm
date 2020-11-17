@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EvolutionaryAlgorithm.BitImplementation
 {
@@ -16,9 +15,6 @@ namespace EvolutionaryAlgorithm.BitImplementation
 
         private readonly Dictionary<int, Dictionary<double, double[]>> _mutationLookup =
             new Dictionary<int, Dictionary<double, double[]>>();
-
-        private readonly Dictionary<int, Dictionary<int, double[]>> _heavyTailLookup =
-            new Dictionary<int, Dictionary<int, double[]>>();
 
         // Reasonably efficient way of calculating
         // n! / ((n - k)! * k!)
@@ -52,56 +48,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
             return _mutationLookup[n][p];
         }
 
-        public int HeavyTail(int p, int n, double beta)
-        {
-            double[] odds;
-            if (!_heavyTailLookup.ContainsKey(n)) _heavyTailLookup[n] = new Dictionary<int, double[]>();
-            if (!_heavyTailLookup[n].ContainsKey(p))
-            {
-                var c = 0D;
-                var allOdds = new double[n / 2];
-                for (var i = 1; i <= allOdds.Length; i++)
-                    c += Math.Pow(i, -beta);
-                for (var alpha = 1; alpha <= allOdds.Length; alpha++)
-                    allOdds[alpha - 1] = 1 / c * Math.Pow(alpha, -beta);
-
-                // Fill out odds according to p
-                odds = new double[n / 2];
-                var index = p - 1;
-                Array.Copy(allOdds, 0, odds, index, odds.Length - index);
-                if (index != 1)
-                {
-                    Array.Reverse(allOdds);
-                    Array.Copy(allOdds, allOdds.Length - p, odds, 0, index);
-                }
-
-                // Normalize
-                var sum = odds.Sum();
-                for (var i = 0; i < odds.Length; i++)
-                    odds[i] /= sum;
-                _heavyTailLookup[n][p] = odds;
-            }
-
-            odds = _heavyTailLookup[n][p];
-            var roll = _random.NextDouble();
-            for (var i = 0; i < odds.Length; i++)
-            {
-                if (roll < odds[i]) return i + 1;
-                roll -= odds[i];
-            }
-
-            return p;
-        }
-
-        public void Mutate(IBitIndividual individual, int index, double p, int n)
-        {
-            if (_random.NextDouble() <= p / n)
-                individual.Flip(index);
-        }
-
-        public void Mutate(IBitIndividual individual, int n) => Mutate(individual, individual.MutationRate, n);
-
-        public void Mutate(IBitIndividual individual, double p, int n)
+        private void MutateLazy(IBitIndividual individual, double p, int n)
         {
             var roll = _random.NextDouble();
             foreach (var d in CalculateOdds(p, n))
@@ -112,39 +59,67 @@ namespace EvolutionaryAlgorithm.BitImplementation
             }
         }
 
-        public void MutatePart(IBitIndividual individual, IReadOnlyList<int> lookup, double p)
+        private void MutateDistinct(IBitIndividual individual, double p, int n)
         {
-            var n = lookup.Count;
             var roll = _random.NextDouble();
-            var odds = CalculateOdds(p, n);
-            foreach (var d in odds)
+            var flipped = new HashSet<int>();
+            foreach (var d in CalculateOdds(p, n))
             {
                 if (roll < d) break;
                 roll -= d;
-                var r = _random.Next(n);
-                var index = lookup[r];
-                individual.Flip(index);
+                int r;
+                do r = _random.Next(individual.Count);
+                while (flipped.Contains(r));
+                individual.Flip(r);
+                flipped.Add(r);
             }
         }
 
-        public void MutateZeroes(IBitIndividual individual, double p)
+        private void MutateLazy(IBitIndividual individual, double p, IReadOnlyList<int> lookup)
         {
-            var genes = individual.Genes;
-            var lookup = new int[individual.Zeros];
-            for (int i = 0, c = 0; i < genes.Count; i++)
-                if (!genes[i])
-                    lookup[c++] = i;
-            MutatePart(individual, lookup, p);
+            var n = lookup.Count;
+            var roll = _random.NextDouble();
+            foreach (var d in CalculateOdds(p, n))
+            {
+                if (roll < d) break;
+                roll -= d;
+                individual.Flip(lookup[_random.Next(n)]);
+            }
         }
 
-        public void MutateOnes(IBitIndividual individual, double p)
+        private void MutateDistinct(IBitIndividual individual, double p, IReadOnlyList<int> lookup)
         {
-            var genes = individual.Genes;
-            var lookup = new int[individual.Ones];
-            for (int i = 0, c = 0; i < genes.Count; i++)
-                if (genes[i])
-                    lookup[c++] = i;
-            MutatePart(individual, lookup, p);
+            var n = lookup.Count;
+            var roll = _random.NextDouble();
+            var flipped = new HashSet<int>();
+            foreach (var d in CalculateOdds(p, n))
+            {
+                if (roll < d) break;
+                roll -= d;
+                int r;
+                do r = _random.Next(n);
+                while (flipped.Contains(r));
+                individual.Flip(lookup[r]);
+                flipped.Add(r);
+            }
+        }
+
+        public void Mutate(IBitIndividual individual, int n) => Mutate(individual, individual.MutationRate, n);
+
+        public void Mutate(IBitIndividual individual, double p, int n)
+        {
+            if (p >= n / 32D)
+                MutateDistinct(individual, p, n);
+            else
+                MutateLazy(individual, p, n);
+        }
+
+        public void MutatePart(IBitIndividual individual, double p, IReadOnlyList<int> lookup)
+        {
+            if (p >= lookup.Count / 32D)
+                MutateDistinct(individual, p, lookup);
+            else
+                MutateLazy(individual, p, lookup);
         }
 
         public void MutateAsymmetric(IBitIndividual individual, double p, double zeroPart, double onePart)
@@ -161,8 +136,8 @@ namespace EvolutionaryAlgorithm.BitImplementation
                 else
                     zeroLookup[z++] = i;
 
-            MutatePart(individual, oneLookup, onePart);
-            MutatePart(individual, zeroLookup, zeroPart);
+            MutatePart(individual, onePart, oneLookup);
+            MutatePart(individual, zeroPart, zeroLookup);
         }
     }
 }

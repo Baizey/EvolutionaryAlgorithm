@@ -27,7 +27,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
         public AsymmetricMutation(double learningRate, int observationPhase)
         {
             _observationPhase = Math.Max(2, observationPhase);
-            _learningRate = Math.Max(0.01, Math.Min(0.5, learningRate));
+            _learningRate = Math.Max(0.00, Math.Min(0.5, learningRate));
             ObservationCounter = _observationPhase;
 
             _tryFocusZero = true;

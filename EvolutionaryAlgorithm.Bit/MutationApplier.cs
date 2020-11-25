@@ -75,35 +75,6 @@ namespace EvolutionaryAlgorithm.BitImplementation
             }
         }
 
-        private void MutateLazy(IBitIndividual individual, double p, IReadOnlyList<int> lookup)
-        {
-            var n = lookup.Count;
-            var roll = _random.NextDouble();
-            foreach (var d in CalculateOdds(p, n))
-            {
-                if (roll < d) break;
-                roll -= d;
-                individual.Flip(lookup[_random.Next(n)]);
-            }
-        }
-
-        private void MutateDistinct(IBitIndividual individual, double p, IReadOnlyList<int> lookup)
-        {
-            var n = lookup.Count;
-            var roll = _random.NextDouble();
-            var flipped = new HashSet<int>();
-            foreach (var d in CalculateOdds(p, n))
-            {
-                if (roll < d) break;
-                roll -= d;
-                int r;
-                do r = _random.Next(n);
-                while (flipped.Contains(r));
-                individual.Flip(lookup[r]);
-                flipped.Add(r);
-            }
-        }
-
         public void Mutate(IBitIndividual individual, int n) => Mutate(individual, individual.MutationRate, n);
 
         public void Mutate(IBitIndividual individual, double p, int n)
@@ -114,12 +85,16 @@ namespace EvolutionaryAlgorithm.BitImplementation
                 MutateLazy(individual, p, n);
         }
 
-        public void MutatePart(IBitIndividual individual, double p, IReadOnlyList<int> lookup)
+        public void MutatePart(IBitIndividual individual, double p, SpecializedQueue indexes)
         {
-            if (p >= lookup.Count / 32D)
-                MutateDistinct(individual, p, lookup);
-            else
-                MutateLazy(individual, p, lookup);
+            var n = indexes.Count;
+            var roll = _random.NextDouble();
+            foreach (var d in CalculateOdds(p, n))
+            {
+                if (roll < d || indexes.IsEmpty) break;
+                roll -= d;
+                individual.Flip(indexes.TakeOne());
+            }
         }
 
         public void MutateAsymmetric(IBitIndividual individual, double p, double zeroPart, double onePart)
@@ -127,17 +102,37 @@ namespace EvolutionaryAlgorithm.BitImplementation
             onePart *= p;
             zeroPart *= p;
             var genes = individual.Genes;
+            var ones = individual.Ones;
+            var zeroes = genes.Count - ones;
 
-            var oneLookup = new int[individual.Ones];
-            var zeroLookup = new int[individual.Zeros];
-            for (int i = 0, o = 0, z = 0; i < genes.Count; i++)
+            var oneLookup = new SpecializedQueue(ones);
+            var zeroLookup = new SpecializedQueue(zeroes);
+            for (var i = 0; i < genes.Count; i++)
                 if (genes[i])
-                    oneLookup[o++] = i;
+                    oneLookup.Add(i);
                 else
-                    zeroLookup[z++] = i;
+                    zeroLookup.Add(i);
 
             MutatePart(individual, onePart, oneLookup);
             MutatePart(individual, zeroPart, zeroLookup);
+        }
+    }
+
+    public class SpecializedQueue
+    {
+        public readonly int[] InternalArray;
+        private readonly Random _random = new Random();
+        public int Count { get; private set; }
+        public bool IsEmpty => Count == 0;
+        public SpecializedQueue(int capacity) => InternalArray = new int[capacity];
+        public void Add(int i) => InternalArray[Count++] = i;
+
+        public int TakeOne()
+        {
+            var i = _random.Next(Count);
+            var removed = InternalArray[i];
+            InternalArray[i] = InternalArray[--Count];
+            return removed;
         }
     }
 }

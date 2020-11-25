@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
@@ -20,6 +18,8 @@ namespace EvolutionaryAlgorithm
 {
     public static class Benchmark
     {
+        public const int MaxThreads = 16;
+
         public static async Task RunBenchmark(
             int mode,
             FitnessFunctions? fitness = null,
@@ -158,39 +158,22 @@ namespace EvolutionaryAlgorithm
 
         private static async Task Range(
             string filename,
-            IReadOnlyCollection<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators,
-            int rounds = 1000)
+            IReadOnlyList<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators)
         {
+            const int rounds = 1024;
             await using var file = new StreamWriter($"{filename}.txt", true);
             await file.WriteLineAsync("GeneCount,Generations,FitnessCalls");
-            var counter = 0;
             var start = DateTime.Now;
             var total = rounds * generators.Count;
             Console.WriteLine($"Progress: 0 / {total} (0%)");
-            foreach (var generator in generators)
+            for (var i = 0; i < generators.Count; i++)
             {
-                var tasks = new List<Task>();
-                var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
-
-                for (var i = 0; i < rounds; i++)
-                {
-                    var algo = generator.Invoke();
-                    algorithms.Add(algo);
-                    var gene = algo.Parameters.GeneCount;
-                    tasks.Add(algo.EvolveAsync(new FitnessTermination<IBitIndividual, BitArray, bool>(gene))
-                        .ContinueWith(
-                            _ =>
-                            {
-                                var c = Interlocked.Increment(ref counter);
-                                var used = (DateTime.Now - start).TotalMilliseconds / c;
-                                var remaining = TimeSpan.FromMilliseconds((total - c) * used);
-                                var progress = 100 * c / total;
-                                if (c % 10 == 0)
-                                    Console.WriteLine($"Progress: {c} / {total} ({progress}%) ~{remaining} remaining");
-                            }));
-                }
-
-                await Task.WhenAll(tasks);
+                var algorithms = await ParallelRun(
+                    start,
+                    i,
+                    generators.Count,
+                    rounds,
+                    generators[i]);
                 foreach (var algo in algorithms)
                     await file.WriteLineAsync(
                         $"{algo.Parameters.GeneCount},{algo.Statistics.Generations},{algo.Fitness.Calls}");
@@ -199,6 +182,87 @@ namespace EvolutionaryAlgorithm
             }
 
             Console.WriteLine("Done...");
+        }
+
+        private static async Task<List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> ParallelRun(
+            DateTime start,
+            int generation,
+            int generations,
+            int rounds,
+            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>> generator)
+        {
+            var workload = rounds / MaxThreads;
+
+            var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
+            for (var i = 0; i < workload * MaxThreads; i++) algorithms.Add(generator.Invoke());
+            var tasks = new List<Task>();
+
+            var total = generations * rounds;
+            var count = rounds * generation;
+            for (var thread = 0; thread < MaxThreads; thread++)
+            {
+                var s = thread * workload;
+                var e = s + workload;
+                tasks.Add(Task.Run(async () =>
+                {
+                    for (var i = s; i < e; i++)
+                    {
+                        await algorithms[i]
+                            .Evolve(new FitnessTermination<IBitIndividual, BitArray, bool>(
+                                algorithms[i].Parameters.GeneCount));
+                        Interlocked.Increment(ref count);
+                        
+                        if (count % 64 != 0) continue;
+                        
+                        var used = (DateTime.Now - start).TotalMilliseconds / count;
+                        var remaining = TimeSpan.FromMilliseconds((total - count) * used);
+                        Console.WriteLine(
+                            $"Progress: {count} / {total} ({100 * count / total}%), Taken: {DateTime.Now - start}; Remaining: ~{remaining}");
+                    }
+                }));
+            }
+
+            await Task.WhenAll(tasks);
+            return algorithms;
+        }
+
+        private static async Task<List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> ParallelQueue(
+            DateTime start,
+            int generation,
+            int generations,
+            int rounds,
+            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>> generator)
+        {
+            var previousDone = generation * rounds;
+            var total = generations * rounds;
+            var pending = rounds;
+            var working = new List<Task>();
+            var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
+            while (pending + working.Count > 0)
+            {
+                if (working.Count < MaxThreads && pending > 0)
+                {
+                    var algo = generator.Invoke();
+                    algorithms.Add(algo);
+                    var gene = algo.Parameters.GeneCount;
+                    working.Add(algo.EvolveAsync(new FitnessTermination<IBitIndividual, BitArray, bool>(gene)));
+                    pending--;
+                }
+                else
+                {
+                    await Task.WhenAny(working);
+                    working.RemoveAll(x => x.IsCompleted);
+                    var done = rounds - (pending + working.Count);
+                    var used = (DateTime.Now - start).TotalMilliseconds / done;
+                    var remaining = TimeSpan.FromMilliseconds((total - done) * used);
+                    var progress = 100 * (previousDone + done) / total;
+                    if (done % 100 == 0)
+                        Console.WriteLine(
+                            $"Progress: {previousDone + done} / {total} ({progress}%) ~{DateTime.Now - start} taken");
+                }
+            }
+
+            return algorithms;
         }
     }
 }

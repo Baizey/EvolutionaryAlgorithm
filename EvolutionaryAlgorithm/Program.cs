@@ -26,13 +26,32 @@ namespace EvolutionaryAlgorithm
             var mode = int.Parse(args[0]);
             var benchmarks = new Func<int, Task>[]
             {
+                i => RunBenchmark(i, heuristic: Asymmetric, fitness: Jump, mu: 1, lambda: 1, stepSize: 1000,
+                    jump: 4,
+                    mutationRate: 2,
+                    learningRate: 0.1,
+                    observationPhase: 50),
+                i => RunBenchmark(i, heuristic: Asymmetric, fitness: Jump, mu: 1, lambda: 1, stepSize: 1000,
+                    jump: 4,
+                    mutationRate: 4,
+                    learningRate: 0.1,
+                    observationPhase: 50),
+                i => RunBenchmark(i, heuristic: Asymmetric, fitness: Jump, mu: 1, lambda: 1, stepSize: 1000,
+                    jump: 4,
+                    mutationRate: 8,
+                    learningRate: 0.1,
+                    observationPhase: 50),
+                i => RunBenchmark(i, heuristic: Asymmetric, fitness: LeadingOnes, stepSize: 1000, mu: 1, lambda: 1,
+                    mutationRate: 1,
+                    observationPhase: 50,
+                    learningRate: 0.1),
+
                 i => RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, stepSize: 10, mu: 1,
                     jump: 8,
                     lambda: 1,
                     beta: 1.5,
                     mutationRate: 2,
                     learningRate: 1),
-
                 i => RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, stepSize: 10, mu: 1,
                     jump: 8,
                     lambda: 1,
@@ -139,28 +158,6 @@ namespace EvolutionaryAlgorithm
                     lambdaFunc: n => (int) Math.Pow(Math.Log(n), 3),
                     learningRate: 4,
                     jump: 3),
-
-                i => RunBenchmark(i, heuristic: Asymmetric, fitness: OneMax, mu: 1, lambda: 1, stepSize: 1000,
-                    mutationRate: 1,
-                    learningRate: 0.1,
-                    observationPhase: 50),
-
-                i => RunBenchmark(i, heuristic: Asymmetric, fitness: Jump, mu: 1, lambda: 1, stepSize: 1000,
-                    jump: 4,
-                    mutationRate: 2,
-                    learningRate: 0.02,
-                    observationPhase: 10),
-                i => RunBenchmark(i, heuristic: Asymmetric, fitness: Jump, mu: 1, lambda: 1, stepSize: 1000,
-                    jump: 4,
-                    mutationRate: 4,
-                    learningRate: 0.02,
-                    observationPhase: 10),
-
-                i => RunBenchmark(i, heuristic: Asymmetric, fitness: Jump, mu: 1, lambda: 1, stepSize: 1000,
-                    jump: 4,
-                    mutationRate: 8,
-                    learningRate: 0.02,
-                    observationPhase: 10),
             };
             if (0 > mode) Console.WriteLine($"Benchmarks: {benchmarks.Length} (0...{benchmarks.Length - 1})");
             else await benchmarks[mode].Invoke(mode);

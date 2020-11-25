@@ -125,8 +125,7 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
                 GeneCount = geneCount,
                 MutationRate = mutationRate
             });
-            Algorithm.UsingStatistics(
-                new BasicEvolutionaryStatistics<IBitIndividual, BitArray, bool>());
+            Algorithm.UsingBasicStatistics();
             Algorithm.UsingRandomPopulation(mutationRate);
             Algorithm.UsingHeuristic(CreateHeuristic(heuristic, learningRate, mutationRate, observationPhase,
                 repairChance, beta, limitFactor));

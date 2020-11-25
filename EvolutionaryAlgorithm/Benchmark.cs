@@ -71,21 +71,21 @@ namespace EvolutionaryAlgorithm
 
             await using (var file = new StreamWriter($"{filename}.txt"))
             {
-                await file.WriteLineAsync($"{heuristic}: {fitness}");
-                await file.WriteLineAsync($"lambda: {lambdaString}");
-                await file.WriteLineAsync($"mu: {muString}");
-                await file.WriteLineAsync($"mutationRate: {mutationRateString}");
-                await file.WriteLineAsync($"learningRate: {learningRate}");
+                await file.WriteLineAsync($"{heuristic} {fitness}");
+                await file.WriteLineAsync($"lambda {lambdaString}");
+                await file.WriteLineAsync($"mu {muString}");
+                await file.WriteLineAsync($"mutationRate {mutationRateString}");
+                await file.WriteLineAsync($"learningRate {learningRate}");
                 if (heuristic == Heuristics.HeavyTail)
-                    await file.WriteLineAsync($"beta: {beta}");
+                    await file.WriteLineAsync($"beta {beta}");
                 if (heuristic == Heuristics.Asymmetric)
-                    await file.WriteLineAsync($"observationPhase: {observationPhase}");
+                    await file.WriteLineAsync($"observationPhase {observationPhase}");
                 if (heuristic == Heuristics.Repair)
-                    await file.WriteLineAsync($"repairChance: {repairChanceString}");
+                    await file.WriteLineAsync($"repairChance {repairChanceString}");
                 if (heuristic == Heuristics.StagnationDetection)
-                    await file.WriteLineAsync($"limitFactor: {limitFactor}");
+                    await file.WriteLineAsync($"limitFactor {limitFactor}");
                 if (fitness == FitnessFunctions.Jump)
-                    await file.WriteLineAsync($"jump: {jump}");
+                    await file.WriteLineAsync($"jump {jump}");
                 await file.WriteLineAsync();
                 await file.FlushAsync();
             }
@@ -162,7 +162,7 @@ namespace EvolutionaryAlgorithm
         {
             const int rounds = 1024;
             await using var file = new StreamWriter($"{filename}.txt", true);
-            await file.WriteLineAsync("GeneCount,Generations,FitnessCalls");
+            await file.WriteLineAsync("GeneCount Generations FitnessCalls");
             var start = DateTime.Now;
             var total = rounds * generators.Count;
             Console.WriteLine($"Progress: 0 / {total} (0%)");
@@ -176,7 +176,7 @@ namespace EvolutionaryAlgorithm
                     generators[i]);
                 foreach (var algo in algorithms)
                     await file.WriteLineAsync(
-                        $"{algo.Parameters.GeneCount},{algo.Statistics.Generations},{algo.Fitness.Calls}");
+                        $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls}");
 
                 await file.FlushAsync();
             }

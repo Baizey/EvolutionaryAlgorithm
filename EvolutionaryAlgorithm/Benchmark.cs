@@ -53,9 +53,6 @@ namespace EvolutionaryAlgorithm
             if (repairChanceFunc == null) filename += $"_{repairChance}";
             if (limitFactor != null) filename += $"_{limitFactor}";
             if (jump != null) filename += $"_{jump}";
-            lambdaFunc ??= _ => lambda;
-            mutationRateFunc ??= _ => mutationRate;
-            repairChanceFunc ??= _ => repairChance;
 
             muString ??= mu.ToString();
             muFunc ??= _ => mu;
@@ -68,7 +65,7 @@ namespace EvolutionaryAlgorithm
 
             repairChanceString ??= repairChance.ToString();
             repairChanceFunc ??= _ => repairChance;
-
+            
             await using (var file = new StreamWriter($"{filename}.txt"))
             {
                 await file.WriteLineAsync($"{heuristic} {fitness}");

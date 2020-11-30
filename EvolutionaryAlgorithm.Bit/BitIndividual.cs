@@ -21,7 +21,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
 
     public class BitIndividual : IBitIndividual
     {
-        public static Population<IBitIndividual, BitArray, bool> FromRandom(int mutationRate) =>
+        public static Population<IBitIndividual, BitArray, bool> FromRandom(double mutationRate) =>
             new Population<IBitIndividual, BitArray, bool>(Generate(mutationRate));
 
         public static Func<int, IBitIndividual> Generate(double mutationRate)

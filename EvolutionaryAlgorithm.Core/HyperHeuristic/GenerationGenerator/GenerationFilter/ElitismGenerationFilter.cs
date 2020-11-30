@@ -36,17 +36,10 @@ namespace EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Generati
                     oldRate = bodies[index = i].MutationRate;
 
             var best = bodies[index];
+            var oldBest = Algorithm.Population.Best;
 
             // If no-one beats current best
-            if (best.Fitness < Algorithm.Population[0].Fitness)
-                return new GenerationFilterResult<TIndividual, TGeneStructure, TGene>
-                {
-                    NextGeneration = Algorithm.Population.Individuals,
-                    Discarded = bodies
-                };
-
-            // If tie, but we dont prefer new
-            if (!_preferNew && best.Fitness == Algorithm.Population[0].Fitness)
+            if (best.Fitness < oldBest.Fitness || !_preferNew && best.Fitness == oldBest.Fitness)
                 return new GenerationFilterResult<TIndividual, TGeneStructure, TGene>
                 {
                     NextGeneration = Algorithm.Population.Individuals,

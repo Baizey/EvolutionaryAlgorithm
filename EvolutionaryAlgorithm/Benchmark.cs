@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace EvolutionaryAlgorithm
 {
     public static class Benchmark
     {
-        public const int MaxThreads = 16;
+        public const int MaxThreads = 1;
 
         public static async Task RunBenchmark(
             int mode,
@@ -26,8 +27,8 @@ namespace EvolutionaryAlgorithm
             Heuristics? heuristic = null,
             int stepSize = 100,
             int steps = 20,
-            int mutationRate = 2,
-            Func<int, int> mutationRateFunc = null,
+            double mutationRate = 2,
+            Func<double, double> mutationRateFunc = null,
             string mutationRateString = null,
             double learningRate = 2,
             int mu = 1,
@@ -37,10 +38,11 @@ namespace EvolutionaryAlgorithm
             Func<int, int> lambdaFunc = null,
             string lambdaString = null,
             int? observationPhase = null,
-            int repairChance = 1,
-            Func<int, int> repairChanceFunc = null,
+            double repairChance = 1,
+            Func<double, double> repairChanceFunc = null,
             string repairChanceString = null,
             double? beta = null,
+            int rounds = 1000,
             int? jump = null,
             int? limitFactor = null)
         {
@@ -60,12 +62,12 @@ namespace EvolutionaryAlgorithm
             lambdaString ??= lambda.ToString();
             lambdaFunc ??= _ => lambda;
 
-            mutationRateString ??= mutationRate.ToString();
+            mutationRateString ??= mutationRate.ToString(CultureInfo.InvariantCulture);
             mutationRateFunc ??= _ => mutationRate;
 
-            repairChanceString ??= repairChance.ToString();
+            repairChanceString ??= repairChance.ToString(CultureInfo.InvariantCulture);
             repairChanceFunc ??= _ => repairChance;
-            
+
             await using (var file = new StreamWriter($"{filename}.txt"))
             {
                 await file.WriteLineAsync($"{heuristic} {fitness}");
@@ -109,12 +111,12 @@ namespace EvolutionaryAlgorithm
                         rr, beta ?? 1.5D, limitFactor ?? 1)));
             }
 
-            await Benchmark.Range(filename, range);
+            await Range(filename, rounds, range);
         }
 
         private static IHyperHeuristic<IBitIndividual, BitArray, bool> CreateHeuristic(Heuristics? heuristic,
             double learningRate = 0.05D,
-            int mutationRate = 2,
+            double mutationRate = 2,
             int observationPhase = 10,
             double repairChance = 1,
             double beta = 1.5,
@@ -155,17 +157,19 @@ namespace EvolutionaryAlgorithm
 
         private static async Task Range(
             string filename,
+            int rounds,
             IReadOnlyList<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators)
         {
-            const int rounds = 1024;
             await using var file = new StreamWriter($"{filename}.txt", true);
             await file.WriteLineAsync("GeneCount Generations FitnessCalls");
             var start = DateTime.Now;
             var total = rounds * generators.Count;
+            var prevGeneCount = 1;
             Console.WriteLine($"Progress: 0 / {total} (0%)");
             for (var i = 0; i < generators.Count; i++)
             {
-                var algorithms = await ParallelRun(
+                var now = DateTime.Now;
+                var algorithms = await ParallelQueue(
                     start,
                     i,
                     generators.Count,
@@ -174,7 +178,6 @@ namespace EvolutionaryAlgorithm
                 foreach (var algo in algorithms)
                     await file.WriteLineAsync(
                         $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls}");
-
                 await file.FlushAsync();
             }
 
@@ -208,9 +211,9 @@ namespace EvolutionaryAlgorithm
                             .Evolve(new FitnessTermination<IBitIndividual, BitArray, bool>(
                                 algorithms[i].Parameters.GeneCount));
                         Interlocked.Increment(ref count);
-                        
+
                         if (count % 64 != 0) continue;
-                        
+
                         var used = (DateTime.Now - start).TotalMilliseconds / count;
                         var remaining = TimeSpan.FromMilliseconds((total - count) * used);
                         Console.WriteLine(
@@ -237,7 +240,7 @@ namespace EvolutionaryAlgorithm
             var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
             while (pending + working.Count > 0)
             {
-                if (working.Count < MaxThreads && pending > 0)
+                while (working.Count < MaxThreads && pending > 0)
                 {
                     var algo = generator.Invoke();
                     algorithms.Add(algo);
@@ -245,18 +248,15 @@ namespace EvolutionaryAlgorithm
                     working.Add(algo.EvolveAsync(new FitnessTermination<IBitIndividual, BitArray, bool>(gene)));
                     pending--;
                 }
-                else
-                {
-                    await Task.WhenAny(working);
-                    working.RemoveAll(x => x.IsCompleted);
-                    var done = rounds - (pending + working.Count);
-                    var used = (DateTime.Now - start).TotalMilliseconds / done;
-                    var remaining = TimeSpan.FromMilliseconds((total - done) * used);
-                    var progress = 100 * (previousDone + done) / total;
-                    if (done % 100 == 0)
-                        Console.WriteLine(
-                            $"Progress: {previousDone + done} / {total} ({progress}%) ~{DateTime.Now - start} taken");
-                }
+
+                await Task.WhenAny(working);
+                working.RemoveAll(x => x.IsCompleted);
+                var count = rounds - pending;
+                var done = rounds - (pending + working.Count);
+                var progress = 100 * (previousDone + done) / total;
+                if (count % 100 == 0)
+                    Console.WriteLine(
+                        $"Progress: {previousDone + done} / {total} ({progress}%) {DateTime.Now - start} taken");
             }
 
             return algorithms;

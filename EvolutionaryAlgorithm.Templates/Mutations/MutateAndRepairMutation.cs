@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Infrastructure;
@@ -14,7 +15,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
         private readonly MutationApplier _applier = new MutationApplier();
         private IBitIndividual _xMark;
         private IParameters _parameters;
-        private SpecializedQueue _flips;
+        private int[] _flips;
         private readonly double _repairChance;
         public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
 
@@ -39,16 +40,21 @@ namespace EvolutionaryAlgorithm.Template.Mutations
             var bodies = _storage.Get(-1, _parameters.Lambda);
             _storage.Dump(-1, bodies);
 
-            var mutations = Mutations();
-            _flips = new SpecializedQueue(mutations);
+            var mutations = Math.Min(Algorithm.Parameters.GeneCount, Mutations());
+            _flips = new int[mutations];
             var currentFlips = new int[mutations];
+            var flipped = new HashSet<int>();
             for (var i = 0; i < bodies.Count; i++)
             {
+                flipped.Clear();
                 var body = bodies[i];
                 x.CopyTo(body);
                 for (var m = 0; m < mutations; m++)
                 {
-                    var r = _random.Next(_parameters.GeneCount);
+                    int r;
+                    do r = _random.Next(_parameters.GeneCount);
+                    while (flipped.Contains(r));
+                    flipped.Add(r);
                     body.Flip(r);
                     currentFlips[m] = r;
                 }
@@ -58,7 +64,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
                 if (i == 0 || body.Fitness > _xMark.Fitness)
                 {
                     body.CopyTo(_xMark);
-                    Array.Copy(currentFlips, 0, _flips.InternalArray, 0, mutations);
+                    Array.Copy(currentFlips, 0, _flips, 0, mutations);
                 }
             }
         }
@@ -68,12 +74,13 @@ namespace EvolutionaryAlgorithm.Template.Mutations
             _parameters = Algorithm.Parameters;
             _storage = new IndividualStorage<IBitIndividual, BitArray, bool>(Algorithm);
             _xMark = _storage.Get(-1, 1)[0];
-            _flips = new SpecializedQueue(0);
+            _flips = new int[0];
             MutationPhase();
         }
 
         public void Update() => MutationPhase();
 
-        public void Mutate(int index, IBitIndividual y) => _applier.MutatePart(y, _repairChance, _flips);
+        public void Mutate(int index, IBitIndividual y) =>
+            _applier.MutatePart(y, _repairChance, _flips);
     }
 }

@@ -11,7 +11,7 @@ namespace EvolutionaryAlgorithm.Template
     {
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingRandomPopulation(
             this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
-            int mutationRate = 1) =>
+            double mutationRate = 1) =>
             algorithm.UsingPopulation(BitIndividual.FromRandom(mutationRate));
 
         public static IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> UsingBasicStatistics(

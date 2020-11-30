@@ -85,6 +85,9 @@ namespace EvolutionaryAlgorithm.BitImplementation
                 MutateLazy(individual, p, n);
         }
 
+        public void MutatePart(IBitIndividual individual, double p, int[] indexes) =>
+            MutatePart(individual, p, new SpecializedQueue(indexes));
+
         public void MutatePart(IBitIndividual individual, double p, SpecializedQueue indexes)
         {
             var n = indexes.Count;
@@ -120,18 +123,25 @@ namespace EvolutionaryAlgorithm.BitImplementation
 
     public class SpecializedQueue
     {
-        public readonly int[] InternalArray;
+        private readonly int[] _internalArray;
         private readonly Random _random = new Random();
         public int Count { get; private set; }
         public bool IsEmpty => Count == 0;
-        public SpecializedQueue(int capacity) => InternalArray = new int[capacity];
-        public void Add(int i) => InternalArray[Count++] = i;
+        public SpecializedQueue(int capacity) => _internalArray = new int[capacity];
+
+        public SpecializedQueue(int[] internalArray)
+        {
+            _internalArray = internalArray;
+            Count = internalArray.Length;
+        }
+
+        public void Add(int i) => _internalArray[Count++] = i;
 
         public int TakeOne()
         {
             var i = _random.Next(Count);
-            var removed = InternalArray[i];
-            InternalArray[i] = InternalArray[--Count];
+            var removed = _internalArray[i];
+            _internalArray[i] = _internalArray[--Count];
             return removed;
         }
     }

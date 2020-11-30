@@ -54,13 +54,13 @@ namespace EvolutionaryAlgorithm.Template
         };
 
         public static IHyperHeuristic<IBitIndividual, BitArray, bool> StagnationDetection(
-            int initialMutationRate,
+            double initialMutationRate,
             int limitFactor,
             int learningRate) =>
             StagnationDetection(initialMutationRate, limitFactor, HalfAndHalf(learningRate));
 
         public static IHyperHeuristic<IBitIndividual, BitArray, bool> StagnationDetection(
-            int initialMutationRate,
+            double initialMutationRate,
             int limitFactor,
             BitGenerationGenerator<IBitIndividual> generator) =>
             new StagnationDetectionHyperHeuristic(initialMutationRate, limitFactor, generator);

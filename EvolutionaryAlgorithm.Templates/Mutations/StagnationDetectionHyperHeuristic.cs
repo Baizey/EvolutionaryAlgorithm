@@ -11,7 +11,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
     public class StagnationDetectionHyperHeuristic : BitHyperHeuristicBase<IBitIndividual>
     {
         private long _u;
-        private readonly int _initialMutationRate;
+        private readonly double _initialMutationRate;
         public bool InStagnationDetection { get; private set; }
 
         private readonly IBitGenerationGenerator<IBitIndividual> _mutationModule;
@@ -21,7 +21,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
         private double _staticLimit;
         private readonly int _limitFactor;
 
-        public StagnationDetectionHyperHeuristic(int initialMutationRate, int limitFactor,
+        public StagnationDetectionHyperHeuristic(double initialMutationRate, int limitFactor,
             IBitGenerationGenerator<IBitIndividual> generator)
         {
             _limitFactor = limitFactor;

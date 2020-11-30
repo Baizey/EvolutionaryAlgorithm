@@ -19,7 +19,7 @@ namespace EvolutionaryAlgorithm
 {
     public static class Benchmark
     {
-        public const int MaxThreads = 1;
+        public const int MaxThreads = 16;
 
         public static async Task RunBenchmark(
             int mode,

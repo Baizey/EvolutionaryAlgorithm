@@ -97,9 +97,9 @@ namespace EvolutionaryAlgorithm
                 i => RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, lambda: 2, stepSize: 100,
                     jump: 2,
                     mutationRateString: "sqrt(k/n)",
-                    mutationRateFunc: n => Math.Sqrt(4 * n),
+                    mutationRateFunc: n => Math.Sqrt(2 * n),
                     repairChanceString: "sqrt(k/n)",
-                    repairChanceFunc: n => Math.Sqrt(4 * n),
+                    repairChanceFunc: n => Math.Sqrt(2 * n),
                     learningRate: 2
                 ),
                 i => RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, lambda: 2, stepSize: 100,

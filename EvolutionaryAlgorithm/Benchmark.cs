@@ -164,7 +164,6 @@ namespace EvolutionaryAlgorithm
             await file.WriteLineAsync("GeneCount Generations FitnessCalls");
             var start = DateTime.Now;
             var total = rounds * generators.Count;
-            var prevGeneCount = 1;
             Console.WriteLine($"Progress: 0 / {total} (0%)");
             for (var i = 0; i < generators.Count; i++)
             {

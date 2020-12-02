@@ -58,6 +58,7 @@
 
         this.updateOptions();
         this.api = new Api();
+        this.initialize();
     }
 
     async run() {

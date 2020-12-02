@@ -56,6 +56,7 @@ document.getElementById('button_initialize').onclick = async () => {
             break;
     }
 }
+document.getElementById('button_initialize').click();
 document.getElementById('button_run').onclick = () => {
     optionsController.run().then(() => updateView());
 }

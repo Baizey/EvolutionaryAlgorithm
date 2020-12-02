@@ -16,9 +16,9 @@
                 <div id="row_heuristic" class="row">
                     <label class="optionLabel" for="input_heuristic">Heuristic</label>
                     <select class="optionValue" id="input_heuristic">
-                        <option value="Asymmetric">1 + λ SA Asymmetric GA</option>
+                        <option value="Asymmetric">1 + 1 SA Asymmetric EA</option>
                         <option value="StagnationDetection">1 + λ SASD GA</option>
-                        <option value="Repair">1 + (λ, λ) GA /w ⅕λ SA</option>
+                        <option value="Repair">1 + (λ, λ) SAGA /w 1/5-th success rule</option>
                         <option value="SingleEndogenous">1 + λ SA Endogenous GA</option>
                         <option value="MultiEndogenous">λ + λ SA Endogenous GA /w Single-Point Crossover & Tournament selction</option>
                         <option value="HeavyTail">1 + λ SA Heavytail GA</option>

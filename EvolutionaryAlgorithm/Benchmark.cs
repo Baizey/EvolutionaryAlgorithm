@@ -26,7 +26,7 @@ namespace EvolutionaryAlgorithm
             FitnessFunctions? fitness = null,
             Heuristics? heuristic = null,
             int stepSize = 100,
-            int steps = 20,
+            int steps = 10,
             double mutationRate = 2,
             Func<double, double> mutationRateFunc = null,
             string mutationRateString = null,

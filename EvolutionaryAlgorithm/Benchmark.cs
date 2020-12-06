@@ -253,7 +253,7 @@ namespace EvolutionaryAlgorithm
                 var count = rounds - pending;
                 var done = rounds - (pending + working.Count);
                 var progress = 100 * (previousDone + done) / total;
-                if (count % 100 == 0)
+                if (count % (rounds / 10) == 0)
                     Console.WriteLine(
                         $"Progress: {previousDone + done} / {total} ({progress}%) {DateTime.Now - start} taken");
             }

@@ -67,11 +67,11 @@ namespace EvolutionaryAlgorithm
                 i => RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, stepSize: 200,
                     jump: 2,
                     lambdaString: "sqrt(n/k) / 2",
-                    lambdaFunc: n => (int) Math.Max(2, Math.Sqrt(n / 3D)) / 2,
+                    lambdaFunc: n => (int) Math.Max(2, Math.Sqrt(n / 2D)) / 2,
                     mutationRateString: "sqrt(k/n)",
-                    mutationRateFunc: n => Math.Sqrt(3 * n),
+                    mutationRateFunc: n => Math.Sqrt(2 * n),
                     repairChanceString: "sqrt(k/n)",
-                    repairChanceFunc: n => Math.Sqrt(3 * n),
+                    repairChanceFunc: n => Math.Sqrt(2 * n),
                     learningRate: 1
                 ),
                 
@@ -99,7 +99,7 @@ namespace EvolutionaryAlgorithm
                 i => RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, stepSize: 200,
                     jump: 2,
                     lambdaString: "sqrt(n/k) * 2",
-                    lambdaFunc: n => (int) Math.Max(2, Math.Sqrt(n / 3D)) * 2,
+                    lambdaFunc: n => (int) Math.Max(2, Math.Sqrt(n / 2D)) * 2,
                     mutationRateString: "sqrt(k/n)",
                     mutationRateFunc: n => Math.Sqrt(2 * n),
                     repairChanceString: "sqrt(k/n)",

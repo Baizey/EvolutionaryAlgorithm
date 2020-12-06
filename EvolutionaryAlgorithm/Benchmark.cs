@@ -42,7 +42,7 @@ namespace EvolutionaryAlgorithm
             Func<double, double> repairChanceFunc = null,
             string repairChanceString = null,
             double? beta = null,
-            int rounds = 1000,
+            int rounds = 100,
             int? jump = null,
             int? limitFactor = null)
         {

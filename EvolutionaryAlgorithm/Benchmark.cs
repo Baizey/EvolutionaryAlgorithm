@@ -183,48 +183,6 @@ namespace EvolutionaryAlgorithm
             Console.WriteLine("Done...");
         }
 
-        private static async Task<List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> ParallelRun(
-            DateTime start,
-            int generation,
-            int generations,
-            int rounds,
-            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>> generator)
-        {
-            var workload = rounds / MaxThreads;
-
-            var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
-            for (var i = 0; i < workload * MaxThreads; i++) algorithms.Add(generator.Invoke());
-            var tasks = new List<Task>();
-
-            var total = generations * rounds;
-            var count = rounds * generation;
-            for (var thread = 0; thread < MaxThreads; thread++)
-            {
-                var s = thread * workload;
-                var e = s + workload;
-                tasks.Add(Task.Run(async () =>
-                {
-                    for (var i = s; i < e; i++)
-                    {
-                        await algorithms[i]
-                            .Evolve(new FitnessTermination<IBitIndividual, BitArray, bool>(
-                                algorithms[i].Parameters.GeneCount));
-                        Interlocked.Increment(ref count);
-
-                        if (count % 64 != 0) continue;
-
-                        var used = (DateTime.Now - start).TotalMilliseconds / count;
-                        var remaining = TimeSpan.FromMilliseconds((total - count) * used);
-                        Console.WriteLine(
-                            $"Progress: {count} / {total} ({100 * count / total}%), Taken: {DateTime.Now - start}; Remaining: ~{remaining}");
-                    }
-                }));
-            }
-
-            await Task.WhenAll(tasks);
-            return algorithms;
-        }
-
         private static async Task<List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> ParallelQueue(
             DateTime start,
             int generation,

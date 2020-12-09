@@ -167,7 +167,6 @@ namespace EvolutionaryAlgorithm
             Console.WriteLine($"Progress: 0 / {total} (0%)");
             for (var i = 0; i < generators.Count; i++)
             {
-                var now = DateTime.Now;
                 var algorithms = await ParallelQueue(
                     start,
                     i,

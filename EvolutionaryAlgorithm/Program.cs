@@ -73,7 +73,7 @@ namespace EvolutionaryAlgorithm
                     var jump = 4D;
                     return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 10,
                         jump: (int) jump,
-                        mutationRate: 2,
+                        mutationRate: 1,
                         beta: 1.5,
                         lambda: 2,
                         learningRate: 1

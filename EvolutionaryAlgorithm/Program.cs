@@ -68,6 +68,28 @@ namespace EvolutionaryAlgorithm
                         learningRate: 1
                     );
                 },
+                i =>
+                {
+                    var jump = 4D;
+                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 10,
+                        jump: (int) jump,
+                        mutationRate: 2,
+                        beta: 1.5,
+                        lambda: 2,
+                        learningRate: 1
+                    );
+                },
+                i =>
+                {
+                    var jump = 4D;
+                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 10,
+                        jump: (int) jump,
+                        mutationRate: 2,
+                        beta: 1.5,
+                        lambda: 2,
+                        learningRate: 2
+                    );
+                },
             };
             if (0 > mode) Console.WriteLine($"Benchmarks: {benchmarks.Length} (0...{benchmarks.Length - 1})");
             else await benchmarks[mode].Invoke(mode);

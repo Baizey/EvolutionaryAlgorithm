@@ -29,51 +29,9 @@ namespace EvolutionaryAlgorithm
                 i =>
                 {
                     var jump = 3D;
-                    return RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, stepSize: 200,
+                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
                         jump: (int) jump,
-                        mutationRateString: "sqrt(k/n)",
-                        mutationRateFunc: n => Math.Sqrt(jump * n),
-                        repairChanceString: "sqrt(k/n)",
-                        repairChanceFunc: n => Math.Sqrt(jump * n),
-                        lambdaString: "(n/k)^(1/k)*(2^(k-1))",
-                        lambdaFunc: n => (int) (Math.Pow(n / jump, 1 / jump) * Math.Pow(2, jump - 1)),
-                        learningRate: 1
-                    );
-                },
-                i =>
-                {
-                    var jump = 3D;
-                    return RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, stepSize: 200,
-                        jump: (int) jump,
-                        mutationRateString: "sqrt(k/n)",
-                        mutationRateFunc: n => Math.Sqrt(jump * n),
-                        repairChanceString: "sqrt(k/n)",
-                        repairChanceFunc: n => Math.Sqrt(jump * n),
-                        lambdaString: "(n/k)^(1/k)*(2^k)",
-                        lambdaFunc: n => (int) (Math.Pow(n / jump, 1 / jump) * Math.Pow(2, jump - 0)),
-                        learningRate: 1
-                    );
-                },
-                i =>
-                {
-                    var jump = 3D;
-                    return RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, stepSize: 200,
-                        jump: (int) jump,
-                        mutationRateString: "sqrt(k/n)",
-                        mutationRateFunc: n => Math.Sqrt(jump * n),
-                        repairChanceString: "sqrt(k/n)",
-                        repairChanceFunc: n => Math.Sqrt(jump * n),
-                        lambdaString: "(n/k)^(1/k)*(2^(k+1))",
-                        lambdaFunc: n => (int) (Math.Pow(n / jump, 1 / jump) * Math.Pow(2, jump + 1)),
-                        learningRate: 1
-                    );
-                },
-                i =>
-                {
-                    var jump = 4D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 10,
-                        jump: (int) jump,
-                        mutationRate: 1,
+                        mutationRate: jump,
                         beta: 1.5,
                         lambda: 2,
                         learningRate: 1
@@ -84,10 +42,10 @@ namespace EvolutionaryAlgorithm
                     var jump = 4D;
                     return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 10,
                         jump: (int) jump,
-                        mutationRate: 1,
+                        mutationRate: jump,
                         beta: 1.5,
                         lambda: 2,
-                        learningRate: 2
+                        learningRate: 1
                     );
                 },
             };

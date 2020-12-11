@@ -16,7 +16,7 @@ namespace EvolutionaryAlgorithm
         // Asymmetric was tested on OneMax with mr: 1, lr: 0.1, op: 50 (https://arxiv.org/pdf/2006.09126.pdf)
         // S-endogenous was theorised on OneMax, λ: (ln n)^(1+ϵ), lr: 32 (https://dl.acm.org/doi/10.1145/3205455.3205569) O(n/log λ + (n logn)/λ)
         // M-endogenous - none
-        // Repair was theorized on jump, with jump: k <= n/16, mr: p >= 2k/n, rr: sqrt(k/n) (https://arxiv.org/pdf/2004.06702.pdf)
+        // Repair was theorized on jump, with jump: k <= n/16, mr: sqrt(k/n), rr: sqrt(k/n), λ: sqrt(n/k)^k (https://arxiv.org/pdf/2004.06702.pdf)
         // Stagnation was tested on Jump with jump: 4, n: 40-160, λ: ln(n)
         // Stagnation was tested on Jump with jump: 3, n: 200-1000, λ: ln(n)
         // HeavyTail was tested on Jump with n: 20-160, jump: 8, λ: 1, beta: 1.5, 2, 3, 4 lr: 1 (i.e no learning) (https://arxiv.org/pdf/1703.03334.pdf)
@@ -29,95 +29,43 @@ namespace EvolutionaryAlgorithm
                 i =>
                 {
                     var jump = 3D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
+                    return RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, stepSize: 200,
                         jump: (int) jump,
-                        mutationRate: 1,
-                        lambda: 2,
-                        learningRate: 1,
-                        beta: 1.5
-                    );
-                },
-                i =>
-                {
-                    var jump = 4D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
-                        jump: (int) jump,
-                        mutationRate: 1,
-                        lambda: 2,
-                        learningRate: 1,
-                        beta: 1.5
+                        mutationRateString: "sqrt(k/n)",
+                        mutationRateFunc: n => Math.Sqrt(jump * n),
+                        repairChanceString: "sqrt(k/n)",
+                        repairChanceFunc: n => Math.Sqrt(jump * n),
+                        lambdaString: "(n/k)^(1/k)*(2^(k-1))",
+                        lambdaFunc: n => (int) (Math.Pow(n / jump, 1 / jump) * Math.Pow(2, jump - 1)),
+                        learningRate: 1
                     );
                 },
                 i =>
                 {
                     var jump = 3D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
+                    return RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, stepSize: 200,
                         jump: (int) jump,
-                        mutationRate: 1,
-                        lambdaString: "sqrt(k/n)",
-                        lambdaFunc: n => (int) Math.Max(2, Math.Sqrt(n / jump)),
-                        learningRate: 1,
-                        beta: 1.5
+                        mutationRateString: "sqrt(k/n)",
+                        mutationRateFunc: n => Math.Sqrt(jump * n),
+                        repairChanceString: "sqrt(k/n)",
+                        repairChanceFunc: n => Math.Sqrt(jump * n),
+                        lambdaString: "(n/k)^(1/k)*(2^k)",
+                        lambdaFunc: n => (int) (Math.Pow(n / jump, 1 / jump) * Math.Pow(2, jump - 0)),
+                        learningRate: 1
                     );
                 },
-                i =>
-                {
-                    var jump = 4D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
-                        jump: (int) jump,
-                        mutationRate: 1,
-                        lambdaString: "sqrt(k/n)",
-                        lambdaFunc: n => (int) Math.Max(2, Math.Sqrt(n / jump)),
-                        learningRate: 1,
-                        beta: 1.5
-                    );
-                },
-
                 i =>
                 {
                     var jump = 3D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
+                    return RunBenchmark(i, heuristic: Repair, fitness: Jump, mu: 1, stepSize: 200,
                         jump: (int) jump,
-                        mutationRate: 1,
-                        lambda: 2,
-                        learningRate: 2,
-                        beta: 1.5
-                    );
-                },
-                i =>
-                {
-                    var jump = 4D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
-                        jump: (int) jump,
-                        mutationRate: 1,
-                        lambda: 2,
-                        learningRate: 2,
-                        beta: 1.5
-                    );
-                },
-                
-                i =>
-                {
-                    var jump = 3D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
-                        jump: (int) jump,
-                        mutationRate: 1,
-                        lambdaString: "sqrt(k/n)",
-                        lambdaFunc: n => (int) Math.Max(2, Math.Sqrt(n / jump)),
-                        learningRate: 2,
-                        beta: 1.5
-                    );
-                },
-                i =>
-                {
-                    var jump = 4D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
-                        jump: (int) jump,
-                        mutationRate: 1,
-                        lambdaString: "sqrt(k/n)",
-                        lambdaFunc: n => (int) Math.Max(2, Math.Sqrt(n / jump)),
-                        learningRate: 2,
-                        beta: 1.5
+                        mutationRateString: "sqrt(k/n)",
+                        mutationRateFunc: n => Math.Sqrt(jump * n),
+                        repairChanceString: "sqrt(k/n)",
+                        repairChanceFunc: n => Math.Sqrt(jump * n),
+                        lambdaString: "(n/k)^(1/k)*(2^(k+1))",
+                        lambdaFunc: n => (int) (Math.Pow(n / jump, 1 / jump) * Math.Pow(2, jump + 1)),
+                        learningRate: 1
                     );
                 },
             };

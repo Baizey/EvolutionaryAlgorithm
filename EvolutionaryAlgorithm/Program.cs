@@ -24,8 +24,8 @@ namespace EvolutionaryAlgorithm
 
         public static async Task Main(string[] args)
         {
-            const double formulaRatio = 4.5D;
-            const int seed = 0;
+            const double formulaRatio = 3.5D;
+            const int seed = 1;
             const int stepSize = 20;
             const int steps = 10;
             const int k = 2;

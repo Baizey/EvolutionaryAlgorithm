@@ -19,4 +19,20 @@ namespace EvolutionaryAlgorithm.Core.Terminations
 
         public bool ShouldTerminate() => Algorithm.Statistics.Generations >= _limit.Invoke(Algorithm);
     }
+
+    public class FitnessCallsTermination<TIndividual, TGeneStructure, TGene>
+        : ITermination<TIndividual, TGeneStructure, TGene>
+        where TGeneStructure : ICloneable
+        where TIndividual : IIndividual<TGeneStructure, TGene>
+    {
+        public IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene> Algorithm { get; set; }
+        private readonly Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, long> _limit;
+
+        public FitnessCallsTermination(long limit) => _limit = _ => limit;
+
+        public FitnessCallsTermination(Func<IEvolutionaryAlgorithm<TIndividual, TGeneStructure, TGene>, long> limit) =>
+            _limit = limit;
+
+        public bool ShouldTerminate() => Algorithm.Fitness.Calls >= _limit.Invoke(Algorithm);
+    }
 }

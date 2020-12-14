@@ -7,9 +7,9 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem
 {
     public class Formula
     {
-        public Formula(int size, int variables)
+        public Formula(int size, int variables, Random random = null)
         {
-            var random = new Random();
+            random ??= new Random();
             for (var j = 0; j < size; j++)
             {
                 Variable.Add(random.Next(variables));

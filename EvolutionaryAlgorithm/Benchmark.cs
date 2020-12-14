@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
@@ -14,6 +13,7 @@ using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.GUI.Models.Enums;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.FitnessFunctions;
+using EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem;
 
 namespace EvolutionaryAlgorithm
 {
@@ -44,7 +44,9 @@ namespace EvolutionaryAlgorithm
             double? beta = null,
             int rounds = 100,
             int? jump = null,
-            int? limitFactor = null)
+            int? limitFactor = null,
+            int? seed = null,
+            double? formulaRatio = null)
         {
             var filename = $"{mode}_{heuristic}_{fitness}_{learningRate}";
             Console.WriteLine(filename);
@@ -55,6 +57,8 @@ namespace EvolutionaryAlgorithm
             if (repairChanceFunc == null) filename += $"_{repairChance}";
             if (limitFactor != null) filename += $"_{limitFactor}";
             if (jump != null) filename += $"_{jump}";
+            if (seed != null) filename += $"_{seed}";
+            if (formulaRatio != null) filename += $"_{formulaRatio}";
 
             muString ??= mu.ToString();
             muFunc ??= _ => mu;
@@ -85,6 +89,10 @@ namespace EvolutionaryAlgorithm
                     await file.WriteLineAsync($"limitFactor {limitFactor}");
                 if (fitness == FitnessFunctions.Jump)
                     await file.WriteLineAsync($"jump {jump}");
+                if (fitness == FitnessFunctions.Satisfiability)
+                    await file.WriteLineAsync($"seed {seed}");
+                if (fitness == FitnessFunctions.Satisfiability)
+                    await file.WriteLineAsync($"formula_ratio {formulaRatio}");
                 await file.WriteLineAsync();
                 await file.FlushAsync();
             }
@@ -98,7 +106,11 @@ namespace EvolutionaryAlgorithm
                 range.Add(() => new BitEvolutionaryAlgorithm<IBitIndividual>()
                     .UsingBasicStatistics()
                     .UsingRandomPopulation(mr)
-                    .UsingEvaluation(CreateFitness(fitness, jump ?? 5))
+                    .UsingEvaluation(CreateFitness(fitness,
+                        geneCount: g,
+                        jump: jump ?? 5,
+                        formulaRatio: formulaRatio ?? 1,
+                        seed: seed ?? 0))
                     .UsingParameters(new Parameters
                     {
                         Mu = muFunc.Invoke(g),
@@ -111,7 +123,7 @@ namespace EvolutionaryAlgorithm
                         rr, beta ?? 1.5D, limitFactor ?? 1)));
             }
 
-            await Range(filename, rounds, range);
+            await Range(fitness, filename, rounds, range);
         }
 
         private static IHyperHeuristic<IBitIndividual, BitArray, bool> CreateHeuristic(Heuristics? heuristic,
@@ -142,7 +154,10 @@ namespace EvolutionaryAlgorithm
 
         private static IBitFitness<IBitIndividual> CreateFitness(
             FitnessFunctions? fitnessFunction,
-            int jump = 0)
+            int jump = 0,
+            int geneCount = 0,
+            double formulaRatio = 1,
+            int? seed = null)
         {
             return fitnessFunction switch
             {
@@ -150,24 +165,29 @@ namespace EvolutionaryAlgorithm
                 FitnessFunctions.Jump => new JumpFitness<IBitIndividual>(jump),
                 FitnessFunctions.LeadingOnes => new LeadingOnesFitness<IBitIndividual>(),
                 FitnessFunctions.MinimumSpanningTree => throw new NotImplementedException(),
-                FitnessFunctions.Satisfiability => throw new NotImplementedException(),
+                FitnessFunctions.Satisfiability => new SatisfiabilityProblemFitness<IBitIndividual>(
+                    seed == null
+                        ? SatisfiabilityProblem.Generate(geneCount, formulaRatio)
+                        : SatisfiabilityProblem.Generate(new Random((int) seed), geneCount, formulaRatio)),
                 _ => throw new InvalidEnumArgumentException()
             };
         }
 
         private static async Task Range(
+            FitnessFunctions? fitnessFunctions,
             string filename,
             int rounds,
             IReadOnlyList<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators)
         {
             await using var file = new StreamWriter($"{filename}.txt", true);
-            await file.WriteLineAsync("GeneCount Generations FitnessCalls");
+            await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness");
             var start = DateTime.Now;
             var total = rounds * generators.Count;
             Console.WriteLine($"Progress: 0 / {total} (0%)");
             for (var i = 0; i < generators.Count; i++)
             {
                 var algorithms = await ParallelQueue(
+                    fitnessFunctions,
                     start,
                     i,
                     generators.Count,
@@ -175,7 +195,7 @@ namespace EvolutionaryAlgorithm
                     generators[i]);
                 foreach (var algo in algorithms)
                     await file.WriteLineAsync(
-                        $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls}");
+                        $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness}");
                 await file.FlushAsync();
             }
 
@@ -183,6 +203,7 @@ namespace EvolutionaryAlgorithm
         }
 
         private static async Task<List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> ParallelQueue(
+            FitnessFunctions? fitnessFunctions,
             DateTime start,
             int generation,
             int generations,
@@ -201,7 +222,17 @@ namespace EvolutionaryAlgorithm
                     var algo = generator.Invoke();
                     algorithms.Add(algo);
                     var gene = algo.Parameters.GeneCount;
-                    working.Add(algo.EvolveAsync(new FitnessTermination<IBitIndividual, BitArray, bool>(gene)));
+                    ITermination<IBitIndividual, BitArray, bool> termination;
+                    if (fitnessFunctions == FitnessFunctions.Satisfiability)
+                    {
+                        // similar limit to http://www.cs.ru.nl/~elenam/fsat.pdf, using fitness calls rather than bit-flips
+                        var limit = 300000;
+                        termination = new FitnessCallsTermination<IBitIndividual, BitArray, bool>(limit);
+                    }
+                    else
+                        termination = new FitnessTermination<IBitIndividual, BitArray, bool>(gene);
+
+                    working.Add(algo.EvolveAsync(termination));
                     pending--;
                 }
 
@@ -212,7 +243,7 @@ namespace EvolutionaryAlgorithm
                 var progress = 100 * (previousDone + done) / total;
                 if (count % (rounds / 10) == 0)
                     Console.WriteLine(
-                        $"Progress: {previousDone + done} / {total} ({progress}%) {DateTime.Now - start} taken");
+                        $"Progress: {previousDone + done} / {total} ({progress}%) {DateTime.Now} | {DateTime.Now - start} taken");
             }
 
             return algorithms;

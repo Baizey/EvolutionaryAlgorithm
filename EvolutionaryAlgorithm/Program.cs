@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EvolutionaryAlgorithm.GUI.Models.Enums;
 using static EvolutionaryAlgorithm.Benchmark;
 using static EvolutionaryAlgorithm.GUI.Models.Enums.FitnessFunctions;
 using static EvolutionaryAlgorithm.GUI.Models.Enums.Heuristics;
@@ -23,31 +24,60 @@ namespace EvolutionaryAlgorithm
 
         public static async Task Main(string[] args)
         {
+            const double formulaRatio = 4.5D;
             var mode = int.Parse(args[0]);
             var benchmarks = new Func<int, Task>[]
             {
-                i =>
-                {
-                    var jump = 3D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 100,
-                        jump: (int) jump,
-                        mutationRate: jump,
-                        beta: 1.5,
-                        lambda: 2,
-                        learningRate: 1
-                    );
-                },
-                i =>
-                {
-                    var jump = 4D;
-                    return RunBenchmark(i, heuristic: HeavyTail, fitness: Jump, mu: 1, stepSize: 10,
-                        jump: (int) jump,
-                        mutationRate: jump,
-                        beta: 1.5,
-                        lambda: 2,
-                        learningRate: 1
-                    );
-                },
+                i => RunBenchmark(i,
+                    heuristic: Asymmetric, fitness: Satisfiability,
+                    stepSize: 100, steps: 10, seed: 0,
+                    mu: 1, lambda: 1,
+                    formulaRatio: formulaRatio,
+                    mutationRate: 1, learningRate: 0.1, observationPhase: 50
+                ),
+
+                // TODO: correct mr and rr
+                i => RunBenchmark(i,
+                    heuristic: Repair, fitness: Satisfiability,
+                    stepSize: 100, steps: 10, seed: 0, formulaRatio: formulaRatio,
+                    mu: 1, lambda: 2,
+                    mutationRateString: "",
+                    mutationRateFunc: n => 50,
+                    repairChanceString: "",
+                    repairChanceFunc: n => 50,
+                    learningRate: 2
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: Heuristics.HeavyTail, fitness: Satisfiability,
+                    stepSize: 100, steps: 10, seed: 0, formulaRatio: formulaRatio,
+                    mu: 1, lambda: 2,
+                    learningRate: 2, mutationRate: 1
+                ),
+
+                // TODO: correct lambda and mu
+                i => RunBenchmark(i,
+                    heuristic: Heuristics.MultiEndogenous, fitness: Satisfiability,
+                    stepSize: 100, steps: 10, seed: 0, formulaRatio: formulaRatio,
+                    mu: 1, lambda: 1,
+                    mutationRate: 2, learningRate: 2
+                ),
+
+                // TODO: correct lambda
+                i => RunBenchmark(i,
+                    heuristic: Heuristics.SingleEndogenous, fitness: Satisfiability,
+                    stepSize: 100, steps: 10, seed: 0, formulaRatio: formulaRatio,
+                    mu: 1, lambda: 1,
+                    mutationRate: 2, learningRate: 2
+                ),
+
+                // TODO: correct lambda
+                i => RunBenchmark(i,
+                    heuristic: Heuristics.StagnationDetection, fitness: Satisfiability,
+                    stepSize: 100, steps: 10, seed: 0, formulaRatio: formulaRatio,
+                    mu: 1, lambda: 1,
+                    mutationRate: 2, learningRate: 2
+                ),
             };
             if (0 > mode) Console.WriteLine($"Benchmarks: {benchmarks.Length} (0...{benchmarks.Length - 1})");
             else await benchmarks[mode].Invoke(mode);

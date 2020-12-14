@@ -26,6 +26,28 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem
                 .ToList()
         };
 
+        public static SatisfiabilityProblem Generate(
+            Random random,
+            int variables,
+            double formulaRatio,
+            int formulaSize = 3) =>
+            Generate(
+                random,
+                variables,
+                (int) Math.Ceiling(variables * formulaRatio),
+                formulaSize);
+
+        public static SatisfiabilityProblem Generate(
+            Random random,
+            int variables,
+            int formulas,
+            int formulaSize = 3) => new SatisfiabilityProblem
+        {
+            Formulas = Enumerable.Range(0, formulas)
+                .Select(_ => new Formula(formulaSize, variables, random))
+                .ToList()
+        };
+
         public IList<Formula> Formulas { get; private set; } = new List<Formula>();
         public int Satisfied(BitArray bitArray) => Formulas.Count(f => f.IsSatisfied(bitArray));
     }

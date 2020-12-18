@@ -180,7 +180,7 @@ namespace EvolutionaryAlgorithm
             IReadOnlyList<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators)
         {
             await using var file = new StreamWriter($"{filename}.txt", true);
-            await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness");
+            await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness Runtime");
             var start = DateTime.Now;
             var total = rounds * generators.Count;
             Console.WriteLine($"Progress: 0 / {total} (0%)");
@@ -195,7 +195,7 @@ namespace EvolutionaryAlgorithm
                     generators[i]);
                 foreach (var algo in algorithms)
                     await file.WriteLineAsync(
-                        $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness}");
+                        $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}");
                 await file.FlushAsync();
             }
 

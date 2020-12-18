@@ -26,6 +26,7 @@ namespace EvolutionaryAlgorithm
         {
             const long fitnessCallTermination = 3000000;
             const double formulaRatio1 = 3.5D;
+            const double formulaRatio2 = 4.5D;
             const int seed = 1;
             const int stepSize = 20;
             const int steps = 10;
@@ -85,6 +86,68 @@ namespace EvolutionaryAlgorithm
                 i => RunBenchmark(i,
                     heuristic: StagnationDetection, fitness: Satisfiability,
                     stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio1,
+                    fitnessCallTermination: fitnessCallTermination,
+                    mu: 1,
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => Math.Max(2, (int) Math.Log(n)),
+                    mutationRate: 2, learningRate: 2
+                ),
+                
+                
+                
+                
+                i => RunBenchmark(i,
+                    heuristic: Asymmetric, fitness: Satisfiability,
+                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
+                    fitnessCallTermination: fitnessCallTermination,
+                    mu: 1, lambda: 1,
+                    mutationRate: 1, learningRate: 0.1, observationPhase: 50
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: Repair, fitness: Satisfiability,
+                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
+                    fitnessCallTermination: fitnessCallTermination,
+                    mu: 1, lambda: 2,
+                    mutationRateString: "sqrt(k/n)",
+                    mutationRateFunc: n => Math.Sqrt(k * n),
+                    repairChanceString: "sqrt(k/n)",
+                    repairChanceFunc: n => Math.Sqrt(k * n),
+                    learningRate: 2
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: HeavyTail, fitness: Satisfiability,
+                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
+                    fitnessCallTermination: fitnessCallTermination,
+                    mu: 1, lambda: 2,
+                    learningRate: 2, mutationRate: 1
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: MultiEndogenous, fitness: Satisfiability,
+                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
+                    fitnessCallTermination: fitnessCallTermination,
+                    muString: "sqrt(n)",
+                    muFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    mutationRate: 2, learningRate: 2
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: SingleEndogenous, fitness: Satisfiability,
+                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
+                    fitnessCallTermination: fitnessCallTermination,
+                    mu: 1,
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    mutationRate: 2, learningRate: 2
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: StagnationDetection, fitness: Satisfiability,
+                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
                     fitnessCallTermination: fitnessCallTermination,
                     mu: 1,
                     lambdaString: "sqrt(n)",

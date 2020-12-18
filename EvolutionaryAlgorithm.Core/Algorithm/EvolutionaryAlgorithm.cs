@@ -18,8 +18,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         private CancellationTokenSource _cancellationSource;
 
         public void Terminate() => _cancellationSource.Cancel();
-
-        public bool IsRunning { get; private set; }
+        public bool IsRunningAsync => AsyncRunner != null && !AsyncRunner.IsCompleted;
+        public Task AsyncRunner { get; private set; }
         public IParameters Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IFitness<TIndividual, TGeneStructure, TGene> Fitness { get; set; }
@@ -83,14 +83,13 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         public Task EvolveAsync(ITermination<TIndividual, TGeneStructure, TGene> termination)
         {
             _cancellationSource = new CancellationTokenSource();
-            return Task.Run(async () => await Evolve(termination, _cancellationSource.Token),
+            return AsyncRunner = Task.Run(async () => await Evolve(termination, _cancellationSource.Token),
                 _cancellationSource.Token);
         }
 
         public async Task Evolve(ITermination<TIndividual, TGeneStructure, TGene> termination,
             CancellationToken cancellationToken)
         {
-            IsRunning = true;
             termination.Algorithm = this;
             if (!IsInitialized) Initialize();
 
@@ -104,8 +103,6 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
 
             Statistics.Finish();
             OnTermination(this);
-            IsRunning = false;
         }
-
     }
 }

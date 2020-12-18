@@ -63,7 +63,7 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
         private bool _requestStatistics;
         public IBitEvolutionaryAlgorithm<IBitIndividual> Algorithm { get; private set; }
 
-        public bool IsRunning => Algorithm?.IsRunning ?? false;
+        public bool IsRunning => Algorithm?.IsRunningAsync ?? false;
 
         public StatisticsView Statistics
         {
@@ -150,7 +150,7 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
         {
             if (!IsRunning) return;
             Algorithm.Terminate();
-            while (Algorithm.IsRunning)
+            while (Algorithm.IsRunningAsync)
                 Task.Delay(1).GetAwaiter().GetResult();
         }
 

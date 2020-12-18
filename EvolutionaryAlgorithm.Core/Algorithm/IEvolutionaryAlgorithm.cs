@@ -17,7 +17,8 @@ namespace EvolutionaryAlgorithm.Core.Algorithm
         where TIndividual : IIndividual<TGeneStructure, TGene>
     {
         public void Terminate();
-        public bool IsRunning { get; }
+        public bool IsRunningAsync { get; }
+        public Task AsyncRunner { get; }
         public IParameters Parameters { get; set; }
         public IPopulation<TIndividual, TGeneStructure, TGene> Population { get; set; }
         public IHyperHeuristic<TIndividual, TGeneStructure, TGene> HyperHeuristic { get; set; }

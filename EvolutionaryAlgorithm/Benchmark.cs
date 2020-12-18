@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
@@ -13,6 +14,7 @@ using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.GUI.Models.Enums;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.FitnessFunctions;
+using EvolutionaryAlgorithm.Template.FitnessFunctions.Graph;
 using EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem;
 
 namespace EvolutionaryAlgorithm
@@ -46,7 +48,8 @@ namespace EvolutionaryAlgorithm
             int? jump = null,
             int? limitFactor = null,
             int? seed = null,
-            double? formulaRatio = null)
+            double? formulaRatio = null,
+            long? fitnessCallTermination = null)
         {
             var filename = $"{mode}_{heuristic}_{fitness}_{learningRate}";
             Console.WriteLine(filename);
@@ -59,6 +62,7 @@ namespace EvolutionaryAlgorithm
             if (jump != null) filename += $"_{jump}";
             if (seed != null) filename += $"_{seed}";
             if (formulaRatio != null) filename += $"_{formulaRatio}";
+            if (fitnessCallTermination != null) filename += $"_{fitnessCallTermination}";
 
             muString ??= mu.ToString();
             muFunc ??= _ => mu;
@@ -123,7 +127,55 @@ namespace EvolutionaryAlgorithm
                         rr, beta ?? 1.5D, limitFactor ?? 1)));
             }
 
-            await Range(fitness, filename, rounds, range);
+            await RunBenchmarks(fitnessCallTermination, fitness, filename, rounds, range);
+        }
+
+        private static async Task RunBenchmarks(
+            long? fitnessCallTermination,
+            FitnessFunctions? fitnessFunctions,
+            string filename,
+            int rounds,
+            IEnumerable<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators)
+        {
+            await using var file = new StreamWriter($"{filename}.txt", true);
+            await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness Runtime");
+            var tasks = generators.SelectMany(e => Enumerable.Range(0, rounds).Select(_ => e))
+                .ToArray();
+            var at = 0;
+            var working = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
+            var start = DateTime.Now;
+            while (at < tasks.Length || working.Count > 0)
+            {
+                while (working.Count < MaxThreads && at < tasks.Length)
+                {
+                    var algo = tasks[at++].Invoke();
+                    working.Add(algo);
+                    var gene = algo.Parameters.GeneCount;
+                    ITermination<IBitIndividual, BitArray, bool> termination;
+                    if (fitnessFunctions == FitnessFunctions.Satisfiability ||
+                        fitnessFunctions == FitnessFunctions.MinimumSpanningTree)
+                        termination =
+                            new FitnessCallsTermination<IBitIndividual, BitArray, bool>((long) fitnessCallTermination);
+                    else
+                        termination = new FitnessTermination<IBitIndividual, BitArray, bool>(gene);
+                    algo.EvolveAsync(termination);
+                }
+
+                await Task.WhenAny(working.Select(e => e.AsyncRunner));
+
+                foreach (var algo in working.Where(e => e.AsyncRunner.IsCompleted))
+                    await file.WriteLineAsync(
+                        $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}");
+                await file.FlushAsync();
+
+                working.RemoveAll(x => x.AsyncRunner.IsCompleted);
+
+                var done = at - working.Count;
+                var progress = 100 * done / tasks.Length;
+                if (done % (rounds / 10) == 0 || working.Count < 10)
+                    Console.WriteLine(
+                        $"Progress: {done} / {tasks.Length} ({progress}%) {DateTime.Now} | {DateTime.Now - start} taken");
+            }
         }
 
         private static IHyperHeuristic<IBitIndividual, BitArray, bool> CreateHeuristic(Heuristics? heuristic,
@@ -171,82 +223,6 @@ namespace EvolutionaryAlgorithm
                         : SatisfiabilityProblem.Generate(new Random((int) seed), geneCount, formulaRatio)),
                 _ => throw new InvalidEnumArgumentException()
             };
-        }
-
-        private static async Task Range(
-            FitnessFunctions? fitnessFunctions,
-            string filename,
-            int rounds,
-            IReadOnlyList<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators)
-        {
-            await using var file = new StreamWriter($"{filename}.txt", true);
-            await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness Runtime");
-            var start = DateTime.Now;
-            var total = rounds * generators.Count;
-            Console.WriteLine($"Progress: 0 / {total} (0%)");
-            for (var i = 0; i < generators.Count; i++)
-            {
-                var algorithms = await ParallelQueue(
-                    fitnessFunctions,
-                    start,
-                    i,
-                    generators.Count,
-                    rounds,
-                    generators[i]);
-                foreach (var algo in algorithms)
-                    await file.WriteLineAsync(
-                        $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}");
-                await file.FlushAsync();
-            }
-
-            Console.WriteLine("Done...");
-        }
-
-        private static async Task<List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> ParallelQueue(
-            FitnessFunctions? fitnessFunctions,
-            DateTime start,
-            int generation,
-            int generations,
-            int rounds,
-            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>> generator)
-        {
-            var previousDone = generation * rounds;
-            var total = generations * rounds;
-            var pending = rounds;
-            var working = new List<Task>();
-            var algorithms = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
-            while (pending + working.Count > 0)
-            {
-                while (working.Count < MaxThreads && pending > 0)
-                {
-                    var algo = generator.Invoke();
-                    algorithms.Add(algo);
-                    var gene = algo.Parameters.GeneCount;
-                    ITermination<IBitIndividual, BitArray, bool> termination;
-                    if (fitnessFunctions == FitnessFunctions.Satisfiability)
-                    {
-                        // similar limit to http://www.cs.ru.nl/~elenam/fsat.pdf, using fitness calls rather than bit-flips
-                        var limit = 300000;
-                        termination = new FitnessCallsTermination<IBitIndividual, BitArray, bool>(limit);
-                    }
-                    else
-                        termination = new FitnessTermination<IBitIndividual, BitArray, bool>(gene);
-
-                    working.Add(algo.EvolveAsync(termination));
-                    pending--;
-                }
-
-                await Task.WhenAny(working);
-                working.RemoveAll(x => x.IsCompleted);
-                var count = rounds - pending;
-                var done = rounds - (pending + working.Count);
-                var progress = 100 * (previousDone + done) / total;
-                if (count % (rounds / 10) == 0)
-                    Console.WriteLine(
-                        $"Progress: {previousDone + done} / {total} ({progress}%) {DateTime.Now} | {DateTime.Now - start} taken");
-            }
-
-            return algorithms;
         }
     }
 }

@@ -14,7 +14,6 @@ using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.GUI.Models.Enums;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.FitnessFunctions;
-using EvolutionaryAlgorithm.Template.FitnessFunctions.Graph;
 using EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem;
 
 namespace EvolutionaryAlgorithm

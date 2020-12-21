@@ -138,7 +138,7 @@ namespace EvolutionaryAlgorithm
             Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>> generator)
         {
             await using var file = new StreamWriter($"{filename}.txt", true);
-            var completed = rounds;
+            var completed = 0;
             var working = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
             var start = DateTime.Now;
             while (completed < rounds || working.Count > 0)

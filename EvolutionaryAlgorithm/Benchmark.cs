@@ -97,60 +97,58 @@ namespace EvolutionaryAlgorithm
                 if (fitness == FitnessFunctions.Satisfiability)
                     await file.WriteLineAsync($"formula_ratio {formulaRatio}");
                 await file.WriteLineAsync();
+                await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness Runtime");
                 await file.FlushAsync();
             }
 
-            var range = new List<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>>();
             for (var i = 0; i < steps; i++)
             {
+                var done = i * rounds;
                 var g = (i + 1) * stepSize;
                 var mr = mutationRateFunc.Invoke(g);
                 var rr = repairChanceFunc.Invoke(g);
-                range.Add(() => new BitEvolutionaryAlgorithm<IBitIndividual>()
-                    .UsingBasicStatistics()
-                    .UsingRandomPopulation(mr)
-                    .UsingEvaluation(CreateFitness(fitness,
-                        geneCount: g,
-                        jump: jump ?? 5,
-                        formulaRatio: formulaRatio ?? 1,
-                        seed: seed ?? 0))
-                    .UsingParameters(new Parameters
-                    {
-                        Mu = muFunc.Invoke(g),
-                        Lambda = lambdaFunc.Invoke(g),
-                        GeneCount = g,
-                        MutationRate = mr
-                    })
-                    .UsingHeuristic(CreateHeuristic(
-                        heuristic, learningRate, mutationRate, observationPhase ?? 10,
-                        rr, beta ?? 1.5D, limitFactor ?? 1)));
+                await RunBenchmarks(termination, filename, done, rounds, () =>
+                    new BitEvolutionaryAlgorithm<IBitIndividual>()
+                        .UsingBasicStatistics()
+                        .UsingRandomPopulation(mr)
+                        .UsingEvaluation(CreateFitness(fitness,
+                            geneCount: g,
+                            jump: jump ?? 5,
+                            formulaRatio: formulaRatio ?? 1,
+                            seed: seed ?? 0))
+                        .UsingParameters(new Parameters
+                        {
+                            Mu = muFunc.Invoke(g),
+                            Lambda = lambdaFunc.Invoke(g),
+                            GeneCount = g,
+                            MutationRate = mr
+                        })
+                        .UsingHeuristic(CreateHeuristic(
+                            heuristic, learningRate, mutationRate, observationPhase ?? 10,
+                            rr, beta ?? 1.5D, limitFactor ?? 1)));
             }
-
-            await RunBenchmarks(termination, filename, rounds, range);
         }
 
         private static async Task RunBenchmarks(
             Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, ITermination<IBitIndividual, BitArray, bool>>
                 termination,
             string filename,
+            int oldDone,
             int rounds,
-            IEnumerable<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators)
+            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>> generator)
         {
             await using var file = new StreamWriter($"{filename}.txt", true);
-            await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness Runtime");
-            var tasks = generators.SelectMany(e => Enumerable.Range(0, rounds).Select(_ => e))
-                .ToArray();
-            var at = 0;
+            var completed = rounds;
             var working = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
             var start = DateTime.Now;
-            while (at < tasks.Length || working.Count > 0)
+            while (completed < rounds || working.Count > 0)
             {
-                while (working.Count < MaxThreads && at < tasks.Length)
+                while (working.Count < MaxThreads && completed < rounds)
                 {
-                    var algo = tasks[at++].Invoke();
+                    completed++;
+                    var algo = generator.Invoke();
                     working.Add(algo);
-                    var t = termination.Invoke(algo);
-                    algo.EvolveAsync(t);
+                    algo.EvolveAsync(termination.Invoke(algo));
                 }
 
                 await Task.WhenAny(working.Select(e => e.AsyncRunner));
@@ -162,11 +160,11 @@ namespace EvolutionaryAlgorithm
 
                 working.RemoveAll(x => x.AsyncRunner.IsCompleted);
 
-                var done = at - working.Count;
-                var progress = 100 * done / tasks.Length;
+                var done = oldDone + completed - working.Count;
+                var progress = 100 * done / rounds;
                 if (done % (rounds / 10) == 0 || working.Count < 10)
                     Console.WriteLine(
-                        $"Progress: {done} / {tasks.Length} ({progress}%) {DateTime.Now} | {DateTime.Now - start} taken");
+                        $"Progress: {done} / {rounds} ({progress}%) {DateTime.Now} | {DateTime.Now - start} taken");
             }
         }
 

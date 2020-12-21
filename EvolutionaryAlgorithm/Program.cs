@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using EvolutionaryAlgorithm.BitImplementation;
+using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.GUI.Models.Enums;
 using static EvolutionaryAlgorithm.Benchmark;
 using static EvolutionaryAlgorithm.GUI.Models.Enums.FitnessFunctions;
@@ -24,10 +28,27 @@ namespace EvolutionaryAlgorithm
 
         public static async Task Main(string[] args)
         {
-            const long fitnessCallTermination = 3000000;
+            const long budget = 3000000;
+            
+            const int seed1 = 1;
             const double formulaRatio1 = 3.5D;
+            
+            const int seed2 = 0;
             const double formulaRatio2 = 4.5D;
-            const int seed = 1;
+            var lookup2 = new Dictionary<int, double>
+            {
+                {20, 89},
+                {40, 180},
+                {60, 269},
+                {80, 360},
+                {100, 450},
+                {120, 540},
+                {140, 629},
+                {160, 719},
+                {180, 808},
+                {200, 899}
+            };
+            
             const int stepSize = 20;
             const int steps = 10;
             const int k = 2;
@@ -36,16 +57,20 @@ namespace EvolutionaryAlgorithm
             {
                 i => RunBenchmark(i,
                     heuristic: Asymmetric, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio1,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed1, formulaRatio: formulaRatio1,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            formulaRatio1 * a.Parameters.GeneCount),
                     mu: 1, lambda: 1,
                     mutationRate: 1, learningRate: 0.1, observationPhase: 50
                 ),
 
                 i => RunBenchmark(i,
                     heuristic: Repair, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio1,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed1, formulaRatio: formulaRatio1,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            formulaRatio1 * a.Parameters.GeneCount),
                     mu: 1, lambda: 2,
                     mutationRateString: "sqrt(k/n)",
                     mutationRateFunc: n => Math.Sqrt(k * n),
@@ -56,16 +81,20 @@ namespace EvolutionaryAlgorithm
 
                 i => RunBenchmark(i,
                     heuristic: HeavyTail, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio1,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed1, formulaRatio: formulaRatio1,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            formulaRatio1 * a.Parameters.GeneCount),
                     mu: 1, lambda: 2,
                     learningRate: 2, mutationRate: 1
                 ),
 
                 i => RunBenchmark(i,
                     heuristic: MultiEndogenous, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio1,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed1, formulaRatio: formulaRatio1,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            formulaRatio1 * a.Parameters.GeneCount),
                     muString: "sqrt(n)",
                     muFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
                     lambdaString: "sqrt(n)",
@@ -75,8 +104,10 @@ namespace EvolutionaryAlgorithm
 
                 i => RunBenchmark(i,
                     heuristic: SingleEndogenous, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio1,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed1, formulaRatio: formulaRatio1,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            formulaRatio1 * a.Parameters.GeneCount),
                     mu: 1,
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
@@ -85,29 +116,33 @@ namespace EvolutionaryAlgorithm
 
                 i => RunBenchmark(i,
                     heuristic: StagnationDetection, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio1,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed1, formulaRatio: formulaRatio1,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            formulaRatio1 * a.Parameters.GeneCount),
                     mu: 1,
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => Math.Max(2, (int) Math.Log(n)),
                     mutationRate: 2, learningRate: 2
                 ),
-                
-                
-                
-                
+
+
                 i => RunBenchmark(i,
                     heuristic: Asymmetric, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed2, formulaRatio: formulaRatio2,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            lookup2[a.Parameters.GeneCount]),
                     mu: 1, lambda: 1,
                     mutationRate: 1, learningRate: 0.1, observationPhase: 50
                 ),
 
                 i => RunBenchmark(i,
                     heuristic: Repair, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed2, formulaRatio: formulaRatio2,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            lookup2[a.Parameters.GeneCount]),
                     mu: 1, lambda: 2,
                     mutationRateString: "sqrt(k/n)",
                     mutationRateFunc: n => Math.Sqrt(k * n),
@@ -118,16 +153,20 @@ namespace EvolutionaryAlgorithm
 
                 i => RunBenchmark(i,
                     heuristic: HeavyTail, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed2, formulaRatio: formulaRatio2,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            lookup2[a.Parameters.GeneCount]),
                     mu: 1, lambda: 2,
                     learningRate: 2, mutationRate: 1
                 ),
 
                 i => RunBenchmark(i,
                     heuristic: MultiEndogenous, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed2, formulaRatio: formulaRatio2,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            lookup2[a.Parameters.GeneCount]),
                     muString: "sqrt(n)",
                     muFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
                     lambdaString: "sqrt(n)",
@@ -137,8 +176,10 @@ namespace EvolutionaryAlgorithm
 
                 i => RunBenchmark(i,
                     heuristic: SingleEndogenous, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed2, formulaRatio: formulaRatio2,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            lookup2[a.Parameters.GeneCount]),
                     mu: 1,
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
@@ -147,8 +188,10 @@ namespace EvolutionaryAlgorithm
 
                 i => RunBenchmark(i,
                     heuristic: StagnationDetection, fitness: Satisfiability,
-                    stepSize: stepSize, steps: steps, seed: seed, formulaRatio: formulaRatio2,
-                    fitnessCallTermination: fitnessCallTermination,
+                    stepSize: stepSize, steps: steps, seed: seed2, formulaRatio: formulaRatio2,
+                    termination: a =>
+                        new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
+                            lookup2[a.Parameters.GeneCount]),
                     mu: 1,
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => Math.Max(2, (int) Math.Log(n)),

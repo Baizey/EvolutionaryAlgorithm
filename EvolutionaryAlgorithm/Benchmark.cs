@@ -48,7 +48,8 @@ namespace EvolutionaryAlgorithm
             int? limitFactor = null,
             int? seed = null,
             double? formulaRatio = null,
-            long? fitnessCallTermination = null)
+            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, ITermination<IBitIndividual, BitArray, bool>>
+                termination = null)
         {
             var filename = $"{mode}_{heuristic}_{fitness}_{learningRate}";
             Console.WriteLine(filename);
@@ -61,7 +62,6 @@ namespace EvolutionaryAlgorithm
             if (jump != null) filename += $"_{jump}";
             if (seed != null) filename += $"_{seed}";
             if (formulaRatio != null) filename += $"_{formulaRatio}";
-            if (fitnessCallTermination != null) filename += $"_{fitnessCallTermination}";
 
             muString ??= mu.ToString();
             muFunc ??= _ => mu;
@@ -126,12 +126,12 @@ namespace EvolutionaryAlgorithm
                         rr, beta ?? 1.5D, limitFactor ?? 1)));
             }
 
-            await RunBenchmarks(fitnessCallTermination, fitness, filename, rounds, range);
+            await RunBenchmarks(termination, filename, rounds, range);
         }
 
         private static async Task RunBenchmarks(
-            long? fitnessCallTermination,
-            FitnessFunctions? fitnessFunctions,
+            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, ITermination<IBitIndividual, BitArray, bool>>
+                termination,
             string filename,
             int rounds,
             IEnumerable<Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>> generators)
@@ -149,15 +149,8 @@ namespace EvolutionaryAlgorithm
                 {
                     var algo = tasks[at++].Invoke();
                     working.Add(algo);
-                    var gene = algo.Parameters.GeneCount;
-                    ITermination<IBitIndividual, BitArray, bool> termination;
-                    if (fitnessFunctions == FitnessFunctions.Satisfiability ||
-                        fitnessFunctions == FitnessFunctions.MinimumSpanningTree)
-                        termination =
-                            new FitnessCallsTermination<IBitIndividual, BitArray, bool>((long) fitnessCallTermination);
-                    else
-                        termination = new FitnessTermination<IBitIndividual, BitArray, bool>(gene);
-                    algo.EvolveAsync(termination);
+                    var t = termination.Invoke(algo);
+                    algo.EvolveAsync(t);
                 }
 
                 await Task.WhenAny(working.Select(e => e.AsyncRunner));

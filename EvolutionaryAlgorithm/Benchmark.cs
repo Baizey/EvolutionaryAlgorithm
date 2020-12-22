@@ -75,31 +75,29 @@ namespace EvolutionaryAlgorithm
             repairChanceString ??= repairChance.ToString(CultureInfo.InvariantCulture);
             repairChanceFunc ??= _ => repairChance;
 
-            await using (var file = new StreamWriter($"{filename}.txt"))
-            {
-                await file.WriteLineAsync($"{heuristic} {fitness}");
-                await file.WriteLineAsync($"lambda {lambdaString}");
-                await file.WriteLineAsync($"mu {muString}");
-                await file.WriteLineAsync($"mutationRate {mutationRateString}");
-                await file.WriteLineAsync($"learningRate {learningRate}");
-                if (heuristic == Heuristics.HeavyTail)
-                    await file.WriteLineAsync($"beta {beta}");
-                if (heuristic == Heuristics.Asymmetric)
-                    await file.WriteLineAsync($"observationPhase {observationPhase}");
-                if (heuristic == Heuristics.Repair)
-                    await file.WriteLineAsync($"repairChance {repairChanceString}");
-                if (heuristic == Heuristics.StagnationDetection)
-                    await file.WriteLineAsync($"limitFactor {limitFactor}");
-                if (fitness == FitnessFunctions.Jump)
-                    await file.WriteLineAsync($"jump {jump}");
-                if (fitness == FitnessFunctions.Satisfiability)
-                    await file.WriteLineAsync($"seed {seed}");
-                if (fitness == FitnessFunctions.Satisfiability)
-                    await file.WriteLineAsync($"formula_ratio {formulaRatio}");
-                await file.WriteLineAsync();
-                await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness Runtime");
-                await file.FlushAsync();
-            }
+            var file = new StreamWriter($"{filename}.txt");
+            await file.WriteLineAsync($"{heuristic} {fitness}");
+            await file.WriteLineAsync($"lambda {lambdaString}");
+            await file.WriteLineAsync($"mu {muString}");
+            await file.WriteLineAsync($"mutationRate {mutationRateString}");
+            await file.WriteLineAsync($"learningRate {learningRate}");
+            if (heuristic == Heuristics.HeavyTail)
+                await file.WriteLineAsync($"beta {beta}");
+            if (heuristic == Heuristics.Asymmetric)
+                await file.WriteLineAsync($"observationPhase {observationPhase}");
+            if (heuristic == Heuristics.Repair)
+                await file.WriteLineAsync($"repairChance {repairChanceString}");
+            if (heuristic == Heuristics.StagnationDetection)
+                await file.WriteLineAsync($"limitFactor {limitFactor}");
+            if (fitness == FitnessFunctions.Jump)
+                await file.WriteLineAsync($"jump {jump}");
+            if (fitness == FitnessFunctions.Satisfiability)
+                await file.WriteLineAsync($"seed {seed}");
+            if (fitness == FitnessFunctions.Satisfiability)
+                await file.WriteLineAsync($"formula_ratio {formulaRatio}");
+            await file.WriteLineAsync();
+            await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness Runtime");
+            await file.FlushAsync();
 
             for (var i = 0; i < steps; i++)
             {
@@ -107,7 +105,7 @@ namespace EvolutionaryAlgorithm
                 var g = (i + 1) * stepSize;
                 var mr = mutationRateFunc.Invoke(g);
                 var rr = repairChanceFunc.Invoke(g);
-                await RunBenchmarks(termination, filename, done, rounds, () =>
+                await RunBenchmarks(termination, file, done, rounds, () =>
                     new BitEvolutionaryAlgorithm<IBitIndividual>()
                         .UsingBasicStatistics()
                         .UsingRandomPopulation(mr)
@@ -132,12 +130,11 @@ namespace EvolutionaryAlgorithm
         private static async Task RunBenchmarks(
             Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, ITermination<IBitIndividual, BitArray, bool>>
                 termination,
-            string filename,
+            TextWriter file,
             int oldDone,
             int rounds,
             Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>> generator)
         {
-            await using var file = new StreamWriter($"{filename}.txt", true);
             var completed = 0;
             var working = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
             var start = DateTime.Now;
@@ -152,13 +149,14 @@ namespace EvolutionaryAlgorithm
                 }
 
                 await Task.WhenAny(working.Select(e => e.AsyncRunner));
-
-                foreach (var algo in working.Where(e => e.AsyncRunner.IsCompleted))
-                    await file.WriteLineAsync(
+                var tasksCompleted = working.Where(e => e.AsyncRunner.IsCompleted).ToList();
+                tasksCompleted.ForEach(algo =>
+                {
+                    working.Remove(algo);
+                    file.WriteLine(
                         $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}");
+                });
                 await file.FlushAsync();
-
-                working.RemoveAll(x => x.AsyncRunner.IsCompleted);
 
                 var done = oldDone + completed - working.Count;
                 var progress = 100 * done / rounds;

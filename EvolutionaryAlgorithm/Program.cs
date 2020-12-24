@@ -28,11 +28,11 @@ namespace EvolutionaryAlgorithm
 
         public static async Task Main(string[] args)
         {
-            const long budget = 3000000;
-            
+            const long budget = 30000000;
+
             const int seed1 = 1;
             const double formulaRatio1 = 3.5D;
-            
+
             const int seed2 = 0;
             const double formulaRatio2 = 4.5D;
             var lookup2 = new Dictionary<int, double>
@@ -48,7 +48,7 @@ namespace EvolutionaryAlgorithm
                 {180, 808},
                 {200, 899}
             };
-            
+
             const int stepSize = 20;
             const int steps = 10;
             const int k = 2;
@@ -62,7 +62,8 @@ namespace EvolutionaryAlgorithm
                         new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
                             formulaRatio1 * a.Parameters.GeneCount),
                     mu: 1, lambda: 1,
-                    mutationRate: 1, learningRate: 0.1, observationPhase: 50
+                    mutationRate: 1, learningRate: 0.1, observationPhase: 50,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -76,7 +77,8 @@ namespace EvolutionaryAlgorithm
                     mutationRateFunc: n => Math.Sqrt(k * n),
                     repairChanceString: "sqrt(k/n)",
                     repairChanceFunc: n => Math.Sqrt(k * n),
-                    learningRate: 2
+                    learningRate: 2,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -86,7 +88,8 @@ namespace EvolutionaryAlgorithm
                         new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
                             formulaRatio1 * a.Parameters.GeneCount),
                     mu: 1, lambda: 2,
-                    learningRate: 2, mutationRate: 1
+                    learningRate: 2, mutationRate: 1,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -99,7 +102,8 @@ namespace EvolutionaryAlgorithm
                     muFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
-                    mutationRate: 2, learningRate: 2
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -111,7 +115,8 @@ namespace EvolutionaryAlgorithm
                     mu: 1,
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
-                    mutationRate: 2, learningRate: 2
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -123,7 +128,8 @@ namespace EvolutionaryAlgorithm
                     mu: 1,
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => Math.Max(2, (int) Math.Log(n)),
-                    mutationRate: 2, learningRate: 2
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
                 ),
 
 
@@ -134,7 +140,8 @@ namespace EvolutionaryAlgorithm
                         new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
                             lookup2[a.Parameters.GeneCount]),
                     mu: 1, lambda: 1,
-                    mutationRate: 1, learningRate: 0.1, observationPhase: 50
+                    mutationRate: 1, learningRate: 0.1, observationPhase: 50,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -148,7 +155,8 @@ namespace EvolutionaryAlgorithm
                     mutationRateFunc: n => Math.Sqrt(k * n),
                     repairChanceString: "sqrt(k/n)",
                     repairChanceFunc: n => Math.Sqrt(k * n),
-                    learningRate: 2
+                    learningRate: 2,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -158,7 +166,8 @@ namespace EvolutionaryAlgorithm
                         new BudgetOrBeforeTermination<IBitIndividual, BitArray, bool>(budget,
                             lookup2[a.Parameters.GeneCount]),
                     mu: 1, lambda: 2,
-                    learningRate: 2, mutationRate: 1
+                    learningRate: 2, mutationRate: 1,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -171,7 +180,8 @@ namespace EvolutionaryAlgorithm
                     muFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
-                    mutationRate: 2, learningRate: 2
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -183,7 +193,8 @@ namespace EvolutionaryAlgorithm
                     mu: 1,
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
-                    mutationRate: 2, learningRate: 2
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
                 ),
 
                 i => RunBenchmark(i,
@@ -195,7 +206,8 @@ namespace EvolutionaryAlgorithm
                     mu: 1,
                     lambdaString: "sqrt(n)",
                     lambdaFunc: n => Math.Max(2, (int) Math.Log(n)),
-                    mutationRate: 2, learningRate: 2
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
                 ),
             };
             if (0 > mode) Console.WriteLine($"Benchmarks: {benchmarks.Length} (0...{benchmarks.Length - 1})");

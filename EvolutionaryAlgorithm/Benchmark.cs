@@ -48,6 +48,7 @@ namespace EvolutionaryAlgorithm
             int? limitFactor = null,
             int? seed = null,
             double? formulaRatio = null,
+            long? budget = null,
             Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, ITermination<IBitIndividual, BitArray, bool>>
                 termination = null)
         {
@@ -62,6 +63,7 @@ namespace EvolutionaryAlgorithm
             if (jump != null) filename += $"_{jump}";
             if (seed != null) filename += $"_{seed}";
             if (formulaRatio != null) filename += $"_{formulaRatio}";
+            if (budget != null) filename += $"_{budget}";
 
             muString ??= mu.ToString();
             muFunc ??= _ => mu;

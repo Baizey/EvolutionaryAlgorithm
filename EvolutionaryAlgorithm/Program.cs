@@ -25,8 +25,251 @@ namespace EvolutionaryAlgorithm
         // Stagnation was tested on Jump with jump: 4, n: 40-160, λ: ln(n)
         // Stagnation was tested on Jump with jump: 3, n: 200-1000, λ: ln(n)
         // HeavyTail was tested on Jump with n: 20-160, jump: 8, λ: 1, beta: 1.5, 2, 3, 4 lr: 1 (i.e no learning) (https://arxiv.org/pdf/1703.03334.pdf)
-
         public static async Task Main(string[] args)
+        {
+            const long budget = 300000;
+            const int seed = 0;
+            const double chance = 0.25D;
+            const double chance2 = 0.5D;
+            const double chance3 = 0.75D;
+            const int stepSize = 10;
+            const int steps = 10;
+            const int k = 2;
+            var mode = int.Parse(args[0]);
+            var benchmarks = new Func<int, Task>[]
+            {
+                
+                i => RunBenchmark(i,
+                    heuristic: Asymmetric, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1, lambda: 1,
+                    mutationRate: 1, learningRate: 0.1, observationPhase: 50,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: Repair, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1, lambda: 2,
+                    mutationRateString: "sqrt(k/n)",
+                    mutationRateFunc: n => Math.Sqrt(k * n),
+                    repairChanceString: "sqrt(k/n)",
+                    repairChanceFunc: n => Math.Sqrt(k * n),
+                    learningRate: 2,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: HeavyTail, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1, lambda: 2,
+                    learningRate: 2, mutationRate: 1,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: MultiEndogenous, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    muString: "sqrt(n)",
+                    muFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: SingleEndogenous, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1,
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: StagnationDetection, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1,
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => Math.Max(2, (int) Math.Log(n)),
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
+                ),
+                
+                
+                
+                
+                
+                
+                
+                
+                i => RunBenchmark(i,
+                    heuristic: Asymmetric, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance2,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1, lambda: 1,
+                    mutationRate: 1, learningRate: 0.1, observationPhase: 50,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: Repair, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance2,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1, lambda: 2,
+                    mutationRateString: "sqrt(k/n)",
+                    mutationRateFunc: n => Math.Sqrt(k * n),
+                    repairChanceString: "sqrt(k/n)",
+                    repairChanceFunc: n => Math.Sqrt(k * n),
+                    learningRate: 2,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: HeavyTail, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance2,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1, lambda: 2,
+                    learningRate: 2, mutationRate: 1,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: MultiEndogenous, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance2,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    muString: "sqrt(n)",
+                    muFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: SingleEndogenous, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance2,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1,
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: StagnationDetection, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance2,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1,
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => Math.Max(2, (int) Math.Log(n)),
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
+                ),
+                
+                
+                
+                
+                
+                
+                
+                i => RunBenchmark(i,
+                    heuristic: Asymmetric, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance3,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1, lambda: 1,
+                    mutationRate: 1, learningRate: 0.1, observationPhase: 50,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: Repair, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance3,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1, lambda: 2,
+                    mutationRateString: "sqrt(k/n)",
+                    mutationRateFunc: n => Math.Sqrt(k * n),
+                    repairChanceString: "sqrt(k/n)",
+                    repairChanceFunc: n => Math.Sqrt(k * n),
+                    learningRate: 2,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: HeavyTail, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance3,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1, lambda: 2,
+                    learningRate: 2, mutationRate: 1,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: MultiEndogenous, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance3,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    muString: "sqrt(n)",
+                    muFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: SingleEndogenous, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance3,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1,
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => (int) Math.Max(2, Math.Pow(Math.Log(n), 2)),
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
+                ),
+
+                i => RunBenchmark(i,
+                    heuristic: StagnationDetection, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed, 
+                    edgeChance: chance3,
+                    termination: a => new FitnessCallsTermination<IBitIndividual, BitArray, bool>(budget),
+                    mu: 1,
+                    lambdaString: "sqrt(n)",
+                    lambdaFunc: n => Math.Max(2, (int) Math.Log(n)),
+                    mutationRate: 2, learningRate: 2,
+                    budget: budget
+                ),
+            };
+            if (0 > mode) Console.WriteLine($"Benchmarks: {benchmarks.Length} (0...{benchmarks.Length - 1})");
+            else await benchmarks[mode].Invoke(mode);
+        }
+
+        public static async Task MainSatisfiability(string[] args)
         {
             const long budget = 30000000;
 

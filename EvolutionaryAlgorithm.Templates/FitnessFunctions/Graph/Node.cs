@@ -11,9 +11,11 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.Graph
         public double Y { get; set; }
         public List<Edge> Edges { get; } = new List<Edge>();
 
-        public void Add(Node other, SimpleGraph simpleGraph = null)
+        public void Add(Node other, SimpleGraph simpleGraph = null, double? distance = null)
         {
-            var edge = new Edge(this, other);
+            var edge = distance == null
+                ? new Edge(this, other)
+                : new Edge(this, other, (double) distance);
             Edges.Add(edge);
             other.Edges.Add(edge);
             simpleGraph?.Edges.Add(edge);
@@ -31,6 +33,6 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.Graph
 
         public static void Reset() => _nextId = 0;
 
-        public double Distance(Node other) => Math.Abs(X - other.X) + Math.Abs(Y - other.Y);
+        public double CoordinateDistance(Node other) => Math.Abs(X - other.X) + Math.Abs(Y - other.Y);
     }
 }

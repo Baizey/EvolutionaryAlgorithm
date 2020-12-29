@@ -9,11 +9,15 @@
         public Node To { get; }
         public double Distance { get; }
 
-        public Edge(Node from, Node to)
+        public Edge(Node from, Node to, double distance)
         {
             From = from;
             To = to;
-            Distance = From.Distance(To);
+            Distance = distance;
+        }
+
+        public Edge(Node from, Node to) : this(from, to, from.CoordinateDistance(to))
+        {
         }
     }
 }

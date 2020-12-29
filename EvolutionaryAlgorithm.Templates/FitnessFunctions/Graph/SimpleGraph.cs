@@ -10,10 +10,20 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.Graph
         public List<Node> Nodes { get; set; }
         public List<Edge> Edges { get; set; }
 
-        public SimpleGraph(int nodes, double edgeChance, int maxX = 10000, int maxY = 10000)
+        public SimpleGraph(
+            int nodes,
+            double edgeChance,
+            int maxX = 1000,
+            int maxY = 1000,
+            int? seed = null,
+            bool randomDistanceCost = false)
         {
+            var random = seed == null
+                ? new Random()
+                : new Random((int) seed);
+
             AddNodes(nodes, maxX, maxY);
-            AddEdges(edgeChance);
+            AddEdges(edgeChance, random, randomDistanceCost);
         }
 
         public double Distance(BitArray activatedEdges) => Edges.Where(e => activatedEdges[e.Id])
@@ -55,19 +65,22 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.Graph
                 Nodes.Add(new Node(random.Next(maxX) + 1, random.Next(maxY) + 1));
         }
 
-        private void AddEdges(double edgeChance)
+        private void AddEdges(double edgeChance, Random random, bool randomDistanceCost)
         {
             Edge.Reset();
             Edges = new List<Edge>();
-            var random = new Random();
             for (var i = 0; i < Nodes.Count; i++)
             {
                 var from = Nodes[i];
                 for (var j = i + 1; j < Nodes.Count; j++)
                 {
+                    if (!(random.NextDouble() <= edgeChance)) continue;
                     var to = Nodes[j];
-                    if (random.NextDouble() <= edgeChance)
-                        from.Add(to, this);
+                    var distance = randomDistanceCost
+                        ? random.Next(1000) + 1
+                        : (double?) null;
+
+                    @from.Add(to, this, distance);
                 }
             }
 

@@ -14,6 +14,7 @@ using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.GUI.Models.Enums;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.FitnessFunctions;
+using EvolutionaryAlgorithm.Template.FitnessFunctions.Graph;
 using EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem;
 
 namespace EvolutionaryAlgorithm
@@ -48,6 +49,7 @@ namespace EvolutionaryAlgorithm
             int? limitFactor = null,
             int? seed = null,
             double? formulaRatio = null,
+            double? edgeChance = null,
             long? budget = null,
             Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, ITermination<IBitIndividual, BitArray, bool>>
                 termination = null)
@@ -63,6 +65,7 @@ namespace EvolutionaryAlgorithm
             if (jump != null) filename += $"_{jump}";
             if (seed != null) filename += $"_{seed}";
             if (formulaRatio != null) filename += $"_{formulaRatio}";
+            if (edgeChance != null) filename += $"_{edgeChance}";
             if (budget != null) filename += $"_{budget}";
 
             muString ??= mu.ToString();
@@ -93,34 +96,48 @@ namespace EvolutionaryAlgorithm
                 await file.WriteLineAsync($"limitFactor {limitFactor}");
             if (fitness == FitnessFunctions.Jump)
                 await file.WriteLineAsync($"jump {jump}");
-            if (fitness == FitnessFunctions.Satisfiability)
+            if (fitness == FitnessFunctions.Satisfiability || fitness == FitnessFunctions.MinimumSpanningTree)
                 await file.WriteLineAsync($"seed {seed}");
             if (fitness == FitnessFunctions.Satisfiability)
                 await file.WriteLineAsync($"formula_ratio {formulaRatio}");
+            if (fitness == FitnessFunctions.MinimumSpanningTree)
+                await file.WriteLineAsync($"edge_chance {edgeChance}");
             await file.WriteLineAsync();
-            await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness Runtime");
+            if (fitness == FitnessFunctions.MinimumSpanningTree)
+                await file.WriteLineAsync("Nodes GeneCount Generations FitnessCalls Fitness Runtime");
+            else
+                await file.WriteLineAsync("GeneCount Generations FitnessCalls Fitness Runtime");
             await file.FlushAsync();
 
             for (var i = 0; i < steps; i++)
             {
                 var done = i * rounds;
-                var g = (i + 1) * stepSize;
-                var mr = mutationRateFunc.Invoke(g);
-                var rr = repairChanceFunc.Invoke(g);
-                await RunBenchmarks(termination, file, done, rounds, () =>
+                var geneCount = (i + 1) * stepSize;
+                var nodes = geneCount;
+                SimpleGraph graph = null;
+                if (fitness == FitnessFunctions.MinimumSpanningTree)
+                {
+                    graph = new SimpleGraph(nodes, (double) edgeChance, seed: seed, randomDistanceCost: true);
+                    geneCount = graph.Edges.Count;
+                }
+
+                var mr = mutationRateFunc.Invoke(geneCount);
+                var rr = repairChanceFunc.Invoke(geneCount);
+                await RunBenchmarks(termination, file, done, steps, rounds, graph, () =>
                     new BitEvolutionaryAlgorithm<IBitIndividual>()
                         .UsingBasicStatistics()
                         .UsingRandomPopulation(mr)
                         .UsingEvaluation(CreateFitness(fitness,
-                            geneCount: g,
+                            geneCount: geneCount,
                             jump: jump ?? 5,
                             formulaRatio: formulaRatio ?? 1,
+                            graph: graph,
                             seed: seed ?? 0))
                         .UsingParameters(new Parameters
                         {
-                            Mu = muFunc.Invoke(g),
-                            Lambda = lambdaFunc.Invoke(g),
-                            GeneCount = g,
+                            Mu = muFunc.Invoke(geneCount),
+                            Lambda = lambdaFunc.Invoke(geneCount),
+                            GeneCount = geneCount,
                             MutationRate = mr
                         })
                         .UsingHeuristic(CreateHeuristic(
@@ -134,7 +151,9 @@ namespace EvolutionaryAlgorithm
                 termination,
             TextWriter file,
             int oldDone,
+            int steps,
             int rounds,
+            SimpleGraph graph,
             Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>> generator)
         {
             var completed = 0;
@@ -156,15 +175,18 @@ namespace EvolutionaryAlgorithm
                 {
                     working.Remove(algo);
                     file.WriteLine(
-                        $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}");
+                        graph == null
+                            ? $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}"
+                            : $"{graph.Nodes} {algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}");
                 });
                 await file.FlushAsync();
-
+                
+                var total = rounds * steps;
                 var done = oldDone + completed - working.Count;
-                var progress = 100 * done / rounds;
+                var progress = 100 * done / total;
                 if (done % (rounds / 10) == 0 || working.Count < 10)
                     Console.WriteLine(
-                        $"Progress: {done} / {rounds} ({progress}%) {DateTime.Now} | {DateTime.Now - start} taken");
+                        $"Progress: {done} / {total} ({progress}%) {DateTime.Now} | {DateTime.Now - start} taken");
             }
         }
 
@@ -197,6 +219,7 @@ namespace EvolutionaryAlgorithm
         private static IBitFitness<IBitIndividual> CreateFitness(
             FitnessFunctions? fitnessFunction,
             int jump = 0,
+            SimpleGraph graph = null,
             int geneCount = 0,
             double formulaRatio = 1,
             int? seed = null)
@@ -206,7 +229,7 @@ namespace EvolutionaryAlgorithm
                 FitnessFunctions.OneMax => new OneMaxFitness<IBitIndividual>(),
                 FitnessFunctions.Jump => new JumpFitness<IBitIndividual>(jump),
                 FitnessFunctions.LeadingOnes => new LeadingOnesFitness<IBitIndividual>(),
-                FitnessFunctions.MinimumSpanningTree => throw new NotImplementedException(),
+                FitnessFunctions.MinimumSpanningTree => new MinimumSpanningTreeFitness<IBitIndividual>(graph),
                 FitnessFunctions.Satisfiability => new SatisfiabilityProblemFitness<IBitIndividual>(
                     seed == null
                         ? SatisfiabilityProblem.Generate(geneCount, formulaRatio)

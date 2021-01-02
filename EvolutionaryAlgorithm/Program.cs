@@ -28,7 +28,7 @@ namespace EvolutionaryAlgorithm
         public static async Task Main(string[] args)
         {
             const long fitnessCallsBudget = 300000;
-            var timeBudget = TimeSpan.FromMinutes(2);
+            var timeBudget = TimeSpan.FromSeconds(5);
             const int seed = 0;
             const double chance = 0.25D;
             const double chance2 = 0.5D;
@@ -260,7 +260,7 @@ namespace EvolutionaryAlgorithm
 
         public static async Task MainSatisfiability(string[] args)
         {
-            const long budget = 30000000;
+            const long budget = 300000;
 
             const int seed1 = 1;
             const double formulaRatio1 = 3.5D;

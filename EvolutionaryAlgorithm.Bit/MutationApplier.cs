@@ -86,7 +86,7 @@ namespace EvolutionaryAlgorithm.BitImplementation
         }
 
         public void MutatePart(IBitIndividual individual, double p, int[] indexes) =>
-            MutatePart(individual, p, new SpecializedQueue(indexes));
+            MutatePart(individual, p, new SpecializedQueue(indexes, _random));
 
         public void MutatePart(IBitIndividual individual, double p, SpecializedQueue indexes)
         {
@@ -108,8 +108,8 @@ namespace EvolutionaryAlgorithm.BitImplementation
             var ones = individual.Ones;
             var zeroes = genes.Length - ones;
 
-            var oneLookup = new SpecializedQueue(ones);
-            var zeroLookup = new SpecializedQueue(zeroes);
+            var oneLookup = new SpecializedQueue(ones, _random);
+            var zeroLookup = new SpecializedQueue(zeroes, _random);
             for (var i = 0; i < genes.Length; i++)
                 if (genes[i])
                     oneLookup.Add(i);
@@ -124,13 +124,20 @@ namespace EvolutionaryAlgorithm.BitImplementation
     public class SpecializedQueue
     {
         private readonly int[] _internalArray;
-        private readonly Random _random = new Random();
+        private readonly Random _random;
+
         public int Count { get; private set; }
         public bool IsEmpty => Count == 0;
-        public SpecializedQueue(int capacity) => _internalArray = new int[capacity];
 
-        public SpecializedQueue(int[] internalArray)
+        public SpecializedQueue(int capacity, Random random)
         {
+            _internalArray = new int[capacity];
+            _random = random;
+        }
+
+        public SpecializedQueue(int[] internalArray, Random random)
+        {
+            _random = random;
             _internalArray = internalArray;
             Count = internalArray.Length;
         }

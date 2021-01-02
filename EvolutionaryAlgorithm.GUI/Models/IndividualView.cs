@@ -15,7 +15,7 @@ namespace EvolutionaryAlgorithm.GUI.Models
 
         public IndividualViewView(IBitIndividual other) : base(other)
         {
-            Genes = new bool[other.Genes.Count];
+            Genes = new bool[other.Count];
             other.Genes.CopyTo(Genes, 0);
         }
     }

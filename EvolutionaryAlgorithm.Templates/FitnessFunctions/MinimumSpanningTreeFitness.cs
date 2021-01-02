@@ -9,7 +9,7 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions
     {
         private readonly SimpleGraph _simpleGraph;
 
-        public IEvolutionaryAlgorithm<T, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<T, bool[], bool> Algorithm { get; set; }
 
         public MinimumSpanningTreeFitness(SimpleGraph simpleGraph) => _simpleGraph = simpleGraph;
 

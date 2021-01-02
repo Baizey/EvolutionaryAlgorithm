@@ -9,45 +9,45 @@ using EvolutionaryAlgorithm.Core.Population;
 
 namespace EvolutionaryAlgorithm.BitImplementation
 {
-    public class BitEvolutionaryAlgorithm<T> : EvolutionaryAlgorithm<T, BitArray, bool>, IBitEvolutionaryAlgorithm<T>
+    public class BitEvolutionaryAlgorithm<T> : EvolutionaryAlgorithm<T, bool[], bool>, IBitEvolutionaryAlgorithm<T>
         where T : IBitIndividual
     {
         public static BitEvolutionaryAlgorithm<T> Construct => new BitEvolutionaryAlgorithm<T>();
     }
 
-    public class BitPopulation<T> : Population<T, BitArray, bool>, IBitPopulation<T>
+    public class BitPopulation<T> : Population<T, bool[], bool>, IBitPopulation<T>
         where T : IBitIndividual
     {
         public BitPopulation(Func<int, T> value) : base(value)
         {
         }
 
-        public BitPopulation(IPopulation<T, BitArray, bool> other) : base(other)
+        public BitPopulation(IPopulation<T, bool[], bool> other) : base(other)
         {
         }
     }
 
-    public abstract class BitHyperHeuristicBase<T> : HyperHeuristicBase<T, BitArray, bool>
+    public abstract class BitHyperHeuristicBase<T> : HyperHeuristicBase<T, bool[], bool>
         where T : IBitIndividual
     {
     }
 
-    public class BitSimpleHeuristic<T> : SimpleHeuristic<T, BitArray, bool>, IBitHyperHeuristic<T>
+    public class BitSimpleHeuristic<T> : SimpleHeuristic<T, bool[], bool>, IBitHyperHeuristic<T>
         where T : IBitIndividual
     {
-        public BitSimpleHeuristic(IGenerationGenerator<T, BitArray, bool> generationGenerator)
+        public BitSimpleHeuristic(IGenerationGenerator<T, bool[], bool> generationGenerator)
             : base(generationGenerator)
         {
         }
     }
 
-    public class BitElitismGenerationFilterAlwaysNew<T> : ElitismGenerationFilterAlwaysNew<T, BitArray, bool>,
+    public class BitElitismGenerationFilterAlwaysNew<T> : ElitismGenerationFilterAlwaysNew<T, bool[], bool>,
         IBitGenerationFilter<T>
         where T : IBitIndividual
     {
     }
 
-    public class BitElitismGenerationFilter<T> : ElitismGenerationFilter<T, BitArray, bool>, IBitGenerationFilter<T>
+    public class BitElitismGenerationFilter<T> : ElitismGenerationFilter<T, bool[], bool>, IBitGenerationFilter<T>
         where T : IBitIndividual
     {
         public BitElitismGenerationFilter(bool preferNew) : base(preferNew)
@@ -55,17 +55,17 @@ namespace EvolutionaryAlgorithm.BitImplementation
         }
     }
 
-    public class BitGenerationGenerator<T> : GenerationGenerator<T, BitArray, bool>, IBitGenerationGenerator<T>
+    public class BitGenerationGenerator<T> : GenerationGenerator<T, bool[], bool>, IBitGenerationGenerator<T>
         where T : IBitIndividual
     {
     }
 
-    public class BitMutator<T> : Mutator<T, BitArray, bool>, IBitMutator<T>
+    public class BitMutator<T> : Mutator<T, bool[], bool>, IBitMutator<T>
         where T : IBitIndividual
     {
     }
 
-    public interface IBitParameterAdjuster<T> : IParameterAdjuster<T, BitArray, bool>
+    public interface IBitParameterAdjuster<T> : IParameterAdjuster<T, bool[], bool>
         where T : IBitIndividual
     {
     }

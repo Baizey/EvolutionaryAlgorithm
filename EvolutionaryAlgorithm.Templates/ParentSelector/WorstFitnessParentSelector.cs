@@ -8,7 +8,7 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
     public class WorstFitnessParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
     {
         private T _worst;
-        public IEvolutionaryAlgorithm<T, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<T, bool[], bool> Algorithm { get; set; }
 
         public void Initialize() => Update();
 

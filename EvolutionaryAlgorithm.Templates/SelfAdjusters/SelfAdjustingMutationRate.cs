@@ -8,15 +8,15 @@ namespace EvolutionaryAlgorithm.Template.SelfAdjusters
 {
     public class SelfAdjustingMutationRate : IBitParameterAdjuster<IBitIndividual>
     {
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, bool[], bool> Algorithm { get; set; }
         private IParameters _parameters;
         private int _minRate, _maxRate;
         private readonly int _learningRate;
-        private readonly Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, int> _calcCap;
+        private readonly Func<IEvolutionaryAlgorithm<IBitIndividual, bool[], bool>, int> _calcCap;
 
         public SelfAdjustingMutationRate(
             int learningRate,
-            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, int> maxMutationRate)
+            Func<IEvolutionaryAlgorithm<IBitIndividual, bool[], bool>, int> maxMutationRate)
         {
             _learningRate = learningRate;
             _calcCap = maxMutationRate;

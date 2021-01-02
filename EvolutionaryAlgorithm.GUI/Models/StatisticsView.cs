@@ -26,7 +26,7 @@ namespace EvolutionaryAlgorithm.GUI.Models
         public double R1 { get; set; }
         public IEnumerable<ViewEdge> Edges { get; set; }
 
-        public StatisticsView(IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm,
+        public StatisticsView(IEvolutionaryAlgorithm<IBitIndividual, bool[], bool> algorithm,
             SimpleGraph graph)
         {
             var statistics = algorithm.Statistics;

@@ -106,11 +106,11 @@ namespace EvolutionaryAlgorithm.BitImplementation
             zeroPart *= p;
             var genes = individual.Genes;
             var ones = individual.Ones;
-            var zeroes = genes.Count - ones;
+            var zeroes = genes.Length - ones;
 
             var oneLookup = new SpecializedQueue(ones);
             var zeroLookup = new SpecializedQueue(zeroes);
-            for (var i = 0; i < genes.Count; i++)
+            for (var i = 0; i < genes.Length; i++)
                 if (genes[i])
                     oneLookup.Add(i);
                 else

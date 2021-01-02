@@ -36,7 +36,7 @@ namespace EvolutionaryAlgorithm.Template
             {
                 Mutator = new BitMutator<IBitIndividual>()
                     .CrossoverGenesFrom(new BitMiddlePointCrossover<IBitIndividual>(
-                        new MultiTournamentSelection<IBitIndividual, BitArray, bool>(2)))
+                        new MultiTournamentSelection<IBitIndividual, bool[], bool>(2)))
                     .ThenApplyMutation(new SelfAdjustingMutation())
                     .AdjustParameterUsing(new EndogenousSelfAdjustingMutationRate(learningRate)),
                 Filter = new BitElitismGenerationFilter<IBitIndividual>(true)
@@ -53,13 +53,13 @@ namespace EvolutionaryAlgorithm.Template
             Filter = new BitElitismGenerationFilter<IBitIndividual>(true)
         };
 
-        public static IHyperHeuristic<IBitIndividual, BitArray, bool> StagnationDetection(
+        public static IHyperHeuristic<IBitIndividual, bool[], bool> StagnationDetection(
             double initialMutationRate,
             int limitFactor,
             int learningRate) =>
             StagnationDetection(initialMutationRate, limitFactor, HalfAndHalf(learningRate));
 
-        public static IHyperHeuristic<IBitIndividual, BitArray, bool> StagnationDetection(
+        public static IHyperHeuristic<IBitIndividual, bool[], bool> StagnationDetection(
             double initialMutationRate,
             int limitFactor,
             BitGenerationGenerator<IBitIndividual> generator) =>

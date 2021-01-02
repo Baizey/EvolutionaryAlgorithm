@@ -16,13 +16,13 @@ namespace EvolutionaryAlgorithm.Template.Mutations
         public double ZeroFocus { get; private set; }
         public double OneFocus { get; private set; }
 
-        private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
+        private IEvolutionaryStatistics<IBitIndividual, bool[], bool> _statistics;
         private readonly Random _random = new Random();
         private bool _tryFocusZero;
         private readonly MutationApplier _applier = new MutationApplier();
         private IParameters _parameters;
 
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, bool[], bool> Algorithm { get; set; }
 
         public AsymmetricMutation(double learningRate, int observationPhase)
         {

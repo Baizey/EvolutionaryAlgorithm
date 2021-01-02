@@ -8,13 +8,10 @@ using EvolutionaryAlgorithm.Core.HyperHeuristic.GenerationGenerator.Mutation.Sel
 namespace EvolutionaryAlgorithm.BitImplementation.Templates
 {
     public class BitMiddlePointCrossover<TIndividual>
-        : MultiParentCrossoverBase<TIndividual, BitArray, bool>
+        : MultiParentCrossoverBase<TIndividual, bool[], bool>
         where TIndividual : IBitIndividual
     {
-        private BitArray _left, _right;
-        private readonly Random _random = new Random();
-
-        public BitMiddlePointCrossover(IMultiParentSelector<TIndividual, BitArray, bool> parentsSelector)
+        public BitMiddlePointCrossover(IMultiParentSelector<TIndividual, bool[], bool> parentsSelector)
             : base(parentsSelector)
         {
         }
@@ -22,30 +19,14 @@ namespace EvolutionaryAlgorithm.BitImplementation.Templates
         public override void Initialize()
         {
             base.Initialize();
-
-            _left = ((TIndividual) Algorithm.Population[0].Clone()).Genes;
-
-            _left.SetAll(false);
-            for (var i = 0; i < _left.Count / 2; i++)
-                _left[i] = true;
-
-            _right = new BitArray(_left.Count)
-                .And(_left)
-                .Not();
         }
 
         public override void Crossover(TIndividual child, List<TIndividual> parents)
         {
             child.MutationRate = parents[0].MutationRate;
-
-            child.Genes.SetAll(false);
-
-            child.Genes.And(_left);
-            child.Genes.And(parents[0].Genes);
-
-            var clone = (BitArray) _right.Clone();
-            clone.And(parents[1].Genes);
-            child.Genes.Or(clone);
+            var split = child.Count / 2;
+            Array.Copy(parents[0].Genes, 0, child.Genes, 0, split);
+            Array.Copy(parents[1].Genes, split, child.Genes, 0, child.Count - split);
         }
     }
 }

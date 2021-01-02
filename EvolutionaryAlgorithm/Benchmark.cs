@@ -51,7 +51,7 @@ namespace EvolutionaryAlgorithm
             double? formulaRatio = null,
             double? edgeChance = null,
             long? budget = null,
-            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, ITermination<IBitIndividual, BitArray, bool>>
+            Func<IEvolutionaryAlgorithm<IBitIndividual, bool[], bool>, ITermination<IBitIndividual, bool[], bool>>
                 termination = null)
         {
             var filename = $"{mode}_{heuristic}_{fitness}_{learningRate}";
@@ -147,17 +147,17 @@ namespace EvolutionaryAlgorithm
         }
 
         private static async Task RunBenchmarks(
-            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>, ITermination<IBitIndividual, BitArray, bool>>
+            Func<IEvolutionaryAlgorithm<IBitIndividual, bool[], bool>, ITermination<IBitIndividual, bool[], bool>>
                 termination,
             TextWriter file,
             int oldDone,
             int steps,
             int rounds,
             SimpleGraph graph,
-            Func<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>> generator)
+            Func<IEvolutionaryAlgorithm<IBitIndividual, bool[], bool>> generator)
         {
             var completed = 0;
-            var working = new List<IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool>>();
+            var working = new List<IEvolutionaryAlgorithm<IBitIndividual, bool[], bool>>();
             var start = DateTime.Now;
             while (completed < rounds || working.Count > 0)
             {
@@ -190,7 +190,7 @@ namespace EvolutionaryAlgorithm
             }
         }
 
-        private static IHyperHeuristic<IBitIndividual, BitArray, bool> CreateHeuristic(Heuristics? heuristic,
+        private static IHyperHeuristic<IBitIndividual, bool[], bool> CreateHeuristic(Heuristics? heuristic,
             double learningRate = 0.05D,
             double mutationRate = 2,
             int observationPhase = 10,
@@ -200,15 +200,15 @@ namespace EvolutionaryAlgorithm
         {
             return heuristic switch
             {
-                Heuristics.Asymmetric => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+                Heuristics.Asymmetric => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                     PresetGenerator.Asymmetric(learningRate, observationPhase)),
-                Heuristics.Repair => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+                Heuristics.Repair => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                     PresetGenerator.Repair((int) learningRate, repairChance)),
-                Heuristics.SingleEndogenous => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+                Heuristics.SingleEndogenous => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                     PresetGenerator.SingleEndogenous((int) learningRate)),
-                Heuristics.MultiEndogenous => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+                Heuristics.MultiEndogenous => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                     PresetGenerator.MultiEndogenous((int) learningRate)),
-                Heuristics.HeavyTail => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+                Heuristics.HeavyTail => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                     PresetGenerator.HeavyTail((int) learningRate, beta)),
                 Heuristics.StagnationDetection => PresetGenerator.StagnationDetection(mutationRate, limitFactor,
                     (int) learningRate),

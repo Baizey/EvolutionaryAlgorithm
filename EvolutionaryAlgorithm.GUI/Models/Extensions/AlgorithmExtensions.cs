@@ -8,7 +8,7 @@ namespace EvolutionaryAlgorithm.GUI.Models.Extensions
     public static class StatisticsExtensions
     {
         public static StatisticsView MapToStatisticsView(
-            this IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> algorithm, SimpleGraph graph) =>
+            this IEvolutionaryAlgorithm<IBitIndividual, bool[], bool> algorithm, SimpleGraph graph) =>
             algorithm == null ? null : new StatisticsView(algorithm, graph);
     }
 }

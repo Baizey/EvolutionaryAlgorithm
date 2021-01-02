@@ -10,7 +10,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
         private HeavyTailApplier _heavyTailApplier;
         private readonly double _beta;
         private int _n;
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, bool[], bool> Algorithm { get; set; }
 
         public SelfAdaptingHeavyTailMutation(double beta) => _beta = beta;
 

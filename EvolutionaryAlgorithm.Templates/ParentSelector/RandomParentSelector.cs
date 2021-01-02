@@ -7,7 +7,7 @@ namespace EvolutionaryAlgorithm.Template.ParentSelector
 {
     public class RandomParentSelector<T> : IBitSingleParentSelector<T> where T : IBitIndividual
     {
-        public IEvolutionaryAlgorithm<T, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<T, bool[], bool> Algorithm { get; set; }
 
         public void Initialize()
         {

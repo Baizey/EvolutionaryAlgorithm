@@ -7,7 +7,7 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions
     public class JumpFitness<TIndividual> : IBitFitness<TIndividual>
         where TIndividual : IBitIndividual
     {
-        public IEvolutionaryAlgorithm<TIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<TIndividual, bool[], bool> Algorithm { get; set; }
 
         public void Initialize()
         {

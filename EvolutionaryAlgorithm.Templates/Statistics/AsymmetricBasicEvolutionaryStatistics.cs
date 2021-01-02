@@ -7,7 +7,7 @@ using EvolutionaryAlgorithm.Template.Mutations;
 namespace EvolutionaryAlgorithm.Template.Statistics
 {
     public class AsymmetricBasicEvolutionaryStatistics<T>
-        : BasicEvolutionaryStatistics<T, BitArray, bool>
+        : BasicEvolutionaryStatistics<T, bool[], bool>
         where T : IBitIndividual
     {
         public override string ToString()

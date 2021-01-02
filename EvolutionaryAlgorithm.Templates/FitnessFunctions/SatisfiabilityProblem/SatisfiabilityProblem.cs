@@ -49,6 +49,6 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem
         };
 
         public IList<Formula> Formulas { get; private set; } = new List<Formula>();
-        public int Satisfied(BitArray bitArray) => Formulas.Count(f => f.IsSatisfied(bitArray));
+        public int Satisfied(bool[] bitArray) => Formulas.Count(f => f.IsSatisfied(bitArray));
     }
 }

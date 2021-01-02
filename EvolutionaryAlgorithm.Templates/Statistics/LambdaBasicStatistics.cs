@@ -4,7 +4,7 @@ using EvolutionaryAlgorithm.Core.Statistics;
 
 namespace EvolutionaryAlgorithm.Template.Statistics
 {
-    public class LambdaBasicStatistics<T> : BasicEvolutionaryStatistics<T, BitArray, bool>
+    public class LambdaBasicStatistics<T> : BasicEvolutionaryStatistics<T, bool[], bool>
         where T : IBitIndividual
     {
         public override string ToString()

@@ -19,6 +19,6 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem
 
         public List<bool> Desired { get; } = new List<bool>();
         public List<int> Variable { get; } = new List<int>();
-        public bool IsSatisfied(BitArray bitArray) => Desired.Where((t, i) => bitArray[Variable[i]] == t).Any();
+        public bool IsSatisfied(bool[] bitArray) => Desired.Where((t, i) => bitArray[Variable[i]] == t).Any();
     }
 }

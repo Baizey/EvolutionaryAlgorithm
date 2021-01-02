@@ -11,13 +11,13 @@ namespace EvolutionaryAlgorithm.Template.Mutations
     public class MutateAndRepairMutation : IBitMutation<IBitIndividual>
     {
         private readonly Random _random = new Random();
-        private IndividualStorage<IBitIndividual, BitArray, bool> _storage;
+        private IndividualStorage<IBitIndividual, bool[], bool> _storage;
         private readonly MutationApplier _applier = new MutationApplier();
         private IBitIndividual _xMark;
         private IParameters _parameters;
         private int[] _flips;
         private readonly double _repairChance;
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, bool[], bool> Algorithm { get; set; }
 
         public MutateAndRepairMutation(double repairChance)
         {
@@ -72,7 +72,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
         public void Initialize()
         {
             _parameters = Algorithm.Parameters;
-            _storage = new IndividualStorage<IBitIndividual, BitArray, bool>(Algorithm);
+            _storage = new IndividualStorage<IBitIndividual, bool[], bool>(Algorithm);
             _xMark = _storage.Get(-1, 1)[0];
             _flips = new int[0];
             MutationPhase();

@@ -10,11 +10,11 @@ namespace EvolutionaryAlgorithm.Template.SelfAdjusters
     public class OneFifthFitnessDependentLambda : IBitParameterAdjuster<IBitIndividual>
     {
         private IParameters _parameters;
-        private IEvolutionaryStatistics<IBitIndividual, BitArray, bool> _statistics;
+        private IEvolutionaryStatistics<IBitIndividual, bool[], bool> _statistics;
         private readonly double _shrinkRate, _growthRate;
         private double _actualLambda;
 
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, bool[], bool> Algorithm { get; set; }
 
         public OneFifthFitnessDependentLambda(double learningRate)
         {

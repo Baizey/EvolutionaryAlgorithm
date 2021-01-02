@@ -26,15 +26,15 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.Graph
             AddEdges(edgeChance, random, randomDistanceCost);
         }
 
-        public double Distance(BitArray activatedEdges) => Edges.Where(e => activatedEdges[e.Id])
+        public double Distance(bool[] activatedEdges) => Edges.Where(e => activatedEdges[e.Id])
             .Select(e => e.Distance)
             .Sum();
 
-        public bool IsOneComponent(BitArray activatedEdges) => GetRandomComponent(activatedEdges).Count == Nodes.Count;
+        public bool IsOneComponent(bool[] activatedEdges) => GetRandomComponent(activatedEdges).Count == Nodes.Count;
 
         private HashSet<Node> GetRandomComponent() => GetRandomComponent(EnableAllEdges());
 
-        private HashSet<Node> GetRandomComponent(BitArray activatedEdges)
+        private HashSet<Node> GetRandomComponent(bool[] activatedEdges)
         {
             var seen = new HashSet<Node>();
             var queue = new Queue<Node>();
@@ -100,11 +100,11 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions.Graph
             }
         }
 
-        private BitArray EnableAllEdges()
+        private bool[] EnableAllEdges()
         {
-            var bitArray = new BitArray(Edges.Count);
-            bitArray.SetAll(true);
-            return bitArray;
+            var result = new bool[Edges.Count];
+            Array.Fill(result, true);
+            return result;
         }
     }
 }

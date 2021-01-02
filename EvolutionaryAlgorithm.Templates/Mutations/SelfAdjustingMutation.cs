@@ -8,7 +8,7 @@ namespace EvolutionaryAlgorithm.Template.Mutations
     {
         private readonly MutationApplier _applier = new MutationApplier();
         private int _geneCount;
-        public IEvolutionaryAlgorithm<IBitIndividual, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<IBitIndividual, bool[], bool> Algorithm { get; set; }
 
         public void Initialize() => _geneCount = Algorithm.Parameters.GeneCount;
 

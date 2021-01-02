@@ -154,20 +154,20 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
                 Task.Delay(1).GetAwaiter().GetResult();
         }
 
-        private static ITermination<IBitIndividual, BitArray, bool> CreateTermination(Termination termination,
+        private static ITermination<IBitIndividual, bool[], bool> CreateTermination(Termination termination,
             double fitness = 100,
             int generations = 100,
             int seconds = 10) => termination switch
         {
-            Termination.Fitness => new FitnessTermination<IBitIndividual, BitArray, bool>(fitness),
-            Termination.Time => new TimeoutTermination<IBitIndividual, BitArray, bool>(
+            Termination.Fitness => new FitnessTermination<IBitIndividual, bool[], bool>(fitness),
+            Termination.Time => new TimeoutTermination<IBitIndividual, bool[], bool>(
                 TimeSpan.FromSeconds(seconds)),
-            Termination.Generations => new GenerationTermination<IBitIndividual, BitArray, bool>(generations),
-            Termination.Stagnation => new StagnationTermination<IBitIndividual, BitArray, bool>(generations),
+            Termination.Generations => new GenerationTermination<IBitIndividual, bool[], bool>(generations),
+            Termination.Stagnation => new StagnationTermination<IBitIndividual, bool[], bool>(generations),
             _ => throw new ArgumentOutOfRangeException(nameof(termination), termination, null)
         };
 
-        private static IHyperHeuristic<IBitIndividual, BitArray, bool> CreateHeuristic(Heuristics heuristic,
+        private static IHyperHeuristic<IBitIndividual, bool[], bool> CreateHeuristic(Heuristics heuristic,
             double learningRate = 0.05D,
             int mutationRate = 2,
             int observationPhase = 10,
@@ -175,15 +175,15 @@ namespace EvolutionaryAlgorithm.GUI.Models.Services
             double beta = 1.5,
             int limitFactor = 1) => heuristic switch
         {
-            Asymmetric => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+            Asymmetric => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                 PresetGenerator.Asymmetric(learningRate, observationPhase)),
-            Repair => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+            Repair => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                 PresetGenerator.Repair((int) learningRate, repairChance)),
-            SingleEndogenous => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+            SingleEndogenous => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                 PresetGenerator.SingleEndogenous((int) learningRate)),
-            MultiEndogenous => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+            MultiEndogenous => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                 PresetGenerator.MultiEndogenous((int) learningRate)),
-            HeavyTail => new SimpleHeuristic<IBitIndividual, BitArray, bool>(
+            HeavyTail => new SimpleHeuristic<IBitIndividual, bool[], bool>(
                 PresetGenerator.HeavyTail((int) learningRate, beta)),
             StagnationDetection => PresetGenerator.StagnationDetection(mutationRate, limitFactor, (int) learningRate),
             _ => throw new ArgumentOutOfRangeException(nameof(heuristic), heuristic, null)

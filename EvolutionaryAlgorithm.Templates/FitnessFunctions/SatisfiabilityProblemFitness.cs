@@ -9,7 +9,7 @@ namespace EvolutionaryAlgorithm.Template.FitnessFunctions
     {
         private readonly SatisfiabilityProblem.SatisfiabilityProblem _satisfiabilityProblem;
 
-        public IEvolutionaryAlgorithm<T, BitArray, bool> Algorithm { get; set; }
+        public IEvolutionaryAlgorithm<T, bool[], bool> Algorithm { get; set; }
 
         public SatisfiabilityProblemFitness(SatisfiabilityProblem.SatisfiabilityProblem satisfiabilityProblem) =>
             _satisfiabilityProblem = satisfiabilityProblem;

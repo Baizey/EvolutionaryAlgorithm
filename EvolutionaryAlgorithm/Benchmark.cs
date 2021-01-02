@@ -177,7 +177,7 @@ namespace EvolutionaryAlgorithm
                     file.WriteLine(
                         graph == null
                             ? $"{algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}"
-                            : $"{graph.Nodes} {algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}");
+                            : $"{graph.Nodes.Count} {algo.Parameters.GeneCount} {algo.Statistics.Generations} {algo.Fitness.Calls} {algo.Statistics.Best.Fitness} {algo.Statistics.RunTime}");
                 });
                 await file.FlushAsync();
                 

@@ -34,7 +34,7 @@ namespace EvolutionaryAlgorithm.BitImplementation.Templates
                 .Not();
         }
 
-        public override void Crossover(TIndividual child, List<TIndividual> parents)
+        public override void Crossover(int index, TIndividual child, List<TIndividual> parents)
         {
             child.MutationRate = parents[0].MutationRate;
 

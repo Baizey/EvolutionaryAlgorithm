@@ -91,9 +91,13 @@ namespace EvolutionaryAlgorithm
                 ),
                 i => MutationBenchmark.Test(
                     () => new AsymmetricMutation(0.1, 50),
+                    mode: i,
+                    name: "Asymmetric",
                     timeBudget: timeBudget),
                 i => MutationBenchmark.Test(
                     () => new SelfAdjustingMutation(),
+                    mode: i,
+                    name: "Normal",
                     timeBudget: timeBudget),
             };
             if (0 > mode) Console.WriteLine($"Benchmarks: {benchmarks.Length} (0...{benchmarks.Length - 1})");

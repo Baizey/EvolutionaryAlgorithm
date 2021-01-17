@@ -14,9 +14,11 @@ namespace EvolutionaryAlgorithm
     {
         public static async Task Test(Func<IBitMutation<IBitIndividual>> mutation,
             long? fitnessCallBudget = null,
+            int mode = -1,
+            string name = null,
             TimeSpan? timeBudget = null)
         {
-            var filename = $"{nameof(mutation)}_{fitnessCallBudget}";
+            var filename = $"{mode}_{name}_{fitnessCallBudget}";
             var file = new StreamWriter($"{filename}.txt");
             await file.WriteLineAsync($"{nameof(mutation)}");
             await file.WriteLineAsync($"Fitness_call_budget {fitnessCallBudget}");

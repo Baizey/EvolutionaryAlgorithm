@@ -41,12 +41,6 @@ namespace EvolutionaryAlgorithm.BitImplementation
         }
     }
 
-    public class BitElitismGenerationFilterAlwaysNew<T> : ElitismGenerationFilterAlwaysNew<T, BitArray, bool>,
-        IBitGenerationFilter<T>
-        where T : IBitIndividual
-    {
-    }
-
     public class BitElitismGenerationFilter<T> : ElitismGenerationFilter<T, BitArray, bool>, IBitGenerationFilter<T>
         where T : IBitIndividual
     {

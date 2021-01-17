@@ -18,7 +18,7 @@ namespace EvolutionaryAlgorithm
             string name = null,
             TimeSpan? timeBudget = null)
         {
-            var filename = $"{mode}_{name}_{fitnessCallBudget}";
+            var filename = $"{mode}_{name}_{fitnessCallBudget}_{timeBudget}";
             var file = new StreamWriter($"{filename}.txt");
             await file.WriteLineAsync($"{nameof(mutation)}");
             await file.WriteLineAsync($"Fitness_call_budget {fitnessCallBudget}");

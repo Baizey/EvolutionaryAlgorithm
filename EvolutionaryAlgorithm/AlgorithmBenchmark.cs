@@ -19,7 +19,7 @@ using EvolutionaryAlgorithm.Template.FitnessFunctions.SatisfiabilityProblem;
 
 namespace EvolutionaryAlgorithm
 {
-    public static class Benchmark
+    public static class AlgorithmBenchmark
     {
         public const int MaxThreads = 16;
 

@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Terminations;
 using EvolutionaryAlgorithm.GUI.Models.Enums;
-using static EvolutionaryAlgorithm.Benchmark;
+using EvolutionaryAlgorithm.Template.Mutations;
+using static EvolutionaryAlgorithm.AlgorithmBenchmark;
 using static EvolutionaryAlgorithm.GUI.Models.Enums.FitnessFunctions;
 using static EvolutionaryAlgorithm.GUI.Models.Enums.Heuristics;
 
@@ -26,6 +27,31 @@ namespace EvolutionaryAlgorithm
         // Stagnation was tested on Jump with jump: 3, n: 200-1000, λ: ln(n)
         // HeavyTail was tested on Jump with n: 20-160, jump: 8, λ: 1, beta: 1.5, 2, 3, 4 lr: 1 (i.e no learning) (https://arxiv.org/pdf/1703.03334.pdf)
         public static async Task Main(string[] args)
+        {
+            const long fitnessCallsBudget = 300000;
+            var timeBudget = TimeSpan.FromSeconds(5);
+            const int seed = 0;
+            const double chance = 0.25D;
+            const double chance2 = 0.5D;
+            const double chance3 = 0.75D;
+            const int stepSize = 10;
+            const int steps = 10;
+            const int k = 2;
+            var mode = int.Parse(args[0]);
+            var benchmarks = new Func<int, Task>[]
+            {
+                i => MutationBenchmark.Test(
+                    () => new AsymmetricMutation(0.1, 50),
+                    timeBudget: timeBudget),
+                i => MutationBenchmark.Test(
+                    () => new SelfAdjustingMutation(),
+                    timeBudget: timeBudget),
+            };
+            if (0 > mode) Console.WriteLine($"Benchmarks: {benchmarks.Length} (0...{benchmarks.Length - 1})");
+            else await benchmarks[mode].Invoke(mode);
+        }
+
+        public static async Task MainMST(string[] args)
         {
             const long fitnessCallsBudget = 300000;
             var timeBudget = TimeSpan.FromMinutes(2);

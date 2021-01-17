@@ -26,7 +26,81 @@ namespace EvolutionaryAlgorithm
         // Stagnation was tested on Jump with jump: 4, n: 40-160, λ: ln(n)
         // Stagnation was tested on Jump with jump: 3, n: 200-1000, λ: ln(n)
         // HeavyTail was tested on Jump with n: 20-160, jump: 8, λ: 1, beta: 1.5, 2, 3, 4 lr: 1 (i.e no learning) (https://arxiv.org/pdf/1703.03334.pdf)
+        
         public static async Task Main(string[] args)
+        {
+            const long fitnessCallsBudget = 300000;
+            const int seed1 = 1;
+            const double formulaRatio1 = 3.5D;
+
+            const int seed2 = 0;
+            const double formulaRatio2 = 4.5D;
+            var lookup2 = new Dictionary<int, double>
+            {
+                {20, 89},
+                {40, 180},
+                {60, 269},
+                {80, 360},
+                {100, 450},
+                {120, 540},
+                {140, 629},
+                {160, 719},
+                {180, 808},
+                {200, 899}
+            };
+            var timeBudget = TimeSpan.FromSeconds(5);
+            const int seed = 0;
+            const double chance = 0.25D;
+            const double chance2 = 0.5D;
+            const double chance3 = 0.75D;
+            const int stepSize = 10;
+            const int steps = 10;
+            const int k = 2;
+            var mode = int.Parse(args[0]);
+            var benchmarks = new Func<int, Task>[]
+            {
+                i => RunBenchmark(i,
+                    heuristic: Asymmetric, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed,
+                    edgeChance: chance,
+                    termination: a => new TimeoutTermination<IBitIndividual, BitArray, bool>(timeBudget),
+                    mu: 1, lambda: 1,
+                    mutationRate: 1, learningRate: 0.1, observationPhase: 50
+                ),
+                i => RunBenchmark(i,
+                    heuristic: Asymmetric, fitness: Satisfiability,
+                    stepSize: stepSize, steps: steps, seed: seed1, formulaRatio: formulaRatio1,
+                    termination: a => new TimeoutTermination<IBitIndividual, BitArray, bool>(timeBudget),
+                    mu: 1, lambda: 1,
+                    mutationRate: 1, learningRate: 0.1, observationPhase: 50
+                ),
+                i => RunBenchmark(i,
+                    heuristic: Asymmetric, fitness: MinimumSpanningTree,
+                    stepSize: stepSize, steps: steps, seed: seed,
+                    edgeChance: chance,
+                    termination: a => new TimeoutTermination<IBitIndividual, BitArray, bool>(timeBudget),
+                    mu: 1, lambda: 1,
+                    mutationRate: 1, learningRate: 0, observationPhase: 50
+                ),
+                i => RunBenchmark(i,
+                    heuristic: Asymmetric, fitness: Satisfiability,
+                    stepSize: stepSize, steps: steps, seed: seed1, formulaRatio: formulaRatio1,
+                    termination: a => new TimeoutTermination<IBitIndividual, BitArray, bool>(timeBudget),
+                    mu: 1, lambda: 1,
+                    mutationRate: 1, learningRate: 0, observationPhase: 50
+                ),
+                i => MutationBenchmark.Test(
+                    () => new AsymmetricMutation(0.1, 50),
+                    timeBudget: timeBudget),
+                i => MutationBenchmark.Test(
+                    () => new SelfAdjustingMutation(),
+                    timeBudget: timeBudget),
+            };
+            if (0 > mode) Console.WriteLine($"Benchmarks: {benchmarks.Length} (0...{benchmarks.Length - 1})");
+            else await benchmarks[mode].Invoke(mode);
+        }
+
+        public static async Task MainMutation(string[] args)
         {
             const long fitnessCallsBudget = 300000;
             var timeBudget = TimeSpan.FromSeconds(5);

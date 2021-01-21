@@ -49,7 +49,7 @@ namespace EvolutionaryAlgorithm
         private static void BenchmarkTime(
             TextWriter file,
             Func<IBitMutation<IBitIndividual>> mutationGenerator,
-            TimeSpan budget)
+            TimeSpan timeBudget)
         {
             for (var n = 100; n <= 1000; n += 100)
             {
@@ -61,13 +61,15 @@ namespace EvolutionaryAlgorithm
                     var start = DateTime.Now;
                     TimeSpan runtime;
 
+                    long mutations = 0;
                     do
                     {
                         mutation.Mutate(0, individual);
+                        mutations++;
                         runtime = DateTime.Now - start;
-                    } while (runtime < budget);
+                    } while (runtime < timeBudget);
 
-                    file.WriteLine($"{n} {budget} {runtime}");
+                    file.WriteLine($"{n} {mutations} {runtime}");
                 }
             }
         }

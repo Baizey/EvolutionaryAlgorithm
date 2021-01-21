@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using EvolutionaryAlgorithm.BitImplementation;
 using EvolutionaryAlgorithm.Core.Algorithm;
 using EvolutionaryAlgorithm.Core.Parameters;
+using EvolutionaryAlgorithm.Core.Statistics;
 using EvolutionaryAlgorithm.Template;
 using EvolutionaryAlgorithm.Template.FitnessFunctions;
 using EvolutionaryAlgorithm.Template.Statistics;

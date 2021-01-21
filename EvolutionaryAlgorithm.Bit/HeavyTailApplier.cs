@@ -17,13 +17,17 @@ namespace EvolutionaryAlgorithm.BitImplementation
             if (_heavyTailLookup.TryGetValue(p, out var cache))
                 return cache;
 
+            // Calculate odds for p = 1 (i.e. normal heavy-tail)
+            // C := sum for i=1..n/2 -> i^{−β}
             var c = 0D;
             var allOdds = new double[_n / 2];
             for (var i = 1; i <= allOdds.Length; i++)
                 c += Math.Pow(i, -beta);
+            
+            // Pr[X = α] = (C)^{−1} * α^{−β}
             for (var alpha = 1; alpha <= allOdds.Length; alpha++)
-                allOdds[alpha - 1] = 1 / c * Math.Pow(alpha, -beta);
-
+                allOdds[alpha - 1] = 1D / c * Math.Pow(alpha, -beta);
+            
             // Fill out odds according to p
             var odds = new double[_n / 2];
             var index = p - 1;

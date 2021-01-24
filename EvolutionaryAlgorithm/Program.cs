@@ -31,7 +31,7 @@ namespace EvolutionaryAlgorithm
         {
             const long fitnessCallsBudget = 300000;
             const int seed1 = 1;
-            const double formulaRatio1 = 3.5D;
+            const double formulaRatio1 = 4.5D;
 
             const int seed2 = 0;
             const double formulaRatio2 = 4.5D;
@@ -48,7 +48,7 @@ namespace EvolutionaryAlgorithm
                 {180, 808},
                 {200, 899}
             };
-            var timeBudget = TimeSpan.FromSeconds(5);
+            var timeBudget = TimeSpan.FromSeconds(4);
             const int seed = 0;
             const double chance = 0.25D;
             const double chance2 = 0.5D;

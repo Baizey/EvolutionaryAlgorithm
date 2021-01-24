@@ -53,7 +53,7 @@ namespace EvolutionaryAlgorithm
             const double chance = 0.25D;
             const double chance2 = 0.5D;
             const double chance3 = 0.75D;
-            const int stepSize = 100;
+            const int stepSize = 1000;
             const int steps = 10;
             const int k = 2;
             var mode = int.Parse(args[0]);

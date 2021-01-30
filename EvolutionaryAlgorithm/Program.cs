@@ -23,10 +23,13 @@ namespace EvolutionaryAlgorithm
         // S-endogenous was theorised on OneMax, λ: (ln n)^(1+ϵ), lr: 32 (https://dl.acm.org/doi/10.1145/3205455.3205569) O(n/log λ + (n logn)/λ)
         // M-endogenous - none
         // Repair was theorized on jump, with jump: k <= n/16, mr: sqrt(k/n), rr: sqrt(k/n), λ: (n/k)^(1/k)*(2^k) (https://arxiv.org/pdf/2004.06702.pdf)
+
+        // Repair was theorized on jump, with jump: k <= n/16, mr: sqrt(k/n), rr: sqrt(k/n), λ: sqrt(n/k)^k * (1/sqrt(n)) (https://arxiv.org/pdf/2004.06702.pdf)
+
         // Stagnation was tested on Jump with jump: 4, n: 40-160, λ: ln(n)
         // Stagnation was tested on Jump with jump: 3, n: 200-1000, λ: ln(n)
         // HeavyTail was tested on Jump with n: 20-160, jump: 8, λ: 1, beta: 1.5, 2, 3, 4 lr: 1 (i.e no learning) (https://arxiv.org/pdf/1703.03334.pdf)
-        
+
         public static async Task Main(string[] args)
         {
             const long fitnessCallsBudget = 300000;
@@ -59,6 +62,71 @@ namespace EvolutionaryAlgorithm
             var mode = int.Parse(args[0]);
             var benchmarks = new Func<int, Task>[]
             {
+                i =>
+                {
+                    return RunBenchmark(i,
+                        heuristic: Repair, fitness: LeadingOnes,
+                        rounds: 100, stepSize: 100, steps: 10,
+                        termination: a =>
+                            new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
+                        mu: 1, lambda: 2,
+                        repairChanceString: "sqrt(k/n)",
+                        mutationRateString: "sqrt(k/n)",
+                        repairChanceFunc: n => n * Math.Sqrt(n * 1), // rewriting sqrt(k/n) = x/n
+                        mutationRateFunc: n => n * Math.Sqrt(n * 1), // rewriting sqrt(k/n) = x/n
+                        learningRate: 2
+                    );
+                },
+                i =>
+                {
+                    var k = 2;
+                    return RunBenchmark(i,
+                        heuristic: Repair, fitness: Jump,
+                        rounds: 100, stepSize: 200, steps: 10, jump: k,
+                        termination: a =>
+                            new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
+                        mu: 1,
+                        learningRate: 1,
+                        repairChanceString: "sqrt(k/n)",
+                        mutationRateString: "sqrt(k/n)",
+                        repairChanceFunc: n => n * Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
+                        mutationRateFunc: n => n * Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
+                        lambdaFunc: n => (int) ((1D / Math.Sqrt(n)) * Math.Pow(Math.Sqrt((double) n / k), k)),
+                        lambdaString: "(1/sqrt(n))*sqrt(n/k)^k"
+                    );
+                },
+                i =>
+                {
+                    var k = 3;
+                    return RunBenchmark(i,
+                        heuristic: Repair, fitness: Jump,
+                        rounds: 100, stepSize: 200, steps: 10, jump: k,
+                        termination: a =>
+                            new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
+                        mu: 1,
+                        learningRate: 1,
+                        repairChanceString: "sqrt(k/n)",
+                        mutationRateString: "sqrt(k/n)",
+                        repairChanceFunc: n => n * Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
+                        mutationRateFunc: n => n * Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
+                        lambdaFunc: n => (int) ((1D / Math.Sqrt(n)) * Math.Pow(Math.Sqrt((double) n / k), k)),
+                        lambdaString: "(1/sqrt(n))*sqrt(n/k)^k"
+                    );
+                },
+                i =>
+                {
+                    var k = 4;
+                    return RunBenchmark(i,
+                        heuristic: Asymmetric, fitness: Jump,
+                        rounds: 1000, stepSize: 1000, steps: 20, jump: k,
+                        termination: a =>
+                            new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
+                        mu: 1, lambda: 1,
+                        mutationRate: 1, learningRate: 0.1, observationPhase: 50
+                    );
+                },
+
+
                 i => RunBenchmark(i,
                     heuristic: Asymmetric, fitness: MinimumSpanningTree,
                     stepSize: stepSize, steps: steps, seed: seed,

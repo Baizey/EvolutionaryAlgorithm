@@ -184,7 +184,7 @@ namespace EvolutionaryAlgorithm
                 var total = rounds * steps;
                 var done = oldDone + completed - working.Count;
                 var progress = 100 * done / total;
-                if (done % (rounds / 10) == 0 || working.Count < 10)
+                if (done % Math.Max(2, rounds / 10) == 0 || working.Count < 10)
                     Console.WriteLine(
                         $"Progress: {done} / {total} ({progress}%) {DateTime.Now} | {DateTime.Now - start} taken");
             }

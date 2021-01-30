@@ -66,14 +66,13 @@ namespace EvolutionaryAlgorithm
                 {
                     return RunBenchmark(i,
                         heuristic: Repair, fitness: LeadingOnes,
-                        rounds: 100, stepSize: 100, steps: 10,
-                        termination: a =>
-                            new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
-                        mu: 1, lambda: 2,
-                        repairChanceString: "sqrt(k/n)",
-                        mutationRateString: "sqrt(k/n)",
-                        repairChanceFunc: n => n * Math.Sqrt(n * 1), // rewriting sqrt(k/n) = x/n
-                        mutationRateFunc: n => n * Math.Sqrt(n * 1), // rewriting sqrt(k/n) = x/n
+                        rounds: 1, stepSize: 100, steps: 10,
+                        termination: a => new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
+                        mu: 1, lambda: 1,
+                        repairChanceString: "sqrt(1/n)",
+                        mutationRateString: "sqrt(1/n)",
+                        repairChanceFunc: Math.Sqrt, // rewriting sqrt(k/n) = x/n
+                        mutationRateFunc: Math.Sqrt, // rewriting sqrt(k/n) = x/n
                         learningRate: 2
                     );
                 },
@@ -89,8 +88,8 @@ namespace EvolutionaryAlgorithm
                         learningRate: 1,
                         repairChanceString: "sqrt(k/n)",
                         mutationRateString: "sqrt(k/n)",
-                        repairChanceFunc: n => n * Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
-                        mutationRateFunc: n => n * Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
+                        repairChanceFunc: n => Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
+                        mutationRateFunc: n => Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
                         lambdaFunc: n => (int) ((1D / Math.Sqrt(n)) * Math.Pow(Math.Sqrt((double) n / k), k)),
                         lambdaString: "(1/sqrt(n))*sqrt(n/k)^k"
                     );
@@ -107,8 +106,8 @@ namespace EvolutionaryAlgorithm
                         learningRate: 1,
                         repairChanceString: "sqrt(k/n)",
                         mutationRateString: "sqrt(k/n)",
-                        repairChanceFunc: n => n * Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
-                        mutationRateFunc: n => n * Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
+                        repairChanceFunc: n => Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
+                        mutationRateFunc: n => Math.Sqrt(n * k), // rewriting sqrt(k/n) = x/n
                         lambdaFunc: n => (int) ((1D / Math.Sqrt(n)) * Math.Pow(Math.Sqrt((double) n / k), k)),
                         lambdaString: "(1/sqrt(n))*sqrt(n/k)^k"
                     );

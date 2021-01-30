@@ -66,7 +66,7 @@ namespace EvolutionaryAlgorithm
                 {
                     return RunBenchmark(i,
                         heuristic: Repair, fitness: LeadingOnes,
-                        rounds: 1, stepSize: 100, steps: 10,
+                        rounds: 100, stepSize: 100, steps: 10,
                         termination: a => new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
                         mu: 1, lambda: 1,
                         repairChanceString: "sqrt(1/n)",

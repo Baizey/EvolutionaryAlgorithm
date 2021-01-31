@@ -72,8 +72,8 @@ namespace EvolutionaryAlgorithm
                         mu: 1,
                         mutationRate: 2,
                         learningRate: 2,
-                        lambdaFunc: n => (int) (2 + 2 * Math.Log(n)),
-                        lambdaString: "2+2*ln(n)"
+                        lambdaFunc: n => (int) Math.Max(2,Math.Pow(Math.Log(n), 3)),
+                        lambdaString: "ln(n)^3"
                     );
                 },
                 i =>
@@ -86,8 +86,8 @@ namespace EvolutionaryAlgorithm
                         mu: 1,
                         mutationRate: 2,
                         learningRate: 2,
-                        lambdaFunc: n => (int) (2 + 2 * Math.Log(n)),
-                        lambdaString: "2+2*ln(n)"
+                        lambdaFunc: n => (int) Math.Max(2,Math.Pow(Math.Log(n), 3)),
+                        lambdaString: "ln(n)^3"
                     );
                 },
 

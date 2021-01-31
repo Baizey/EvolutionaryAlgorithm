@@ -65,9 +65,39 @@ namespace EvolutionaryAlgorithm
                 i =>
                 {
                     return RunBenchmark(i,
+                        heuristic: SingleEndogenous, fitness: LeadingOnes,
+                        rounds: 100, stepSize: 100, steps: 10,
+                        termination: a =>
+                            new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
+                        mu: 1,
+                        mutationRate: 2,
+                        learningRate: 2,
+                        lambdaFunc: n => (int) (2 + 2 * Math.Log(n)),
+                        lambdaString: "2+2*ln(n)"
+                    );
+                },
+                i =>
+                {
+                    return RunBenchmark(i,
+                        heuristic: SingleEndogenous, fitness: OneMax,
+                        rounds: 100, stepSize: 100, steps: 10,
+                        termination: a =>
+                            new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
+                        mu: 1,
+                        mutationRate: 2,
+                        learningRate: 2,
+                        lambdaFunc: n => (int) (2 + 2 * Math.Log(n)),
+                        lambdaString: "2+2*ln(n)"
+                    );
+                },
+
+                i =>
+                {
+                    return RunBenchmark(i,
                         heuristic: Repair, fitness: LeadingOnes,
                         rounds: 100, stepSize: 100, steps: 10,
-                        termination: a => new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
+                        termination: a =>
+                            new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
                         mu: 1, lambda: 1,
                         repairChanceString: "sqrt(1/n)",
                         mutationRateString: "sqrt(1/n)",

@@ -66,7 +66,7 @@ namespace EvolutionaryAlgorithm
                 {
                     return RunBenchmark(i,
                         heuristic: SingleEndogenous, fitness: LeadingOnes,
-                        rounds: 100, stepSize: 100, steps: 10,
+                        rounds: 100, stepSize: 100, steps: 20,
                         termination: a =>
                             new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
                         mu: 1,
@@ -80,7 +80,7 @@ namespace EvolutionaryAlgorithm
                 {
                     return RunBenchmark(i,
                         heuristic: SingleEndogenous, fitness: OneMax,
-                        rounds: 100, stepSize: 100, steps: 10,
+                        rounds: 100, stepSize: 100, steps: 20,
                         termination: a =>
                             new FitnessTermination<IBitIndividual, BitArray, bool>(a.Parameters.GeneCount),
                         mu: 1,
